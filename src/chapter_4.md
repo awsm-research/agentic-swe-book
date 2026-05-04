@@ -360,7 +360,7 @@ Bandit flags issues like SQL injection risks, hardcoded passwords, use of weak c
 
 ## 4.7 Pull Requests and Code Review
 
-Before code reaches the main branch, it passes through two gates: a *pull request* (PR), which is the mechanism for proposing and discussing a change, and *code review*, which is the human evaluation of that change. Together they are among the most effective defect-detection and knowledge-sharing practices in software engineering ([Fagan, 1976](https://ieeexplore.ieee.org/document/1702601); [Rigby & Bird, 2013](https://dl.acm.org/doi/10.1145/2491411.2491428)).
+Before code reaches the main branch, it passes through two gates: a *pull request* (PR), which is the mechanism for proposing and discussing a change, and *code review*, which is the human evaluation of that change. Together they are among the most effective defect-detection and knowledge-sharing practices in software engineering ([Fagan, 1976](https://ieeexplore.ieee.org/document/5388086); [Rigby & Bird, 2013](https://dl.acm.org/doi/10.1145/2491411.2491444)).
 
 ### 4.7.1 What Is a Pull Request?
 

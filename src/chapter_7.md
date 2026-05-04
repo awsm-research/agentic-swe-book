@@ -1,5 +1,5 @@
-# Chapter 7: Agentic SWE in SDLC: Hands-on Activities
-
+# Chapter 7: Hands-on Activities with AI Coding Agents
+<!-- 
 > *"The real leverage of AI in software engineering is not that it writes code faster — it is that it compresses the feedback loop between an idea and a working, tested, reviewed artefact."*
 
 ---
@@ -758,4 +758,4 @@ class TestAssignJob:
 - Does your AI use `assert_called()` instead of `assert_called_once_with(...)`? The former does not verify the arguments passed to the notifier.
 - Is the "notification not called on failure" test present? AI frequently omits this negative assertion, leaving a gap where a buggy implementation that always notifies would still pass.
 
-</details>
+</details> -->

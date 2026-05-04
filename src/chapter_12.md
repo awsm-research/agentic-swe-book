@@ -1,6 +1,6 @@
 # Chapter 12: The Future of AI-Native Engineering
 
-> *"We cannot predict the future of software engineering, but we can observe which skills are becoming more valuable and which are becoming less — and act accordingly."*
+<!-- > *"We cannot predict the future of software engineering, but we can observe which skills are becoming more valuable and which are becoming less — and act accordingly."*
 
 ---
 
@@ -366,4 +366,4 @@ This final chapter surveyed the emerging frontier of AI-native engineering and l
 - SWE-bench Leaderboard. [https://www.swebench.com/](https://www.swebench.com/)
 - OpenAI. HumanEval benchmark. [https://github.com/openai/human-eval](https://github.com/openai/human-eval)
 - Chen, M., et al. (2021). Evaluating Large Language Models Trained on Code. *arXiv*. [https://arxiv.org/abs/2107.03374](https://arxiv.org/abs/2107.03374)
-- Hypothesis. Property-based testing for Python. [https://hypothesis.readthedocs.io/](https://hypothesis.readthedocs.io/)
+- Hypothesis. Property-based testing for Python. [https://hypothesis.readthedocs.io/](https://hypothesis.readthedocs.io/) -->

@@ -1,6 +1,6 @@
 # Chapter 11: Developer Productivity and Team Practices
 
-> *"Measuring programming progress by lines of code is like measuring aircraft building progress by weight."*
+<!-- > *"Measuring programming progress by lines of code is like measuring aircraft building progress by weight."*
 > — Bill Gates
 
 ---
@@ -405,4 +405,4 @@ def compare_sprints(before: SprintMetrics, after: SprintMetrics) -> str:
         f"  MTTR:                 {pct_change(before.mttr_hours, after.mttr_hours, lower_is_better=True)}",
     ])
 ```
-
+ -->

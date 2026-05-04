@@ -1,5 +1,5 @@
 # Chapter 8: Configuring the Agent's World — Context, Skills, and Tools
-
+<!-- 
 > *"An agent is only as good as the world it can see. What you choose to put in front of it — and what you keep out — is an engineering decision, not a configuration detail."*
 
 ---
@@ -608,4 +608,4 @@ Justify your final list of enabled MCP servers.
 - Anthropic. (2024). *Claude Code documentation: Subagents*. Anthropic Developer Docs.
 - Anthropic. (2024). *Claude Code documentation: Skills*. Anthropic Developer Docs.
 - Weng, L. (2023). LLM-powered autonomous agents. *Lil'Log*. [https://lilianweng.github.io/posts/2023-06-23-agent/](https://lilianweng.github.io/posts/2023-06-23-agent/)
-- Shinn, N., Cassano, F., Labash, A., Gopalan, A., Narasimhan, K., & Yao, S. (2023). Reflexion: Language agents with verbal reinforcement learning. *Advances in Neural Information Processing Systems, 36*.
+- Shinn, N., Cassano, F., Labash, A., Gopalan, A., Narasimhan, K., & Yao, S. (2023). Reflexion: Language agents with verbal reinforcement learning. *Advances in Neural Information Processing Systems, 36*. -->

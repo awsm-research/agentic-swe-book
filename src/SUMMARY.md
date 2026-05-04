@@ -15,7 +15,7 @@
 # Part II: Agentic Software Engineering
 
 - [Chapter 6: Agentic Software Engineering: A New Paradigm](./chapter_6.md)
-- [Chapter 7: Agentic SWE in SDLC: Hands-on Activities](./chapter_7.md)
+- [Chapter 7: Hands-on Activities with AI Coding Agents](./chapter_7.md)
 - [Chapter 8: Configuring the Agent's World — Context, Skills, and Tools](./chapter_8.md)
 - [Chapter 9: Emerging Security Concerns in Agentic Software Engineering](./chapter_9.md)
 

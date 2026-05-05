@@ -14,8 +14,6 @@ By the end of this chapter, you will be able to:
 3. Describe the historical evolution of software engineering from its origins to the present day, including the contributions of Margaret Hamilton.
 4. Identify real-world software engineering failures and the lessons they teach.
 5. Compare Waterfall, Incremental, Agile, Scrum, Kanban, and Open Source development — explaining the strengths, weaknesses, and appropriate contexts for each.
-6. Set up a professional Python development environment including virtual environments, Git, Ruff, Mypy, pre-commit hooks, and Pytest.
-7. Apply good commit practices — writing descriptive messages, staging selectively, and understanding what never to commit.
 
 ---
 

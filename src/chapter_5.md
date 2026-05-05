@@ -1,478 +1,308 @@
-# Chapter 5: Software Security
-
-> *"Security is not a product, but a process."*
-> — Bruce Schneier
+# Chapter 5: Automated Code Review, Code Quality, and CI/CD
 
 ---
 
-## Learning Objectives
+## 5.1 What Is Code Review?
 
-By the end of this chapter, you will be able to:
+Code review is the practice of having one or more developers read and evaluate a change to the codebase before it is merged. Its primary goals are defect detection, knowledge sharing, and enforcing standards — and it is among the most effective quality practices known in software engineering ([Fagan, 1976](https://ieeexplore.ieee.org/document/5388086); [Rigby & Bird, 2013](https://dl.acm.org/doi/10.1145/2491411.2491444)).
 
-1. Explain foundational software security concepts: vulnerability, CVE, CWE, and the OWASP Top 10.
-2. Identify and mitigate common Python security vulnerabilities.
-3. Perform basic secrets scanning and PII detection.
-4. Describe AI-specific threats: prompt injection, data leakage, and AI-generated vulnerabilities.
-5. Explain how AI coding assistants can introduce security vulnerabilities.
-6. Conduct a basic threat model for an AI-enabled system using STRIDE.
+### 5.1.1 Fagan Inspection
 
----
+The formal origin of code review is the *Fagan inspection*, introduced by Michael Fagan at IBM in 1976. A Fagan inspection is a structured, meeting-based process with defined roles:
 
-## 5.1 Software Security Fundamentals
+- **Author**: the developer who wrote the code
+- **Moderator**: facilitates the meeting and keeps it on track
+- **Reader**: reads the code aloud, paraphrasing to expose gaps in understanding
+- **Reviewers**: evaluate the code against a checklist and raise defects
 
-Security is not a feature you add to a system — it is a property that must be designed in from the start. A single vulnerability in a deployed system can expose all user data, allow unauthorised access, or enable an attacker to take over the entire server.
+Fagan found that inspections caught 60–90% of defects before testing — a rate that testing alone rarely matches. The key insight was that a *structured* process with defined roles and an explicit checklist performs better than ad-hoc reading.
 
-### 5.1.1 Key Terminology
+### 5.1.2 Code Review Checklist
 
-**Vulnerability**: A weakness in software that can be exploited by an attacker to cause harm. Vulnerabilities may arise from coding errors, design flaws, or misconfiguration.
+Modern teams rarely run formal Fagan inspections, but the checklist principle survives. A reviewer should systematically ask:
 
-**Exploit**: A technique or piece of code that takes advantage of a vulnerability.
+| Category | Questions |
+|---|---|
+| **Correctness** | Does the code do what the description claims? Are edge cases handled? |
+| **Tests** | Are there sufficient tests? Do they cover the happy path and failure cases? |
+| **Design** | Does the change fit the existing architecture? Does it introduce unnecessary coupling? |
+| **Readability** | Can you understand the code without asking the author? Are names clear? |
+| **Security** | Does the change introduce injection risks, broken auth, or unsafe defaults? |
+| **Performance** | Are there N+1 queries, unbounded loops, or unnecessary allocations? |
+| **Error handling** | Are errors caught and surfaced appropriately? Are resources released on failure? |
+| **Documentation** | Are public interfaces documented? Do comments explain *why*, not *what*? |
 
-**CVE (Common Vulnerabilities and Exposures)**: A public catalogue of known software vulnerabilities, maintained by MITRE ([cve.mitre.org](https://cve.mitre.org/)). Each CVE entry has a unique identifier (e.g., CVE-2021-44228 for Log4Shell) and describes the vulnerability, affected versions, and severity.
-
-**CWE (Common Weakness Enumeration)**: A catalogue of common software weakness types ([cwe.mitre.org](https://cwe.mitre.org/)). Where CVE describes specific instances ("this version of this library has this vulnerability"), CWE describes classes of weakness ("SQL injection" is CWE-89; "Path Traversal" is CWE-22). CWE is useful for training developers to recognise and avoid vulnerability patterns.
-
-**CVSS (Common Vulnerability Scoring System)**: A standardised scoring system that rates vulnerability severity from 0 (none) to 10 (critical) based on exploitability, impact, and scope ([NIST, 2019](https://nvd.nist.gov/vuln-metrics/cvss)).
-
-### 5.1.2 The OWASP Top 10
-
-The Open Web Application Security Project publishes a regularly updated list of the most critical web application security risks ([OWASP, 2021](https://owasp.org/www-project-top-ten/)). The 2021 Top 10:
-
-| Rank | Category | Description |
-|---|---|---|
-| A01 | Broken Access Control | Improper enforcement of what authenticated users can do |
-| A02 | Cryptographic Failures | Weak or improperly implemented cryptography |
-| A03 | Injection | SQL, command, LDAP injection via untrusted input |
-| A04 | Insecure Design | Security risks from flawed design decisions |
-| A05 | Security Misconfiguration | Default configs, unnecessary features, missing hardening |
-| A06 | Vulnerable Components | Using components with known vulnerabilities |
-| A07 | Authentication Failures | Weak authentication, session management |
-| A08 | Software & Data Integrity Failures | Insecure deserialization, CI/CD pipeline attacks |
-| A09 | Logging & Monitoring Failures | Insufficient logging to detect and respond to attacks |
-| A10 | SSRF | Server-Side Request Forgery: server making requests to unintended targets |
+Reviewers are not responsible for finding every bug — that is what tests are for. The goal is a second pair of eyes that catches what the author's familiarity with their own code conceals.
 
 ---
 
-## 5.2 Common Python Security Vulnerabilities
+## 5.2 Modern Code Review: Pull Requests
 
-Python is a safe language in many respects, but its expressiveness and dynamic features introduce specific security pitfalls.
+Contemporary code review is conducted through *pull requests* (PRs), also called *merge requests* on GitLab ([Gousios et al., 2014](https://doi.org/10.1145/2568225.2568260)). A pull request is a request to merge a set of commits from one branch into another — typically from a feature branch into `main`. It replaces the synchronous meeting of Fagan inspection with an asynchronous, tool-mediated process.
 
-### 5.2.1 SQL Injection (CWE-89)
+A PR serves as a structured checkpoint that combines:
 
-SQL injection occurs when untrusted input is incorporated directly into a SQL query, allowing attackers to alter the query's logic.
+- **Change visibility**: a diff showing exactly what changed and why
+- **Discussion space**: a thread where reviewers can ask questions, raise concerns, and suggest improvements
+- **Automated gate**: a trigger for CI checks (tests, linting, type checking, security scans) that must pass before merging
+- **Audit trail**: a permanent record of what was changed, who reviewed it, and what was discussed
 
-```python
-# VULNERABLE: String concatenation in SQL
-def get_user_by_name_bad(name: str) -> dict | None:
-    query = f"SELECT * FROM users WHERE name = '{name}'"
-    # If name = "'; DROP TABLE users; --"
-    # Query becomes: SELECT * FROM users WHERE name = ''; DROP TABLE users; --'
-    return db.execute(query).fetchone()
+### 5.2.1 The Review Process
 
+A standard PR lifecycle proceeds as follows:
 
-# SAFE: Parameterised query
-def get_user_by_name(name: str) -> dict | None:
-    query = "SELECT * FROM users WHERE name = %s"
-    return db.execute(query, (name,)).fetchone()
+```mermaid
+flowchart TD
+    A[Author opens PR\nwith description] --> B[CI runs automatically\ntests · lint · type check · security scan]
+    B --> C{CI passes?}
+    C -- No --> D[Author fixes failures] --> B
+    C -- Yes --> E[Author requests reviewers]
+    E --> F[Reviewer reads diff\nand description]
+    F --> G[Leaves inline comments\nmust-fix · suggestion · question]
+    G --> H[Author responds to\nall comments and makes changes]
+    H --> I{Reviewer satisfied?}
+    I -- No --> F
+    I -- Yes --> J[Reviewer approves]
+    J --> K[PR merged\nsquash or merge commit]
 ```
 
-**Rule**: Never concatenate user input into a SQL string. Always use parameterised queries or an ORM.
+**Step 1 — Author opens PR with description.** The author pushes the feature branch and opens a pull request against `main`. The description explains what changed, why, and how to test it (see Section 5.2.2). A clear description sets reviewers up to evaluate the change in context rather than reconstruct intent from the diff alone.
 
-### 5.2.2 Command Injection (CWE-78)
+**Step 2 — CI runs automatically.** Opening the PR triggers the CI pipeline immediately, before any human sees the code. The pipeline runs linting, type checking, tests, and security scans in parallel. This automated pre-filter ensures that reviewers spend their attention on logic and design, not on mechanical errors a tool could have caught.
 
-Command injection occurs when user input is passed to a shell command.
+**Step 3 — CI passes?** If the pipeline fails, the author fixes the failures and pushes new commits. The pipeline re-runs on each push. The PR cannot proceed to human review while CI is red — this is enforced by branch protection rules that block merging until all required checks pass.
 
-```python
-import subprocess
+**Step 4 — Author requests reviewers.** Once CI is green, the author assigns one or more reviewers. Reviewer selection matters: reviewers should be familiar with the affected area of the codebase ([Rigby & Bird, 2013](https://dl.acm.org/doi/10.1145/2491411.2491444); [Thongtanunam et al., 2015](https://ieeexplore.ieee.org/document/7081824/)). On most teams, one approval is sufficient for routine changes; two are required for changes to core infrastructure, security-sensitive code, or public APIs.
 
-# VULNERABLE: Shell=True with user input
-def run_analysis_bad(filename: str) -> str:
-    result = subprocess.run(
-        f"analyze_tool {filename}",
-        shell=True,  # DANGEROUS with user input
-        capture_output=True,
-        text=True,
-    )
-    return result.stdout
+**Step 5 — Reviewer reads the diff and description.** The reviewer reads the PR description first to understand intent, then reads the diff. A good reviewer uses the checklist from Section 5.1.2 as a mental framework, checking correctness, tests, design, readability, security, and performance in turn.
 
+**Step 6 — Reviewer leaves inline comments.** Comments are placed directly on the relevant lines of the diff. Each comment is tagged to indicate its weight: a `[must]` comment blocks approval and requires a fix; a `[nit]` is a non-blocking suggestion; a `[question]` requests clarification without implying a problem. Tagging prevents ambiguity about what the author is required to address.
 
-# SAFE: Shell=False with argument list
-def run_analysis(filename: str) -> str:
-    # Validate filename first
-    if not filename.replace("_", "").replace("-", "").replace(".", "").isalnum():
-        raise ValueError(f"Invalid filename: {filename}")
+**Step 7 — Author responds and makes changes.** The author addresses every comment — fixing defects, pushing revised commits, and replying to each thread. Replies should acknowledge the feedback explicitly: *"fixed in latest commit"* or *"kept as-is because X"*. Unresolved threads signal to the reviewer that the review cycle is not yet complete.
 
-    result = subprocess.run(
-        ["analyze_tool", filename],  # List form, no shell interpretation
-        shell=False,
-        capture_output=True,
-        text=True,
-    )
-    return result.stdout
+**Step 8 — Reviewer satisfied?** The reviewer checks whether all must-fix comments have been resolved and evaluates the new commits. If outstanding issues remain, the reviewer adds further comments and the author addresses them in another iteration. Each iteration narrows the gap between the submitted code and the standard required for approval.
+
+**Step 9 — Reviewer approves.** When the reviewer is satisfied, they record a formal approval. Approval means the code is good enough to ship — not necessarily perfect. Over-holding a PR for perfection increases cost without proportionate quality gain.
+
+**Step 10 — PR merged.** The author (or a designated maintainer) merges the branch into `main`. Most teams use either a *squash merge* — collapsing all PR commits into one — or a *merge commit* that preserves the full history. Squash merges keep the main branch history linear and easy to bisect; merge commits preserve the granular development history of the feature.
+
+### 5.2.2 Writing an Effective Pull Request
+
+A good PR is small, focused, and self-explanatory. **Keep PRs small.** A PR touching 10 files is reviewed carefully; a PR touching 50 files is rubber-stamped. Aim for changes that can be reviewed in under 20 minutes. If a feature requires large changes, break it into sequential PRs: data model first, then business logic, then API layer.
+
+The title and description should answer three questions:
+
+1. **What changed?** — a one-line summary that a reader can understand without opening the diff
+2. **Why?** — the motivation: the bug being fixed, the requirement being met, the tech debt being addressed
+3. **How should reviewers test it?** — the steps to verify the change works as intended
+
+```markdown
+## What
+Add pagination to the task list endpoint (`GET /tasks`).
+
+## Why
+The endpoint currently returns all tasks in a single response. With >10,000 tasks
+in staging, response times exceed 5 s and memory usage spikes. Fixes #142.
+
+## How to test
+1. Run `pytest tests/test_task_endpoint.py -k pagination`
+2. Manually: `curl "localhost:8000/tasks?page=2&page_size=20"` — should return
+   tasks 21–40 with `X-Total-Count` header set correctly.
+3. Edge case: `page=0` should return HTTP 422.
 ```
 
-**Rule**: Never use `shell=True` with user-controlled input. Use a list of arguments instead.
+### 5.2.3 Review Etiquette
 
-### 5.2.3 Path Traversal (CWE-22)
+Effective code review requires clear, respectful communication on both sides.
 
-Path traversal allows attackers to access files outside the intended directory by using `../` sequences.
+**For reviewers:**
+- Review the code, not the person — *"This function is hard to follow"* not *"You wrote this poorly"*
+- Be specific and actionable — vague comments waste everyone's time
+- Acknowledge what is done well — a review that is only criticism is demoralising
+- Distinguish blocking issues from suggestions with explicit prefixes (`[must]`, `[nit]`, `[question]`)
 
-```python
-import os
-from pathlib import Path
-
-UPLOAD_DIR = Path("/app/uploads")
-
-# VULNERABLE: Direct path construction
-def read_upload_bad(filename: str) -> bytes:
-    path = UPLOAD_DIR / filename  # filename = "../../etc/passwd" would escape!
-    with open(path, "rb") as f:
-        return f.read()
-
-
-# SAFE: Resolve and verify the path stays within the intended directory
-def read_upload(filename: str) -> bytes:
-    requested_path = (UPLOAD_DIR / filename).resolve()
-
-    # Verify the resolved path is still under UPLOAD_DIR
-    if not str(requested_path).startswith(str(UPLOAD_DIR.resolve())):
-        raise PermissionError(f"Access denied: {filename}")
-
-    with open(requested_path, "rb") as f:
-        return f.read()
-```
-
-### 5.2.4 Insecure Deserialization (CWE-502)
-
-Python's `pickle` module can execute arbitrary code when deserialising untrusted data.
-
-```python
-import pickle
-import json
-
-# VULNERABLE: Deserialising untrusted pickle data
-def load_session_bad(data: bytes) -> dict:
-    return pickle.loads(data)  # Arbitrary code execution on untrusted data!
-
-
-# SAFE: Use JSON for data serialisation
-def load_session(data: str) -> dict:
-    session = json.loads(data)
-    # Validate the structure before returning
-    if not isinstance(session, dict):
-        raise ValueError("Invalid session data")
-    return session
-```
-
-**Rule**: Never use `pickle`, `marshal`, or `yaml.load` (without `Loader=yaml.SafeLoader`) on untrusted data.
-
-### 5.2.5 Hardcoded Credentials (CWE-798)
-
-Hardcoded passwords, API keys, and tokens in source code are frequently exposed via public repositories.
-
-```python
-import os
-
-# VULNERABLE: Hardcoded credentials
-def connect_bad():
-    return DatabaseConnection(
-        host="db.example.com",
-        password="SuperSecret123!",  # Visible in source code, git history
-    )
-
-
-# SAFE: Read from environment variables
-def connect():
-    password = os.environ.get("DB_PASSWORD")
-    if not password:
-        raise EnvironmentError("DB_PASSWORD environment variable is not set")
-    return DatabaseConnection(host=os.environ["DB_HOST"], password=password)
-```
-
-**Rule**: Credentials must never appear in source code. Use environment variables, a secrets manager (AWS Secrets Manager, HashiCorp Vault), or a `.env` file that is excluded from version control.
+**For authors:**
+- Do not take feedback personally — the reviewer is evaluating the code, not your ability
+- Explain your reasoning when you disagree rather than silently reverting or silently keeping your version
+- Keep the PR small enough that reviewers can engage thoroughly
+- Respond to all comments before requesting re-review
 
 ---
 
-## 5.3 PII and Credential Detection
+## 5.3 Limitations of Manual Code Review
 
-### 5.3.1 GitLeaks
+Code review is effective but not free. Understanding its costs helps teams apply it well rather than applying it uniformly.
 
-GitLeaks ([Gitleaks, 2019](https://github.com/gitleaks/gitleaks)) is an open-source tool that scans git repositories for secrets — API keys, passwords, tokens, and other credentials — using a library of regular expression patterns.
+**Time and cognitive load.** A careful review of 400 lines takes a skilled engineer 45–60 minutes. At scale, review becomes a significant fraction of total engineering time. Teams that treat review as a low-priority interrupt find that PRs sit unreviewed for days, blocking delivery.
+
+**Inconsistency.** Human reviewers vary in thoroughness, focus, and knowledge. The same code reviewed by two different engineers will produce different feedback. Style and convention issues — the easiest mechanical problems to fix — consume disproportionate reviewer attention.
+
+**Fatigue effects.** Research on inspection data finds that defect detection rate drops significantly after the first hour of review ([Capers Jones, 1991](https://dl.acm.org/doi/10.5555/573262)). Large PRs exploit this effect: reviewers find early defects carefully and then accelerate through the rest.
+
+**Coverage gaps.** Manual review catches design and logic problems well but is unreliable for performance, security, and concurrency bugs, which require systematic analysis rather than reading. A reviewer who does not think to check for SQL injection will not find it.
+
+Manual review should therefore focus on what humans do best — evaluating design decisions, business logic, and domain correctness — while mechanical checks are delegated to automated tools.
+
+---
+
+## 5.4 Automated Code Review Using Static Analysis
+
+Automated code review tools analyse source code without executing it, systematically checking for a class of issues that manual review catches inconsistently. They are fast, cheap, and consistent — running in seconds on every commit with no reviewer fatigue.
+
+Tools are most effective at:
+- Enforcing style and formatting rules uniformly
+- Catching type errors before runtime
+- Identifying known security anti-patterns
+- Flagging unused imports, dead code, and obvious bugs
+
+They are least effective at:
+- Understanding business context and domain logic
+- Evaluating architectural decisions
+- Catching subtle security vulnerabilities that require contextual reasoning
+- Judging whether a change is the *right* change to make
+
+The practical pattern is to run automated analysis as a *pre-filter* before human review: CI blocks the PR if automated checks fail, so reviewers can focus their attention on what tools cannot catch.
+
+---
+
+## 5.5 Code Quality Analysis
+
+### 5.5.1 Linting and Formatting with Ruff
+
+Ruff ([Astral, 2023](https://docs.astral.sh/ruff/)) is a fast Python linter and formatter written in Rust. It enforces style rules and catches common programming errors:
 
 ```bash
-# Install
-brew install gitleaks   # macOS
-# or: go install github.com/gitleaks/gitleaks/v8@latest
-
-# Scan the current repository
-gitleaks detect --source .
-
-# Scan git history (catches secrets that were committed then deleted)
-gitleaks detect --source . --log-opts="--all"
+ruff check src/       # lint
+ruff format src/      # format (replaces black)
 ```
 
-GitLeaks can be added to your CI/CD pipeline to prevent secrets from ever reaching the repository.
+Ruff subsumes the functionality of flake8, isort, and black, and runs 10–100× faster than any of them individually. A typical configuration in `pyproject.toml`:
+
+```toml
+[tool.ruff]
+line-length = 88
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "N", "UP"]   # pycodestyle, pyflakes, isort, naming, pyupgrade
+ignore = ["E501"]                       # handled by formatter
+```
+
+Running `ruff check --fix src/` applies safe auto-fixes — removing unused imports, reordering them, upgrading deprecated syntax — without changing behaviour.
+
+### 5.5.2 Type Checking with mypy
+
+Type annotations in Python (since PEP 484, [van Rossum et al., 2015](https://peps.python.org/pep-0484/)) enable static analysis. mypy verifies that annotations are consistent throughout the codebase, catching a class of bugs that tests can miss:
+
+```bash
+mypy src/ --strict
+```
+
+Common errors mypy catches:
+- Passing `None` where a non-optional value is expected
+- Calling a method that does not exist on a type
+- Returning the wrong type from a function
+- Missing return statements in non-`None` functions
+
+Example: the following code passes all unit tests but fails mypy because `divide` can return `None` yet the caller treats the result as `float`:
+
+```python
+def divide(a: float, b: float) -> float:
+    if b == 0:
+        return None        # mypy: error: Incompatible return value type
+    return a / b
+
+result: float = divide(10, 0)
+print(result + 1)          # AttributeError at runtime
+```
+
+Fixing the annotation to `Optional[float]` forces every caller to handle the `None` case explicitly, eliminating the runtime error before deployment.
+
+> **Box: Incremental adoption of mypy**
+>
+> Adding `--strict` to an existing codebase typically produces hundreds of errors. A practical adoption path is incremental: start with `mypy src/ --ignore-missing-imports` and fix errors module by module, adding `# type: ignore` sparingly for cases that require deeper refactoring. Once the baseline is clean, tighten the flags progressively toward `--strict`.
+
+---
+
+## 5.6 CI/CD and Quality Gate Checks
+
+Continuous integration (CI) is the practice of merging all developer branches into the main branch frequently — at least daily — with each merge triggering an automated build and test run ([Fowler, 2006](https://martinfowler.com/articles/continuousIntegration.html)). Continuous delivery (CD) extends CI to ensure the software is always in a deployable state.
+
+A *quality gate* is a CI step that fails the pipeline if a quality threshold is not met — coverage below 80%, any linting error, any type error, any medium-severity security finding. Quality gates convert code quality from a guideline into an enforced constraint.
+
+### 5.6.1 GitLab CI Configuration
+
+GitLab CI is configured through a `.gitlab-ci.yml` file at the repository root. Pipelines are composed of *jobs* grouped into *stages*; jobs within a stage run in parallel, and stages run sequentially.
 
 ```yaml
-# .github/workflows/security.yml (add to CI)
-- name: Scan for secrets
-  uses: gitleaks/gitleaks-action@v2
-  env:
-    GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+# .gitlab-ci.yml
+image: python:3.11-slim
+
+variables:
+  PIP_CACHE_DIR: "$CI_PROJECT_DIR/.cache/pip"
+
+cache:
+  paths:
+    - .cache/pip
+
+stages:
+  - lint
+  - test
+  - security
+
+before_script:
+  - pip install -r requirements.txt
 ```
 
-### 5.3.2 PII Detection
+The `before_script` block runs before every job, installing dependencies. The `cache` block persists the pip download cache across pipeline runs, reducing install time.
 
-Personally Identifiable Information (PII) — names, email addresses, phone numbers, government IDs — must be handled with particular care under regulations like GDPR (EU) and the Privacy Act (Australia).
+### 5.6.2 Multi-Stage Pipeline
 
-For Python applications, the Microsoft Presidio library ([Microsoft, 2019](https://github.com/microsoft/presidio)) provides PII detection and anonymisation:
+Splitting the pipeline into stages makes failures fast and legible: a lint failure in stage 1 blocks the expensive test stage from running, giving the author immediate feedback at minimum cost.
 
-```python
-# pip install presidio-analyzer presidio-anonymizer
-from presidio_analyzer import AnalyzerEngine
-from presidio_anonymizer import AnonymizerEngine
+```yaml
+# Stage 1: lint
+ruff:
+  stage: lint
+  script:
+    - ruff check src/ tests/
+    - ruff format --check src/ tests/
 
-analyzer = AnalyzerEngine()
-anonymizer = AnonymizerEngine()
+mypy:
+  stage: lint
+  script:
+    - mypy src/ --strict
 
+# Stage 2: test
+unit-tests:
+  stage: test
+  script:
+    - pytest tests/unit/ --cov=src --cov-report=xml --cov-fail-under=80
+  coverage: '/TOTAL.*\s+(\d+%)$/'
+  artifacts:
+    reports:
+      coverage_report:
+        coverage_format: cobertura
+        path: coverage.xml
 
-def detect_pii(text: str) -> list[dict]:
-    """Detect PII entities in a text string."""
-    results = analyzer.analyze(text=text, language="en")
-    return [
-        {
-            "entity_type": r.entity_type,
-            "start": r.start,
-            "end": r.end,
-            "score": r.score,
-            "text": text[r.start : r.end],
-        }
-        for r in results
-    ]
+integration-tests:
+  stage: test
+  script:
+    - pytest tests/integration/ -v
+  allow_failure: false
 
-
-def anonymise_pii(text: str) -> str:
-    """Replace PII entities with type placeholders."""
-    results = analyzer.analyze(text=text, language="en")
-    anonymised = anonymizer.anonymize(text=text, analyzer_results=results)
-    return anonymised.text
-
-
-# Example
-text = "Alice Smith (alice@example.com) was assigned task #123"
-print(detect_pii(text))
-# [{'entity_type': 'PERSON', ...}, {'entity_type': 'EMAIL_ADDRESS', ...}]
-
-print(anonymise_pii(text))
-# "<PERSON> (<EMAIL_ADDRESS>) was assigned task #123"
+# Stage 3: security
+bandit:
+  stage: security
+  script:
+    - pip install bandit
+    - bandit -r src/ -ll
+  allow_failure: false
 ```
 
----
+**Key configuration details:**
 
-## Tutorial Activity: SAST Triage — True Positives vs False Positives
-
-**Duration:** 2 hours | **Format:** Pairs or small groups | **Difficulty:** Intermediate
-
----
-
-### Scenario
-
-You are a security engineer reviewing a pull request from a junior developer who built a task-management REST API over the weekend. The code compiles and passes all unit tests. Your job is to run two SAST tools against the file, collect every finding, and determine which ones are genuine vulnerabilities and which are tool noise.
-
-The lab file is at `labs/ch05_vulnerable_app.py`.
-
----
-
-### Learning Outcomes
-
-By completing this activity you will be able to:
-
-- Run Bandit and Semgrep against a Python codebase and interpret their output.
-- Distinguish between true positives (real vulnerabilities) and false positives (acceptable patterns the tool over-flags).
-- Map findings to OWASP Top 10 categories and CWE identifiers.
-- Propose a minimal, correct fix for each confirmed vulnerability.
-- Identify vulnerabilities that SAST tools miss entirely (false negatives).
-
----
-
-### Phase 1 — Setup (15 min)
-
-Install the two SAST tools into a virtual environment:
-
-```bash
-python -m venv .venv && source .venv/bin/activate
-pip install flask bandit semgrep
-```
-
-Verify they are installed:
-
-```bash
-bandit --version
-semgrep --version
-```
-
----
-
-### Phase 2 — Run the Tools (20 min)
-
-Run each tool against the lab file and save the output to a file so you can refer back to it during triage.
-
-**Bandit** — a Python-specific SAST tool that maps findings to CWE and reports severity and confidence levels:
-
-```bash
-# -r  recursive  -ll  medium-and-above severity  -f json  machine-readable output
-bandit -r labs/ch05_vulnerable_app.py -ll -f json -o bandit_results.json
-
-# Human-readable version for review
-bandit -r labs/ch05_vulnerable_app.py -ll
-```
-
-**Semgrep** — a multi-language SAST tool that uses rule sets from the community registry:
-
-```bash
-semgrep --config=auto labs/ch05_vulnerable_app.py --json -o semgrep_results.json
-
-# Human-readable version
-semgrep --config=auto labs/ch05_vulnerable_app.py
-```
-
-> **Tip:** Bandit and Semgrep will each flag different subsets of issues. Some findings appear in both tools; some appear in only one. Note which tool produced each finding — this matters during triage.
-
----
-
-### Phase 3 — Triage Worksheet (50 min)
-
-For every finding reported by either tool, complete one row of the triage table below. Work through the findings in order of reported severity (Critical → High → Medium → Low).
-
-For each finding, ask:
-
-1. **Is the flagged code reachable with attacker-controlled input?** If not, it may be a false positive.
-2. **Does the context change the risk?** (e.g., MD5 for a password vs. MD5 for an HTTP cache key)
-3. **What is the worst-case impact if the vulnerability is exploited?**
-
-Copy this table into a text file or spreadsheet and fill it in:
-
-```
-| # | Tool    | Rule / Check       | Line | Description                        | TP / FP | Reason                                           | OWASP | CWE   | Proposed Fix                        |
-|---|---------|--------------------|----|-------------------------------------|---------|--------------------------------------------------|-------|-------|-------------------------------------|
-| 1 |         |                    |    |                                     |         |                                                  |       |       |                                     |
-| 2 |         |                    |    |                                     |         |                                                  |       |       |                                     |
-| … |         |                    |    |                                     |         |                                                  |       |       |                                     |
-```
-
-**Column guide**
-
-| Column | What to write |
-|---|---|
-| Tool | `bandit`, `semgrep`, or `both` |
-| Rule / Check | The rule ID (e.g. `B608`, `python.lang.security.audit.eval-detected`) |
-| Line | Line number in the source file |
-| Description | One sentence — what the tool thinks is wrong |
-| TP / FP | Your verdict: **TP** (genuine vulnerability) or **FP** (acceptable pattern) |
-| Reason | Why you made that call — cite code context, not just the rule description |
-| OWASP | Relevant OWASP Top 10 category (e.g. A03 — Injection) |
-| CWE | Relevant CWE ID (e.g. CWE-89) |
-| Proposed Fix | For TPs only: one sentence or a code sketch of the fix |
-
----
-
-### Phase 4 — Fix the True Positives (20 min)
-
-Choose **three** of the confirmed true positives from your worksheet. For each one:
-
-1. Write the corrected version of the function directly in the file (create a new function with a `_safe` suffix).
-2. Add a one-line comment explaining what was wrong and how the fix addresses it.
-3. Re-run Bandit on your fixed version to confirm the finding is gone.
-
-> **Constraint:** Do not fix the false positives. If your fix causes Bandit to stop flagging a true false positive, add a `# nosec BXX` annotation with a comment explaining why it is safe, rather than restructuring the code.
-
----
-
-### Phase 5 — Group Discussion (15 min)
-
-Compare your triage worksheets across groups and discuss:
-
-1. **Did every group agree on which findings were TP vs FP?** Where did groups disagree, and why?
-2. **Which vulnerabilities did BOTH tools catch?** Which did only one tool catch? Which did neither catch?
-3. **What did the tools miss entirely?** Look at the login route (`/login`) and the admin route (`/admin/users`) — are there security problems there that neither tool reported?
-4. **AI-generated code risk:** If a junior developer used an AI coding assistant to write this file, which of these vulnerabilities might the assistant have introduced? Which are more likely to be human mistakes?
-5. **Severity triage:** If you had only 30 minutes to fix the most critical issues before deploying, which three vulnerabilities would you prioritise and why?
-
----
-
-### Reference: Bandit Rule Codes
-
-The following Bandit rules are relevant to findings in this lab. Use this table to map rule IDs to vulnerability categories.
-
-| Rule | Description | Severity |
-|------|-------------|----------|
-| B105 | Hardcoded password or secret string | Medium |
-| B201 | Flask app run with debug=True | High |
-| B301 | Use of `pickle` module | Medium |
-| B306 | Use of `mktemp` (race-condition risk) | Medium |
-| B307 | Use of `eval()` | Medium |
-| B311 | Use of `random` for security purposes | Low |
-| B324 | Use of MD5 or SHA-1 hash function | Medium |
-| B602 | `subprocess` with `shell=True` | High |
-| B608 | SQL query constructed with string formatting | Medium |
-
----
-
-### Instructor Answer Key
-
-<details>
-<summary><strong>Reveal answer key</strong> — attempt the triage worksheet before expanding</summary>
-
-> *This section should be distributed only after groups have completed their worksheets.*
-
-The table below lists every intentional finding in `labs/ch05_vulnerable_app.py` and the expected verdict. **Bold** rows are findings that SAST tools flag but that require human context to classify correctly — these are the false positives.
-
-Run Bandit without any severity filter to see all findings including Low:
-
-```bash
-bandit -r labs/ch05_vulnerable_app.py   # no -ll flag
-```
-
-| Finding | Line | Bandit Rule | Verdict | Key Reasoning |
-|---------|------|-------------|---------|---------------|
-| Hardcoded `app.secret_key` | 43 | B105 | **TP** | Flask session signing key in source code and git history |
-| `STRIPE_API_KEY` — *missed by Bandit* | 49 | — (false negative) | **TP** | Bandit B105 matched `secret_key` but not `STRIPE_API_KEY`; use Semgrep or GitLeaks for broad secrets scanning |
-| **`CACHE_SALT` string** | **50** | **B105 (if flagged)** | **FP** | Not a credential — a static, non-secret cache namespace prefix |
-| SQL injection in `find_task` | 64 | B608 | **TP** | `task_id` is user-controlled and interpolated directly into the query string |
-| SQL injection in `search_tasks` | 78 | B608 | **TP** | `keyword` is user-controlled; `LIKE` with wildcards does not prevent injection |
-| MD5 in `hash_password` | 88 | B324 | **TP** | MD5 is cryptographically broken for password storage; use bcrypt or Argon2 |
-| **MD5 in `compute_etag`** | **93** | **B324** | **FP** | An ETag is a cache identifier, not a security control; MD5 is acceptable for non-cryptographic checksums |
-| `random.randint` in `generate_session_token` | 98 | B311 | **TP** | `random` is seeded and predictable; session tokens must use `secrets.token_urlsafe` |
-| `random.randint` in `generate_reset_code` | 103 | B311 | **TP** | Same issue; a 6-digit code from `random` is brute-forceable |
-| Path traversal in `read_report` | 112 | Semgrep (CWE-22) | **TP** | `filename` comes from the URL with no validation; `../../etc/passwd` escapes `REPORTS_DIR` |
-| **Allowlist-guarded `read_template`** | **119–122** | **Semgrep (CWE-22)** | **FP** | The `allowed` set check before path construction prevents traversal entirely |
-| Command injection in `run_report_generator` | 133–135 | B602 | **TP** | `report_id` is user-supplied and interpolated into a shell command string |
-| **Static `hostname` command** | **144–146** | **B602** | **FP** | Bandit itself notes "seems safe" — the shell string is a hardcoded literal with no user input |
-| `pickle.loads` on cookie data | 159 | B301 | **TP** | `session_data` arrives from an HTTP cookie; arbitrary code execution on deserialization |
-| **`pickle.load` on internal ML model** | **165–166** | **B301** | **FP** | The model file is written by a trusted internal pipeline, not by users; the file path is not user-controlled |
-| **`eval` on constant `"1 + 1"`** | **173** | **B307** | **FP** | The argument is a hardcoded string literal; no user input can reach this call |
-| `eval` on `request.args` in `/calculate` | 200–201 | B307 | **TP** | `expr` is taken directly from the query string; enables arbitrary Python execution |
-| Insecure `mktemp` in `/upload` | 208 | B306 | **TP** | `mktemp` returns a name before creating the file — TOCTOU race condition; use `tempfile.NamedTemporaryFile` |
-| Logging password in `/login` — *missed by both* | 219 | — (false negative) | **TP** | Credentials written to stdout in plaintext; requires manual code review |
-| No auth on `/admin/users` — *missed by both* | 229 | — (false negative) | **TP** | Any unauthenticated caller can list all users; SAST cannot detect design-level access-control gaps |
-| Flask `debug=True` and `host="0.0.0.0"` | 238 | B201, B104 | **TP** | Exposes the Werkzeug interactive debugger on all interfaces; enables remote code execution |
-
-**Summary counts**
-
-| Category | Count |
-|----------|-------|
-| True positives (genuine vulnerabilities) | 13 |
-| False positives (tool noise — acceptable patterns) | 5 |
-| False negatives (missed entirely by both tools) | 3 |
-
-**Key teaching points**
-
-- Bandit flags *patterns* (any use of MD5, any pickle, any `shell=True`), not *intent*. Context determines whether the pattern is actually exploitable — that is the human's job.
-- B105 matched `app.secret_key` but not `STRIPE_API_KEY`. No SAST tool has perfect pattern coverage; complement Bandit with Semgrep and GitLeaks for secrets.
-- Three findings — the hardcoded Stripe key, the logged password, and the unauthenticated admin route — require manual reasoning and are invisible to at least one or both tools. SAST is a floor, not a ceiling.
-- The false positive rate in this file (~28%) is representative of real-world SAST deployments. Teams that dismiss all FPs start ignoring true positives too.
-- AI coding assistants commonly reproduce all the patterns in this file: SQL concatenation, `debug=True`, hardcoded credentials, and `shell=True` are among the most frequent AI-generated vulnerabilities. Running SAST on every commit catches them before they reach production.
-
-</details>
-
----
+- `coverage:` is a regex that extracts the coverage percentage from pytest output; GitLab displays it on the pipeline page and merge request
+- `artifacts: reports: coverage_report:` uploads the Cobertura XML so GitLab renders inline coverage annotations on the diff
+- `allow_failure: false` (the default) means a failing job fails the entire pipeline and blocks merge
+- Jobs within a stage (`unit-tests` and `integration-tests`) run in parallel automatically

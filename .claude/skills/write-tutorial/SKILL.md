@@ -217,7 +217,7 @@ When invoked with a tutorial number and title (e.g., `/write-tutorial 2 Testing 
 1. Read `src/SUMMARY.md` to confirm the tutorial's place in the book and which chapter it accompanies
 2. Read `src/tutorial_1.md` as the structural and style reference
 3. Read the chapter the tutorial accompanies (`src/chapter_N.md`) to understand which concepts need hands-on reinforcement
-4. Read `outline.md` if a tutorial outline exists for this number
+4. Read `summary.md` if a tutorial outline exists for this number
 5. Draft the full tutorial following the template above
 6. Check: do the part time estimates sum to the total Duration?
 7. Check: does every learning objective map to at least one step?

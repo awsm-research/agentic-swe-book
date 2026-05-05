@@ -1,7 +1,10 @@
 {
   "permissions": {
     "allow": [
-      "WebFetch(domain:docs.gitlab.com)"
+      "WebFetch(domain:docs.gitlab.com)",
+      "WebFetch(domain:arxiv.org)",
+      "WebSearch",
+      "WebFetch(domain:autos.yahoo.com)"
     ]
   }
 }

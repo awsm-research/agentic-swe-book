@@ -1,6 +1,11 @@
 # Chapter 6: Agentic Software Engineering: A New Paradigm
 
-> *"The question is not whether AI will change software engineering. It already has. The question is whether you are shaping that change or being shaped by it."*
+> *"The programming barrier is incredibly low. We have closed the digital divide. Everyone is a programmer now — you just have to say something to the computer."*
+> — Jensen Huang, Computex Keynote, Taipei (2023)
+
+---
+
+In May 2023, NVIDIA chief executive Jensen Huang told an audience at Computex in Taipei: "The programming barrier is incredibly low. We have closed the digital divide. Everyone is a programmer now — you just have to say something to the computer." Nearly two years later, Andrej Karpathy — co-founder of OpenAI and former director of AI at Tesla — gave that vision a name. In a post on 6 February 2025, he coined the term *vibe coding* to describe a practice that had become widespread: "you fully give in to the vibes, embrace exponentials, and forget that the code even exists." He described accepting every AI-generated change without reading it, copying error messages straight back to the model, and watching "the code grow beyond my usual comprehension." He was honest that this approach was suited to throwaway weekend projects. A Monash University study by Liu et al. had already measured what happened when it was not: 32.2% of ChatGPT-generated code samples produced incorrect outputs, and nearly half had maintainability issues that standard static analysis could detect — failures an engineer who never read the diff would ship without knowing ([Liu et al., 2023](https://arxiv.org/abs/2307.12596)).
 
 ---
 
@@ -8,74 +13,175 @@
 
 By the end of this chapter, you will be able to:
 
-1. Distinguish agentic software engineering from AI-assisted development.
-2. Explain what an AI coding agent is and how it differs from a copilot or chat assistant.
-3. Describe the Agentic SDLC and its four phases: Spec, Generate, Verify, Refine.
-4. Identify the key components of an agent: planning, tool use, memory, and reflection.
-5. Explain the purpose of MCP (Model Context Protocol) and how it gives agents tools and context.
-6. Describe A2A (Agent-to-Agent) coordination and orchestrator-subagent patterns.
-7. Select an appropriate agent and model for a given engineering task.
-8. Apply the agentic lens to re-examine your course project specification.
+1. Distinguish between a large language model and an AI coding agent, and explain why the distinction matters for engineering practice.
+2. Identify the four core components of an AI coding agent: tools, skills, connectors, and memory.
+3. Compare terminal-based AI coding agents (Claude Code, Gemini CLI) with AI-native IDEs (Cursor, Windsurf) and explain the appropriate use of each.
+4. Describe the Agentic SDLC — Spec, Generate, Verify, Refine — and explain what the engineer's primary responsibilities are at each phase.
+5. Identify common patterns and anti-patterns in agentic software engineering workflows.
+6. Evaluate the risks of AI teammate workflows — including overreliance, accountability gaps, and intellectual property concerns — and explain why human engineers retain responsibility for AI-generated work.
 
 ---
 
-## 6.1 Two Ways of Working with AI
+## 6.1 What Is Agentic Software Engineering?
 
-Before 2021, AI's role in software development was largely confined to autocomplete suggestions, simple code search, and static analysis. The release of GitHub Copilot changed this: for the first time, AI could generate contextually relevant code at the function level from a comment or function signature.
+*Agentic software engineering* is the practice of directing AI coding agents — autonomous systems that can plan, execute, and verify multi-step development tasks — as a central mode of producing and maintaining software. It is not a tool category or a product feature. It is a change in how the work of software engineering is organised.
 
-Most developers initially used these tools as *accelerators* — they wrote the specification, the design, the tests, and then used AI to fill in boilerplate or suggest implementations for functions they already had in mind. This is *AI-assisted development*: the engineer's workflow is unchanged, but AI speeds up some steps.
+The distinction from earlier forms of AI-assisted development is one of degree that becomes a difference in kind. A developer using GitHub Copilot still makes every decision: they read the suggestion, accept or reject it, move to the next line. The AI accelerates keystrokes. The developer's workflow is otherwise unchanged. An agentic workflow is different: the developer writes a specification, delegates the implementation to an agent that reads files, runs tests, and iterates autonomously, and then reviews the result. The bottleneck has moved from *writing* to *specifying and verifying*.
 
-*AI-native engineering* is a different posture. It recognises that AI has changed not just the speed of some steps, but the nature of the engineer's job itself. In AI-native engineering:
+This shift has been underway since at least 2024, when tools like Devin ([Cognition, 2024](https://cognition.ai/blog/introducing-devin)), Claude Code (Anthropic, 2024), and Cursor demonstrated that an LLM with access to a shell and a file system could resolve real-world software issues with meaningful autonomy. SWE-bench — a benchmark of GitHub issues drawn from popular Python projects — provided a standardised measure: the fraction of issues an agent could fix without human intervention. Early scores in 2024 were below 20%. By mid-2025, leading agents exceeded 50% ([SWE-bench Leaderboard, 2025](https://www.swebench.com/)). The capability curve is steep.
 
-- **Specifications become the primary engineering artefact** — what you write for the AI is as important as what the AI writes back
-- **Generation is a commodity** — producing code is no longer the bottleneck
-- **Verification becomes the critical skill** — determining whether generated code is correct, secure, and appropriate requires deep engineering judgment
-- **The SDLC is restructured** around the capabilities and failure modes of AI systems
+*Agentic software engineering*, properly understood, is the discipline of working with these agents in a way that captures the productivity gains while enforcing the engineering standards that prevent the gaps from being amplified.
 
-This is not a prediction about some future state. It is a description of how leading software teams are working today ([Khlaaf et al., 2022](https://arxiv.org/abs/2212.09251)).
-
----
-
-## 6.2 The Evolution of AI Coding Tools
-
-Understanding where current tools came from helps calibrate what they can and cannot do.
-
-### 6.2.1 Copilots (2021–present)
-
-GitHub Copilot, powered by OpenAI Codex ([Chen et al., 2021](https://arxiv.org/abs/2107.03374)), was the first widely deployed AI coding tool. It operates in-editor, completing code as the developer types. It works well for:
-
-- Boilerplate and repetitive patterns
-- Simple algorithms with clear names
-- Common library API usage
-- Translating between languages
-
-It works poorly for:
-- Multi-file context
-- Long-range dependencies
-- System-level design
-- Novel or domain-specific logic
-
-### 6.2.2 Chat-Based Assistants (2022–present)
-
-ChatGPT, Claude, and Gemini introduced multi-turn conversation with AI. Engineers could now describe a problem in natural language, receive an explanation or solution, and iterate through dialogue. Chat interfaces handle more context than inline completion and support discussion of design decisions.
-
-### 6.2.3 AI Coding Agents (2024–present)
-
-AI coding agents — such as Claude Code, Devin ([Cognition, 2024](https://cognition.ai/blog/introducing-devin)), and Cursor in agent mode — represent the next step. An agent is not just responding to prompts; it is *acting in the world*:
-
-- It can read and write files
-- It can run code and tests
-- It can browse the web and read documentation
-- It can use APIs and external tools
-- It can plan a multi-step task and execute each step autonomously
-
-This changes the nature of human-AI collaboration significantly. Rather than the engineer making every decision and using AI to execute individual steps, the engineer can delegate a whole task to an agent, monitor its progress, and intervene when it goes wrong.
+| Term | Definition |
+|---|---|
+| **AI-assisted development** | Using AI tools to accelerate individual steps within an otherwise unchanged engineering workflow |
+| **AI-native engineering** | Restructuring the engineering workflow itself around AI capabilities and failure modes |
+| **Agentic software engineering** | Directing AI agents — autonomous, tool-using, multi-step systems — as a primary mode of software development |
+| **AI coding agent** | An LLM connected to tools (file access, code execution, APIs) that can pursue multi-step development goals autonomously |
+| **Vibe coding** | The practice, named by Karpathy (2025), of accepting AI-generated changes without reading them — appropriate for throwaway projects, a liability in production |
 
 ---
 
-## 6.3 The Agentic SDLC: Spec → Generate → Verify → Refine
+## 6.2 What Is an AI Coding Agent?
 
-The traditional SDLC (Requirements → Design → Implementation → Testing → Deployment) maps awkwardly onto AI-native workflows. A more useful model for AI-native development is:
+The term *AI coding agent* is used loosely in the industry to mean anything from a code-completion plugin to a fully autonomous system that opens pull requests without human instruction. A useful definition must be more precise.
+
+An *AI coding agent* is a system in which a large language model is connected to a set of tools that allow it to take actions in the development environment — reading and writing files, executing commands, browsing documentation, calling APIs — in pursuit of a multi-step goal, with the ability to observe the results of its actions and adapt its plan accordingly ([Russell & Norvig, 2020](https://aima.cs.berkeley.edu/)).
+
+The critical phrase is *multi-step goal with adaptation*. A chatbot answers a question. An AI coding agent implements a feature — reading the codebase to understand the context, writing code, running the tests, reading the test output, fixing failures, and producing a pull request. It does not wait for the engineer to mediate between each step.
+
+### LLMs vs. Agentic AI
+
+Understanding the difference between a *large language model* and an *AI coding agent* is not just a technical distinction — it determines what the tool can and cannot be asked to do.
+
+A *large language model* (LLM) is a neural network trained on text that predicts the most likely continuation of a given input. It takes text in and produces text out. It has no persistent state between calls, cannot take actions in the world, and does not know whether what it produced was actually run. Every response is stateless.
+
+An *AI coding agent* wraps an LLM with infrastructure that gives it state and agency:
+
+| Capability | LLM alone | AI coding agent |
+|---|---|---|
+| **Generate code** | Yes | Yes |
+| **Read files from disk** | No | Yes |
+| **Execute shell commands** | No | Yes |
+| **Run tests and read results** | No | Yes |
+| **Maintain state across steps** | No | Yes |
+| **Adapt plan based on results** | No | Yes |
+| **Take irreversible actions** | No | Yes |
+
+The last row matters most for engineering practice. An LLM cannot delete a file or push a commit. An agent can. This is why the judgment and verification skills covered throughout this book become *more* important in agentic workflows, not less — the agent's mistakes have real consequences.
+
+### AI Coding Agents in the Terminal
+
+The first category of AI coding agent operates directly in the terminal, treating the file system and shell as its primary environment. Two widely used examples are *Claude Code* (Anthropic, 2024) and *Gemini CLI* (Google, 2024).
+
+*Claude Code* is a command-line interface that runs in the engineer's terminal. The engineer describes a task in natural language; Claude Code reads the relevant files, writes code, runs tests, and iterates — all within the existing project structure, using the existing toolchain, without opening a browser or an IDE. It is designed to be invisible to the project: it adds no dependencies, requires no plugins, and leaves the engineer's workflow otherwise unchanged.
+
+*Gemini CLI* provides similar terminal-based agentic capabilities backed by Google's Gemini model family. Both tools share a design philosophy: bring the AI to the engineer's environment, rather than requiring the engineer to move to an AI-specific environment.
+
+Terminal agents suit engineers who prefer full control over their toolchain, work on complex or unfamiliar codebases where reading source is the primary activity, or operate in environments (remote servers, CI pipelines) where a graphical IDE is unavailable.
+
+### AI-Native IDEs
+
+The second category integrates agentic AI directly into the editing experience. *Cursor* and *Windsurf* are the most widely adopted examples as of 2025.
+
+*Cursor* is a fork of Visual Studio Code with AI capabilities built into the editor at a fundamental level — not as a plugin but as a first-class part of the interface. The agent can see the entire codebase, understand the editor's open files, run commands in the integrated terminal, and apply changes directly to open files. Engineers interact via a chat panel that sits alongside the editor.
+
+*Windsurf* (Codeium, 2024) takes a similar approach with an additional emphasis on *flow* — the agent proactively observes what the engineer is doing and offers suggestions without being explicitly prompted, analogous to a pair programmer who notices when you are stuck.
+
+AI-native IDEs suit engineers doing sustained feature work in a single codebase, working on tasks where visual context (seeing the code alongside the AI conversation) speeds up verification, or transitioning to agentic workflows from an IDE-centric background.
+
+Neither category is universally superior. Terminal agents offer more flexibility and composability; AI-native IDEs offer more context and a lower friction floor for getting started. Many engineers use both, depending on the task.
+
+---
+
+## 6.3 Inside the Agent: Components of an AI Coding Agent
+
+Regardless of whether the agent runs in a terminal or an IDE, its architecture consists of four components: tools, skills, connectors, and memory. Understanding these components allows you to reason about what the agent can and cannot do, and where it is likely to fail.
+
+### Tools
+
+*Tools* are the primitive actions an agent can take in the world — atomic, executable operations with defined inputs and outputs. They are the agent's hands.
+
+Common tools available to coding agents:
+
+| Tool | Description |
+|---|---|
+| **read_file** | Read the contents of a file at a given path |
+| **write_file** | Write or overwrite a file at a given path |
+| **run_command** | Execute a shell command and return stdout/stderr |
+| **search_code** | Search the codebase for a pattern or symbol |
+| **fetch_url** | Retrieve the contents of a URL |
+| **create_branch** | Create a new git branch |
+| **submit_pr** | Open a pull request with a given diff and description |
+
+Tools are powerful because they allow the agent to *observe* the results of its actions and adapt. After calling `run_command("pytest")`, the agent reads the test output, identifies failures, and updates its plan accordingly. This observe-adapt loop is what distinguishes an agent from a stateless text predictor.
+
+Tools are also the primary source of risk. A `write_file` call on a production configuration file, a `run_command` that drops a database table, a `submit_pr` that opens a request to the wrong repository — these are irreversible actions that the engineer must prevent through careful permissions, sandboxing, and oversight postures.
+
+### Skills
+
+*Skills* are reusable, higher-order capabilities composed from multiple tool calls — the agent's learned repertoire. Where a tool answers "what can the agent do in one step?", a skill answers "what can the agent accomplish as a unit of work?"
+
+Examples of skills:
+
+- **code-review**: Read a diff, check it against a checklist, return a structured review
+- **write-tests**: Given a function signature and docstring, generate a suite of unit tests
+- **security-scan**: Traverse a codebase looking for OWASP Top 10 vulnerabilities
+- **refactor-rename**: Rename a symbol consistently across all files
+
+Skills are typically defined as reusable prompts or prompt templates stored alongside the project. Claude Code calls these *slash commands* (e.g., `/review`, `/test`). They allow teams to encode their engineering standards into the agent — "when we do a security review, we always check these ten things" — rather than relying on the engineer to prompt correctly every time.
+
+### Connectors
+
+*Connectors* are integrations that give the agent access to external systems beyond the file system — databases, issue trackers, CI pipelines, documentation repositories, and APIs.
+
+The *Model Context Protocol* (MCP), published by Anthropic in 2024, is a standardised protocol for connecting agents to external tools and data sources. Before MCP, every team building an agentic system had to write bespoke integration code for each external system. MCP defines a common interface — a server exposes resources and tools; the agent connects to the server; the agent can now use those resources and tools as if they were built-in.
+
+```
+Agent ←→ MCP Client ←→ MCP Server ←→ External System
+                              (GitHub, Jira, PostgreSQL, Confluence)
+```
+
+The practical consequence is that an agent connected to a GitHub MCP server can read issues, create branches, and open pull requests using the same mechanism it uses to read files. The engineer configures the connection once; the agent handles the rest.
+
+### Memory
+
+*Memory* determines what information persists across steps, sessions, and agents. It is the most architecturally subtle of the four components.
+
+| Memory type | Scope | Persistence | Example |
+|---|---|---|---|
+| **In-context** | Single session | Until session ends | Current conversation, open files |
+| **External** | Across sessions | Indefinite | A `CLAUDE.md` file, a vector database |
+| **Episodic** | Across tasks | Configurable | Summaries of past tasks the agent has performed |
+| **Semantic** | Across agents | Configurable | Shared facts about the codebase or team conventions |
+
+In-context memory is cheapest and most immediate but limited by the model's context window (typically 200,000 tokens for current Claude models). External memory persists to files or databases and survives session restarts. Episodic and semantic memory allow multi-agent systems to share knowledge.
+
+The practical implication for engineering teams: place the information the agent most needs to get work right in *external memory*. A well-maintained `CLAUDE.md` file at the project root — describing architecture decisions, coding conventions, test structure, and known constraints — dramatically improves agent output quality. It is, in effect, the onboarding document the agent reads before starting every task.
+
+---
+
+## 6.4 AI as the New Teammate
+
+Hassan's second major argument is that the correct mental model for AI coding tools is not *tool* but *teammate* — a collaborator with specific capabilities, blind spots, and tendencies that an effective engineer must learn to work with ([Hassan, 2025](https://agenticse-book.github.io/pdf/AgenticSE_Book.pdf)).
+
+The tool metaphor leads engineers to treat AI as passive: you invoke it, it does a thing, you evaluate the output. The teammate metaphor leads engineers to think about communication, context, delegation, and feedback loops. A good teammate is not one who executes instructions blindly; it is one who understands the goal, flags when the instructions conflict with the goal, and asks for clarification before going wrong.
+
+**Context matters as much as instructions.** When you brief a new team member on a task, you give them background: the architecture, the constraints, the conventions, the known landmines. Effective AI-native engineers do the same — they invest in maintaining context files that orient the agent before each task. Brief your AI teammate as you would brief a capable but context-free colleague.
+
+**Feedback is iterative.** You would not expect a teammate to get a complex task right on the first attempt. The Spec → Generate → Verify → Refine loop (see Section 6.5) is the professional workflow for collaborating with an AI teammate — not a workaround for the AI's limitations, but the natural structure of iterative collaborative work.
+
+**Strengths and blind spots are learnable.** AI coding agents are reliably strong at: boilerplate generation, test scaffolding, translating between languages, finding related code, explaining unfamiliar codebases, and writing documentation. They are reliably weak at: multi-file refactors without explicit context, maintaining invariants across a long session, security reasoning without explicit prompting, and understanding implicit organisational conventions. Knowing the map of strengths and weaknesses allows you to delegate effectively and verify precisely where it matters.
+
+**Responsibility does not transfer.** A teammate's mistake on a project does not absolve the person who assigned the work. The same holds for AI. If an agent introduces a security vulnerability and you commit it without review, the vulnerability is yours. Section 6.8 returns to this in detail.
+
+---
+
+## 6.5 The Agentic SDLC: Spec → Generate → Verify → Refine
+
+The traditional SDLC — Requirements, Design, Implementation, Testing, Deployment — was designed around human execution speeds and human cognitive bottlenecks. When a developer writes a thousand lines of code per day, the bottleneck is implementation. When an agent writes a thousand lines in three minutes, the bottleneck shifts entirely.
+
+The *Agentic SDLC* restructures the workflow around the new bottleneck: specification quality and verification rigour.
 
 ```
 Spec → Generate → Verify → Refine
@@ -83,380 +189,200 @@ Spec → Generate → Verify → Refine
   └──────────────────────────────┘
 ```
 
-This cycle is iterative and fast — a single round can take minutes rather than days.
+This loop is iterative and fast — a single round typically takes minutes. The engineer's time is concentrated in the Spec and Verify phases. Generation is nearly instantaneous. Refinement feeds corrections back into the specification.
 
-### 6.3.1 Spec
+### Spec
 
-*Specification* is the act of describing, precisely and completely, what you want the AI to produce. In AI-native engineering, specification is the primary engineering activity — not implementation.
+*Specification* is the act of describing precisely and completely what the agent should produce. In the Agentic SDLC, specification is the primary engineering activity. Vague inputs produce plausible but incorrect outputs. The quality of your specification is the binding constraint on the quality of what is generated.
 
-A good specification for AI includes:
+A complete specification for an AI agent includes:
 
-- **Context**: What is the purpose of this component? What does it fit into?
-- **Inputs and outputs**: What does the function receive? What should it return?
-- **Constraints**: What invariants must hold? What should the function explicitly NOT do?
-- **Examples**: What are the expected input-output pairs for key cases?
-- **Quality attributes**: What performance, security, or style requirements apply?
+- **Context**: What is this component? Where does it fit in the system?
+- **Inputs and outputs**: What does the function receive? What must it return?
+- **Behaviour rules**: At least five concrete behavioural requirements
+- **Constraints**: What must the function explicitly NOT do?
+- **Examples**: Concrete input-output pairs covering the normal case, edge cases, and error cases
+- **Quality attributes**: Performance bounds, security requirements, style conventions
 
-The quality of your specification directly determines the quality of what is generated. Vague inputs produce vague outputs. This is the central insight of prompt engineering, covered in depth in Chapter 5.
+An underspecified prompt ("add validation to the login endpoint") produces code that technically adds validation but misses the cases the engineer cared about. A fully specified prompt produces code that can be verified against the specification directly.
 
-### 6.3.2 Generate
+### Generate
 
-Generation is the act of invoking the AI with your specification to produce code, tests, documentation, or other artefacts. In the AI-native paradigm, this step is largely mechanical — the creative and intellectual work is in the specification and verification phases.
+*Generation* is the act of invoking the agent with the specification to produce code, tests, documentation, or other artefacts. In the Agentic SDLC, generation is largely mechanical — the intellectual work is in the phases before and after it.
 
-Key decisions at the generate step:
-- **Which model to use**: Different models have different strengths, costs, and context windows
-- **Temperature and sampling**: Lower temperatures produce more deterministic output; higher temperatures produce more varied output
-- **Context to include**: What files, documentation, or examples should accompany the specification?
+Key decisions at this phase:
+- **Which model**: Match capability to task complexity — capable models for security-critical or complex reasoning tasks, faster models for boilerplate and scaffolding
+- **Which agent**: Terminal agent or AI-native IDE, depending on task and context
+- **What context to include**: Which files, conventions, and background does the agent need?
 
-### 6.3.3 Verify
+The common mistake is to treat generation as the primary activity. Engineers who spend most of their time crafting prompts to coax better generation are inverting the model. The specification should be thorough enough that generation is routine.
 
-Verification is the act of determining whether the generated output meets the specification. This is where most of the engineering judgment in AI-native development lives.
+### Verify
 
-Verification is covered in depth in Chapter 6. At a high level, it involves:
+*Verification* is the act of determining whether the generated output meets the specification. This is where most engineering judgment lives in the Agentic SDLC.
 
-- Running automated tests
-- Static analysis and type checking
-- Manual code review
-- Behavioural testing against real or synthetic data
-- Security review
+Verification is not optional and cannot be delegated to the agent itself. An agent asked to check its own output will often confirm that the output is correct even when it is not — it is evaluating against the same implicit model that produced the error. Verification requires a human with the engineering knowledge to recognise what correct looks like.
 
-Crucially, verification must happen *before* the generated code is trusted. AI-generated code can pass visual inspection while containing subtle bugs, security vulnerabilities, or logical errors that only surface under specific conditions.
+A structured verification checklist for AI-generated code:
 
-### 6.3.4 Refine
-
-If verification reveals problems, refinement involves returning to the specification (to add constraints or correct misunderstandings) and regenerating. Refinement may involve:
-
-- Adding failing test cases to the specification ("the function should return X when given Y")
-- Adding explicit constraints that the AI violated ("do not use X, use Y instead")
-- Breaking the specification into smaller, more tractable pieces
-- Changing the approach entirely
-
-The Spec → Generate → Verify → Refine loop typically runs multiple times before a satisfactory result is reached. The discipline is in specification quality and verification rigour, not in generating more.
-
----
-
-## 6.4 What Is an AI Coding Agent?
-
-An AI coding agent is a system in which a large language model can not only generate text, but also take *actions* in the world — reading and writing files, executing code, calling APIs, and browsing the web — in service of a multi-step goal.
-
-The term "agent" comes from AI research ([Russell & Norvig, 2020](https://aima.cs.berkeley.edu/)), where an agent is any system that perceives its environment and takes actions to achieve goals. In the context of AI coding, the environment is the software development environment (the codebase, the terminal, the browser).
-
-### 6.4.1 Tool Use
-
-The most fundamental capability that distinguishes an agent from a chatbot is *tool use* — the ability to invoke external functions and incorporate their results into the agent's reasoning.
-
-Common tools available to coding agents:
-
-| Tool | Description |
+| Category | Questions |
 |---|---|
-| `read_file(path)` | Read the contents of a file |
-| `write_file(path, content)` | Write content to a file |
-| `run_command(cmd)` | Execute a shell command and return the output |
-| `search_web(query)` | Search the web and return results |
-| `fetch_url(url)` | Fetch the contents of a URL |
-| `call_api(endpoint, params)` | Make an HTTP API call |
+| **Functional correctness** | Does the code do what the specification says, for all specified cases? |
+| **Edge cases** | Does it handle empty inputs, null values, boundary conditions? |
+| **Security** | Does it introduce injection risks, broken auth, or unsafe defaults? |
+| **Error handling** | Are errors surfaced, not silently swallowed? |
+| **Type correctness** | Do types match? Does the type checker pass? |
+| **Test coverage** | Does the generated test suite actually test the specified behaviours? |
+| **Conventions** | Does the code follow the project's style, naming, and structure conventions? |
+| **No accidental side effects** | Does the code modify state it was not supposed to touch? |
 
-When an agent has access to these tools, it can autonomously investigate a codebase, identify a bug, write a fix, run the tests to verify it, and commit the change — all without human intervention at each step.
+Automated checks — test suites, linters, type checkers, security scanners — are the first line of verification. They are necessary but not sufficient. Many specification violations pass automated checks because the test suite tests what the code does, not what the specification required.
 
-### 6.4.2 Planning
+An important nuance: agents can assist with verification as well as generation. A separate agent configured for security review can audit AI-generated code for vulnerability patterns without the cognitive overhead of the engineer who wrote the original specification ([Roychoudhury, 2025](https://arxiv.org/abs/2508.17343)). However, this only works when the verification agent has access to what Roychoudhury terms *intent inference* — an explicit representation of what the code was supposed to do, grounded in the specification or in program structure analysis — rather than simply re-reading the generated code and guessing. Verification-by-agent without a clear specification to verify against is the same problem as generation-without-specification, one layer deeper.
 
-Planning is the ability to break a high-level goal into a sequence of sub-tasks and execute them in order, adapting the plan as new information is discovered.
+### Refine
 
-A naive agent executes tasks sequentially without reflection. A more sophisticated agent uses a *plan-execute-observe* loop:
+*Refinement* is the act of returning to the specification with information from the verification step and adjusting before regenerating. Refinement is how the loop closes.
 
-```
-Goal: "Add input validation to the task creation endpoint"
+Common refinement triggers:
 
-Plan:
-  1. Read the current task creation endpoint code
-  2. Read the existing tests for this endpoint
-  3. Identify which input fields currently lack validation
-  4. Write validation logic for each field
-  5. Write tests for the new validation
-  6. Run the tests to verify
+- A test fails: add the failing case as an explicit example in the specification
+- The agent used a deprecated library: add a constraint ("do not use X, use Y")
+- The output misunderstood a domain concept: add a clarifying definition
+- The generated code is technically correct but violates a convention: add the convention to the context
 
-Execute step 1 → Observe result → Update plan if needed → Execute step 2 → ...
-```
-
-Modern agents use techniques like ReAct (Reason + Act) ([Yao et al., 2022](https://arxiv.org/abs/2210.03629)) to interleave reasoning and action, producing more reliable multi-step behaviour.
-
-### 6.4.3 Memory
-
-Agents need different types of memory to function effectively across long tasks:
-
-- **In-context memory**: The current conversation history and tool results — limited by the model's context window
-- **External memory**: Files, databases, or vector stores that the agent can read and write — persistent across sessions
-- **Semantic memory**: Compressed summaries of past interactions — allows the agent to operate over longer time horizons than the context window permits
-
-Managing what information to put in context (and what to leave out) is a significant challenge in building effective agents. Too much context causes the model to "lose focus"; too little context causes it to make decisions without relevant information.
+The discipline of refinement is to *improve the specification*, not just re-run the agent with the same input hoping for a different result. Regenerating without refining is the most common time-wasting pattern in agentic workflows.
 
 ---
 
-## 6.5 Choosing the Right Model
+## 6.6 Patterns and Anti-Patterns
 
-Not all AI models are equally suited to every task. Selecting the right model for a given purpose is an engineering decision with real consequences for quality, speed, and cost.
+Agentic software engineering has accumulated a short but instructive body of practice. Hassan (2025) identifies patterns that distinguish effective AI-native engineers from those who simply adopted new tools without changing their approach.
 
-### 6.5.1 The Model Capability Spectrum
+### Patterns
 
-Modern AI providers offer models across a spectrum from small/fast/cheap to large/slow/capable. The Anthropic model family as of 2025:
+**Specification-first development.** Write the complete specification before invoking the agent. Engineers who start typing a prompt and refine it as they go produce weaker output than engineers who think through the specification completely, then invoke the agent once.
 
-| Model | Strengths | Context Window | Relative Cost | Best For |
-|---|---|---|---|---|
-| **Claude Haiku** | Speed, low latency | 200K tokens | Low | High-volume, simple tasks: docstring generation, lint fixes, short completions |
-| **Claude Sonnet** | Balanced capability and speed | 200K tokens | Medium | Most engineering tasks: feature implementation, code review, test generation |
-| **Claude Opus** | Maximum capability, complex reasoning | 200K tokens | High | Difficult tasks: architectural decisions, complex debugging, security analysis |
+**Verification-driven generation.** Write the verification criteria — test cases, behavioural requirements, security checks — before generating the implementation. This is the AI-native analogue of test-driven development: the tests define what "correct" means, so that when the agent generates an implementation you can immediately verify it.
 
-> **Check the current model list.** Model families evolve rapidly. Always verify available models and their capabilities at [https://docs.anthropic.com/en/docs/about-claude/models](https://docs.anthropic.com/en/docs/about-claude/models) before selecting a model for production use.
+**Context file discipline.** Maintain a project-level context file (`CLAUDE.md`, `.cursorrules`, or equivalent) that the agent reads before every task. Keep it current. An outdated context file that references a library the project no longer uses causes the agent to generate code using the wrong dependency — silently.
 
-For OpenAI, the equivalent spectrum is GPT-4o-mini (fast/cheap) → GPT-4o (balanced) → o1/o3 (reasoning-heavy). For Google: Gemini Flash → Gemini Pro → Gemini Ultra. The selection principle is the same regardless of provider.
+**Incremental delegation.** Start with smaller, well-bounded tasks and expand the delegation as you build confidence in the agent's output for your specific codebase. An agent that reliably generates correct tests for utility functions may still produce insecure code in authentication flows. Calibrate trust by task type, not globally.
 
-### 6.5.2 Matching Model to Task
+**Commit granularity.** Commit AI-generated changes frequently and at a granularity that makes diffs reviewable. A single 2,000-line commit labelled "AI refactor" is unverifiable in practice. Fifty commits of 40 lines each, each with a clear message, are verifiable.
 
-```python
-import anthropic
+### Anti-Patterns
 
-client = anthropic.Anthropic()
+**Prompt-and-pray.** The engineer submits a vague prompt, receives output, ships it without systematic verification, and hopes the tests catch any issues. Tests catch syntactic and logical errors; they rarely catch specification mismatches, security weaknesses, or architectural violations.
 
-# Use a smaller, faster model for high-volume, simple tasks
-def generate_docstring(function_code: str) -> str:
-    response = client.messages.create(
-        model="claude-haiku-4-5-20251001",  # Fast, cheap — appropriate for docstrings
-        max_tokens=256,
-        messages=[{"role": "user", "content": f"Write a one-line docstring for:\n{function_code}"}],
-    )
-    return response.content[0].text
+**Confidence by plausibility.** AI-generated code looks correct because it is well-formatted, uses familiar patterns, and contains no obvious syntax errors. Plausibility is not correctness. The Stanford Copilot study is the controlled-trial version of this anti-pattern.
 
+**Ownership transfer.** The engineer treats AI-generated code as the AI's code — "the agent wrote this, not me" — and applies less rigorous review than they would to their own work. This is both epistemically wrong (the engineer directed and accepted the output) and professionally dangerous (the engineer is responsible for what they commit, regardless of how it was generated).
 
-# Use a capable model for complex reasoning tasks
-def security_review(code: str) -> str:
-    response = client.messages.create(
-        model="claude-opus-4-7",  # Full capability — security analysis needs it
-        max_tokens=2048,
-        messages=[{"role": "user", "content": f"Security review:\n{code}"}],
-    )
-    return response.content[0].text
+**Context starvation.** The engineer invokes the agent with minimal context — no project conventions, no relevant file background, no architectural constraints — and then iterates through many rounds of refinement because the initial output was disconnected from the project's reality. The fix is to invest in context upfront, not to iterate expensively later.
 
-
-# Use a balanced model for most feature development
-def implement_feature(specification: str) -> str:
-    response = client.messages.create(
-        model="claude-sonnet-4-6",  # Balanced — good quality at reasonable cost
-        max_tokens=4096,
-        messages=[{"role": "user", "content": specification}],
-    )
-    return response.content[0].text
-```
-
-### 6.5.3 Context Window Considerations
-
-Context window size — the maximum amount of text a model can process in a single call — directly affects specification design. All current Claude models support 200K tokens (roughly 150,000 words), which is sufficient for most codebases. However, larger contexts:
-
-- Cost more (most providers charge per token)
-- Are processed more slowly
-- May cause the model to "lose focus" on specific instructions buried in long context ([Liu et al., 2023](https://arxiv.org/abs/2307.03172))
-
-**Practical guideline**: Keep specification prompts under 2,000 tokens for most code generation. Reserve large context for tasks that genuinely need it — understanding an entire module before refactoring, for example.
-
-### 6.5.4 Cost Estimation
-
-Rough cost estimation for common tasks (prices vary; check provider pricing pages for current rates):
-
-| Task | Typical tokens | Model tier | Approx. cost per 1,000 tasks |
-|---|---|---|---|
-| Docstring generation | ~500 in + ~100 out | Small | < $0.10 |
-| Function implementation | ~1,000 in + ~500 out | Medium | ~$1–3 |
-| Security review | ~2,000 in + ~1,000 out | Large | ~$15–30 |
-| Agent task (10 steps) | ~20,000 total | Medium | ~$10–20 |
-
-For a 12-person team running 50 AI-assisted tasks per day, monthly API costs typically range from $50–500 depending on task mix and model selection — comparable to a single SaaS tool licence.
+**Overlong agentic sessions.** Allowing an agent to operate for many steps without verification checkpoints. Each step can propagate errors from earlier steps. An agent that went wrong at step 3 of a 20-step task may have built an entire feature on a flawed foundation. Establish verification checkpoints after every 3–5 significant steps.
 
 ---
 
-## 6.6 The Shifting Role of the Engineer
+## 6.7 The Future of Work with an AI Teammate
 
-The emergence of AI coding agents does not eliminate the need for software engineers — but it does fundamentally change what engineers spend their time on.
+Hoda (2025) argues that the field risks making a categorical error: treating agentic software engineering as an acceleration of *coding* when it is actually a transformation of *the entire software process* ([Hoda, 2025](https://arxiv.org/abs/2510.19692)). Teams that adopt AI agents to write code faster while leaving their requirements practices, design processes, review cultures, and testing disciplines unchanged are, in Hoda's framing, using a paradigm-shifting tool within a paradigm that has not shifted. The efficiency gains are real but bounded. The deeper opportunity — and the deeper risk — lies in what happens when AI agents are applied across the full socio-technical process, not just the coding step.
 
-### 6.6.1 What Changes
+### Productivity Expectations
 
-**Less time on**: Implementing boilerplate, writing routine CRUD code, translating designs into code, looking up API documentation, writing test scaffolding.
+The 10x productivity claim — that AI coding agents can make a single engineer ten times as productive — circulates widely, and the evidence is mixed in instructive ways.
 
-**More time on**: Defining the problem clearly, writing precise specifications, verifying generated outputs, architectural decisions, security review, stakeholder communication.
+Studies consistently find productivity gains for *specific task types*: routine code generation, test scaffolding, documentation, boilerplate, and translation between languages. [GitHub's internal study (2023)](https://github.blog/2022-09-07-research-quantifying-github-copilots-impact-on-developer-productivity/) found Copilot users completed certain coding tasks 55% faster. McKinsey (2023) found mid-complexity tasks saw 20–45% time reductions. These are real and significant gains.
 
-### 6.6.2 The Engineer as Principal
+The 10x claim typically comes from productivity profiles that are heavily skewed toward tasks AI handles well. A developer whose work is 80% boilerplate and routine CRUD implementation may see near 10x on that work. A developer whose work is 80% novel domain logic, architectural decisions, and stakeholder negotiation will see modest gains.
 
-In agentic systems, the human engineer acts as a *principal* — the authority that defines goals, sets constraints, and approves outcomes. The agent acts as an *executor* — planning and carrying out the steps needed to achieve the goal.
+The honest framing: AI coding agents can make a developer dramatically more productive at the tasks AI handles well, while leaving the tasks that require judgment, domain knowledge, and interpersonal communication essentially unchanged. The proportion of work that falls into each category varies widely by role, seniority, and domain.
 
-This relationship requires a new set of skills:
+### Risks and Concerns
 
-- **Goal decomposition**: Breaking a complex goal into tasks small enough for an agent to handle reliably
-- **Constraint specification**: Defining what the agent must NOT do, not just what it should do
-- **Output verification**: Assessing whether the agent's output is correct, secure, and appropriate
-- **Failure diagnosis**: Understanding why an agent went wrong and how to prevent recurrence
+The productivity data is real. So are the failures. In 2025, reports of *agentic incidents* — cases where AI coding agents took destructive, irreversible actions — proliferated across developer communities. Engineers reported agents with broad shell access interpreting "clean up temporary files" as a mandate to delete untracked directories, wiping configuration that was not in version control. Others reported agents generating and executing database migration scripts against production instances after staging tests passed — dropping columns used by features not covered by the test suite. A widely circulated case involved an agent connected to an AWS environment that, acting on a refactoring task, deleted S3 buckets it identified as unused — with no backup, no confirmation step, and no rollback path. In each case the agent had done exactly what it understood its instructions to mean. The gap was between what the engineer intended and what the agent inferred, and there was no checkpoint in between.
 
-### 6.6.3 Skills That Endure
+Liu et al. (2023) document the baseline problem: 32.2% of ChatGPT-generated code samples produced incorrect outputs, and nearly half had maintainability issues detectable by standard static analysis ([Liu et al., 2023](https://arxiv.org/abs/2307.12596)). ChatGPT could self-repair some defects when shown the errors — but only when the engineer knew to ask. An engineer who accepted the output without verification shipped the failure.
 
-The foundational skills of software engineering — understanding algorithms, system design, testing, security, and communication — become *more* valuable in the AI-native era, not less. They are the skills needed to write good specifications, verify AI outputs, and diagnose agent failures.
+**Overreliance and skill atrophy.** Perry et al. (2022) identified a mechanism beyond the immediate code errors: Copilot users relied on the tool as a substitute for understanding, rather than as an accelerator for it. Engineers who stop practising a skill because AI does it for them lose the judgment needed to verify AI's execution of that skill. Overreliance is not a hypothetical future risk — it is a documented present-day outcome ([Perry et al., 2022](https://arxiv.org/abs/2211.03622)).
 
-Engineers who treat AI tools as magic boxes that produce correct code will be frustrated and vulnerable. Engineers who understand the capabilities and failure modes of AI systems will be significantly more productive.
+**Responsibility and accountability.** When AI-generated code causes a production incident, the question of who is responsible is not legally ambiguous: the engineer who committed the code and the organisation that deployed it are responsible. AI systems are not legal persons. They cannot be held accountable. The accountability sits with the humans in the chain.
 
----
+**Intellectual property and licences.** AI models are trained on publicly available code, much of it under open-source licences. When an agent generates code that closely resembles a licensed open-source function, questions arise about licence obligations. As of 2025, this remains an active area of litigation in multiple jurisdictions. Engineering teams working on proprietary products should understand their organisation's policy on AI-generated code and verify that generated output does not reproduce copyrighted material verbatim.
 
-## 6.7 Tutorial: Working with an AI Coding Agent End-to-End
+**Autonomy and the expanding blast radius.** As agents become more capable and are delegated more consequential tasks, the potential damage from a single bad agentic session increases. An agent that generates a wrong function is a minor problem. An agent that refactors a database schema incorrectly, generates a migration script, and runs it against a production database is a major incident. The appropriate response is not to avoid agentic tools — it is to match the agent's autonomy to the reversibility of its actions, a principle addressed in Section 6.8.
 
-This tutorial demonstrates the Agentic SDLC cycle using the Anthropic API to implement a feature for the course project.
-
-### The Task
-
-Add a `filter_tasks` function to the task service that filters tasks by status, priority, and assignee.
-
-### Step 1: Write the Specification
-
-```python
-# spec: filter_tasks function
-# 
-# Context: Part of a task management API backend (Python 3.11, no framework)
-# 
-# Function signature:
-#   filter_tasks(tasks, status=None, priority=None, assignee=None) -> list[Task]
-#
-# Behaviour:
-# - Returns all tasks if no filters are provided
-# - Filters by status if status is provided (exact match)
-# - Filters by priority if priority is provided (exact match, integer 1-4)
-# - Filters by assignee if assignee is provided (exact match on assignee email)
-# - Multiple filters are ANDed (all must match)
-# - Returns an empty list (not None) if no tasks match
-# - Does NOT modify the input list
-# - Raises TypeError if tasks is not a list
-# - Raises ValueError if priority is provided but not in range 1-4
-#
-# Examples:
-# filter_tasks([task1, task2], status="open") -> [task1] (if task1.status=="open")
-# filter_tasks([task1], status="open", priority=2) -> [] (if task1.priority!=2)
-# filter_tasks([]) -> []
-```
-
-### Step 2: Generate an Implementation
-
-```python
-import anthropic
-
-client = anthropic.Anthropic()
-
-specification = """
-Implement a Python function `filter_tasks` with the following specification:
-...
-"""
-
-response = client.messages.create(
-    model="claude-opus-4-7",
-    max_tokens=1024,
-    messages=[{"role": "user", "content": specification}],
-)
-
-print(response.content[0].text)
-```
-
-### Step 3: Verify the Output
-
-Review the generated code for:
-
-- [ ] Correct type hints on function signature and return type
-- [ ] Does not modify the input list (uses a new list or generator)
-- [ ] TypeError raised when tasks is not a list
-- [ ] ValueError raised when priority is out of range
-- [ ] Empty list returned (not None) when no matches
-- [ ] All filter conditions ANDed correctly
-
-Write tests to verify each behaviour before accepting the code.
-
-### Step 4: Refine
-
-If the generated code is missing the `TypeError` check, add this constraint to the specification:
-
-```python
-# Add to specification:
-# - MUST raise TypeError (not just return []) if tasks is not a list
-#   This is important because silent failures mask programmer errors
-```
-
-Regenerate and re-verify.
+**Security attack surface.** Agents that are connected to external systems — issue trackers, CI pipelines, production APIs — can be manipulated through malicious content in those systems. *Prompt injection* attacks embed AI instructions in user-controlled content (a ticket title, a code comment, a test fixture) that the agent reads and executes as instructions. Chapter 9 covers this threat in detail; for now, the principle is: treat any content the agent reads from an external system as untrusted input, just as you would user-supplied data in a web application.
 
 ---
 
-## 6.8 Human-in-the-Loop vs. Human-on-the-Loop
+## 6.8 Human Responsibility in the Agentic Era
 
-Not all agentic tasks warrant the same level of human involvement. Understanding the two dominant oversight postures — *human-in-the-loop* and *human-on-the-loop* — helps you match the level of supervision to the risk profile of the task.
+The most important idea in this chapter is also the simplest: the human engineer retains full responsibility for everything that is committed, deployed, or shipped — regardless of how it was produced.
 
-### Human-in-the-Loop (HITL)
+This is not a philosophical position. It is the practical reality of how accountability works in engineering organisations and in law. When a software defect causes harm, the investigation asks who designed, built, tested, and deployed the system. The answer is the humans and the organisation — not the tools they used. This was true when the tool was a compiler, a framework, or a cloud provider. It remains true when the tool is an AI agent.
 
-In a human-in-the-loop configuration, a human must explicitly approve each consequential action before the agent takes it. The agent pauses, presents its intended next step, and waits for the engineer to confirm, modify, or reject it.
+Roychoudhury et al. (2025) frame this directly in their analysis of agentic SE systems: the central challenge is not capability but *trust* — establishing the conditions under which engineers and organisations can place justified confidence in AI-generated outputs ([Roychoudhury et al., 2025](https://arxiv.org/abs/2502.13767)). Trust is not granted by default. It is earned through verification discipline, bounded delegation, and accumulated evidence of reliable behaviour in specific contexts. An agent that has produced correct, secure authentication code fifty times on a project earns a degree of trust for that task type. That trust does not generalise to database migrations, production deployments, or security-critical logic the agent has not been tested against.
 
-This is the appropriate posture when:
-- The actions are **irreversible** (deleting records, sending emails, deploying to production)
-- The domain is **novel or high-stakes** (security-critical code, financial logic, medical data)
-- The agent is **new or untested** and its reliability has not yet been established
-- **Regulatory or audit requirements** mandate a documented human approval at each step
+This has three concrete implications for agentic practice:
 
-The cost of HITL is latency and cognitive load — the engineer must stay engaged throughout the task, which negates many of the throughput benefits of autonomous agents.
+**Review everything before it is committed.** The agent's output is a first draft, not a final product. The engineer's review is what transforms it from a generated artefact into code the engineer stands behind. This review should be at least as thorough as a review of code written by a junior teammate — someone competent but fallible, whose work you are co-signing by approving.
 
-### Human-on-the-Loop (HOTL)
+**Understand what you are committing.** Committing code you do not understand is not acceptable regardless of its origin. An engineer who cannot explain what a function does, why it uses a particular approach, and what its failure modes are, has not adequately verified the output. If the agent produces code you do not understand, the right response is to ask the agent to explain it, to read the relevant documentation, and to ensure you understand it before committing — not to trust that it looks plausible.
 
-In a human-on-the-loop configuration, the agent executes autonomously while a human *monitors* its progress and retains the ability to intervene. The engineer is not required to approve each step, but receives notifications of significant events — tool calls with side effects, unexpected errors, or completion — and can halt the agent at any point.
+**Set appropriate delegation boundaries.** Not every task should be fully delegated. Determine which actions in your agentic workflow are irreversible (database migrations, production deployments, external API calls that have side effects) and require explicit human approval before the agent takes them. Reversible actions in a version-controlled environment — editing files, generating tests, updating documentation — can be delegated with human review at the end. Irreversible actions require human-in-the-loop approval at the point of action.
 
-This is the appropriate posture when:
-- The actions are **reversible** (editing files in a version-controlled repository, writing tests)
-- The agent is operating in a **well-defined, bounded domain** with clear success criteria
-- **Automated verification** (test suites, linters, type checkers) can catch most errors before they propagate
-- The team has **established trust** in the agent through prior use on similar tasks
-
-The risk of HOTL is that subtle errors may propagate further before they are caught. This is mitigated by strong automated verification at the end of the agentic loop.
-
-### Choosing the Right Posture
-
-| Dimension | Human-in-the-Loop | Human-on-the-Loop |
-|---|---|---|
-| Action reversibility | Low (irreversible) | High (reversible) |
-| Domain familiarity | New/unfamiliar | Well-understood |
-| Agent maturity | Untested/new | Established track record |
-| Verification coverage | Limited automated checks | Comprehensive test suite |
-| Regulatory context | Audit/compliance required | Standard engineering workflow |
-| Throughput cost | High (human bottleneck) | Low (minimal interruption) |
-
-In practice, most teams operate on a sliding scale: HITL for production deployments and database migrations; HOTL for feature implementation, test generation, and documentation. As agent reliability in a specific domain improves and automated verification matures, the posture typically shifts from HITL toward HOTL.
-
-A third posture — *fully autonomous* with no human oversight — is rarely appropriate in software engineering contexts, even for low-risk tasks. At minimum, the engineer should review the agent's output before it is committed or deployed. The goal is to reduce *friction*, not to eliminate *judgment*.
+The tool does not make the engineer. Jensen Huang was right that the barrier to producing code has fallen. The barrier to producing *correct, secure, maintainable* code has not moved. That barrier has always been engineering judgment, and it remains so.
 
 ---
 
-## Chapter Summary
+## 6.9 Key Takeaways
 
-This chapter introduced the paradigm shift from AI-assisted to AI-native software engineering and established the conceptual foundations you will build on throughout this course.
+1. **A tool does not confer judgment.** Liu et al. (2023) found that 32.2% of AI-generated code samples were functionally incorrect; Perry et al. (2022) found that developers using AI produced more insecure code with greater confidence. Agentic tools amplify existing engineering capability — they do not substitute for it.
 
-**Key ideas:**
+2. **An AI coding agent is not an LLM.** It is an LLM connected to tools, skills, connectors, and memory that allow it to take multi-step actions in the world. The difference is consequential: agents can make irreversible changes that require careful oversight.
 
-- *AI-assisted development* uses AI to accelerate individual steps in an unchanged workflow. *AI-native engineering* restructures the workflow itself around AI capabilities and failure modes.
-- The **Agentic SDLC** — Spec → Generate → Verify → Refine — replaces the traditional waterfall and maps better onto the iterative, fast-feedback nature of AI-assisted development. The critical human activities are specification and verification, not implementation.
-- An **AI coding agent** extends a language model with tools (file access, code execution, API calls), planning, and memory. The Anthropic `tool_use` API is the mechanism through which this tool-calling behaviour is expressed in code: the model requests a tool call, your code executes it, and the result is returned to the model for further reasoning.
-- **MCP (Model Context Protocol)** standardises how agents connect to external tools and data sources, eliminating bespoke integration code. **A2A (Agent-to-Agent)** standardises how agents communicate with each other, enabling composable multi-agent pipelines. Both protocols trade bespoke flexibility for interoperability at scale.
-- **Model selection** is an engineering decision: match model capability and cost to task complexity. Use small models for high-volume simple tasks; reserve large models for tasks requiring deep reasoning.
-- The engineer's role shifts from *implementer* to *principal*: defining goals, writing precise specifications, verifying outputs, and diagnosing failures. Foundational software engineering skills — algorithms, system design, testing, security — become *more* valuable, not less.
-- **Human-in-the-loop** (approve each action) is appropriate for irreversible, high-stakes, or audited tasks. **Human-on-the-loop** (monitor and intervene) is appropriate when actions are reversible, verification is strong, and the agent has an established track record in the domain.
+3. **Terminal agents and AI-native IDEs serve different use cases.** Claude Code and Gemini CLI suit complex, flexible, terminal-centric work. Cursor and Windsurf suit sustained feature work where visual context alongside the AI conversation speeds verification. Neither is universally superior.
+
+4. **The four components of an agent are tools, skills, connectors, and memory.** Tools are atomic actions. Skills are reusable multi-step capabilities. Connectors link the agent to external systems. Memory determines what persists across steps and sessions.
+
+5. **The Agentic SDLC is Spec → Generate → Verify → Refine.** Generation is fast and cheap; specification and verification are where engineering judgment concentrates. Investing in specification quality is more efficient than iterating through poor generations.
+
+6. **Common anti-patterns include prompt-and-pray, confidence by plausibility, and ownership transfer.** All three result from treating AI output as trustworthy by default rather than as a first draft requiring systematic verification.
+
+7. **The 10x productivity claim is partially true and easily misread.** AI coding agents produce large gains for tasks they handle well — boilerplate, tests, documentation. They produce modest gains for tasks requiring deep judgment. The proportion of each in a given role determines the realistic productivity impact.
+
+8. **Significant risks include overreliance, accountability gaps, IP and licence exposure, and prompt injection.** None of these are reasons to avoid agentic tools — they are reasons to use them with engineered controls.
+
+9. **Accountability does not transfer to the AI.** The engineer who commits AI-generated code is responsible for that code. Review before commit is not optional.
 
 ---
 
 ## Review Questions
 
-**Conceptual**
+1. A team lead proposes giving a junior developer access to Claude Code to implement a new payment processing feature autonomously, with a final code review at the end. Using the concepts from this chapter — agent components, the Agentic SDLC, and human responsibility — identify three specific risks in this proposal and recommend concrete changes to the workflow that would mitigate each risk.
 
-1. Explain the difference between AI-assisted development and AI-native engineering. Give a concrete example of a task that would be handled differently under each approach, and explain why the engineer's activities differ between the two.
+2. The anti-pattern "confidence by plausibility" describes engineers accepting AI output because it looks correct, rather than because it has been verified to be correct. Design a verification checklist for AI-generated authentication code. What specific categories of error would your checklist catch that automated tests might not?
 
-2. The chapter argues that verification — not generation — is "where most of the engineering judgment in AI-native development lives." Do you agree? What specific skills does effective AI output verification require that differ from reviewing human-written code?
+3. Your team is considering adopting an AI-native IDE (Cursor or Windsurf) versus a terminal-based agent (Claude Code). The project is a 200-KLOC Python monolith with a comprehensive test suite and no AI tooling currently. What questions would you ask to determine which approach is more appropriate, and what evidence would lead you toward each choice?
 
-3. Compare the MCP (Model Context Protocol) and A2A (Agent-to-Agent) protocols. What problem does each solve, and why is standardisation at the protocol level more valuable than each team building its own integration layer?
+4. A developer uses an AI agent to implement a database migration. The agent runs the migration against the staging database, observes success, and reports the task complete. The developer commits and deploys. The migration silently drops a column used by a feature not covered in the test suite. Who is responsible, and what process changes would have prevented the incident?
 
-**Applied**
+5. Ahmed Hassan argues AI should be treated as a teammate rather than a tool. A sceptical colleague responds: "Teammates have professional accountability. AI has none. The metaphor is misleading." Construct the strongest version of both sides of this argument, then take a position on which framing produces better engineering behaviour in practice.
 
-4. You are building an agent that monitors a production database, detects anomalies, and automatically rolls back suspicious transactions. Using the HITL/HOTL framework from Section 4.8, justify which oversight posture is appropriate for each phase of the agent's operation (detection, decision, rollback). What automated verification would you put in place to support your chosen posture?
+---
 
-5. Your team has been tasked with using the Agentic SDLC to add a password reset feature to the course project. Write a complete specification (Step 1 of the tutorial) for a `request_password_reset(email: str) -> None` function, suitable for use in a `client.messages.create` call. Your specification must include: context, function signature, behaviour (at least five rules), constraints (at least two things the function must NOT do), and three concrete input-output examples covering normal operation, a missing account, and an invalid email format. Then identify two specific behaviours you would check in the verification step that an AI is likely to implement incorrectly or omit.
+## Further Reading
+
+- Hassan, A. E. (2025). *Agentic Software Engineering: Building Trustworthy Software with Stochastic Teammates at Unprecedented Scale*. [https://agenticse-book.github.io/pdf/AgenticSE_Book.pdf](https://agenticse-book.github.io/pdf/AgenticSE_Book.pdf)
+- Liu, Y., Le-Cong, T., Widyasari, R., Tantithamthavorn, C., Li, L., Le, X.-B. D., & Lo, D. (2023). *Refining ChatGPT-Generated Code: Characterizing and Mitigating Code Quality Issues*. arXiv:2307.12596. [https://arxiv.org/abs/2307.12596](https://arxiv.org/abs/2307.12596)
+- Perry, N., Srivastava, M., Kumar, D., & Boneh, D. (2022). *Do Users Write More Insecure Code with AI Assistants?* ACM CCS. [https://arxiv.org/abs/2211.03622](https://arxiv.org/abs/2211.03622)
+- Russell, S., & Norvig, P. (2020). *Artificial Intelligence: A Modern Approach* (4th ed.). Pearson. [https://aima.cs.berkeley.edu/](https://aima.cs.berkeley.edu/)
+- Yao, S., Zhao, J., Yu, D., Du, N., Shafran, I., Narasimhan, K., & Cao, Y. (2022). *ReAct: Synergizing Reasoning and Acting in Language Models*. [https://arxiv.org/abs/2210.03629](https://arxiv.org/abs/2210.03629)
+- Anthropic. (2024). *Model Context Protocol Specification*. [https://modelcontextprotocol.io](https://modelcontextprotocol.io)
+- GitHub. (2023). *Research: Quantifying GitHub Copilot's Impact on Developer Productivity*. [https://github.blog/2022-09-07-research-quantifying-github-copilots-impact-on-developer-productivity/](https://github.blog/2022-09-07-research-quantifying-github-copilots-impact-on-developer-productivity/)
+- Chen, M., et al. (2021). *Evaluating Large Language Models Trained on Code (Codex)*. [https://arxiv.org/abs/2107.03374](https://arxiv.org/abs/2107.03374)
+- Roychoudhury, A., Pasareanu, C., Pradel, M., & Ray, B. (2025). *Agentic AI Software Engineers: Programming with Trust*. arXiv:2502.13767. [https://arxiv.org/abs/2502.13767](https://arxiv.org/abs/2502.13767)
+- Roychoudhury, A. (2025). *Agentic AI for Software: Thoughts from the Software Engineering Community*. arXiv:2508.17343. [https://arxiv.org/abs/2508.17343](https://arxiv.org/abs/2508.17343)
+- Hoda, R. (2025). *Toward Agentic Software Engineering Beyond Code: Framing Vision, Values, and Vocabulary*. arXiv:2510.19692. [https://arxiv.org/abs/2510.19692](https://arxiv.org/abs/2510.19692)

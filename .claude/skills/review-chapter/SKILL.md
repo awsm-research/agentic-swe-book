@@ -23,7 +23,7 @@ When invoked with a chapter file (e.g., `/review-chapter src/chapter_2.md`):
 
 1. Read the target chapter file in full
 2. Read `src/chapter_1.md` as the established style baseline
-3. Read `outline.md` to confirm the chapter's intended content scope
+3. Read `summary.md` to confirm the chapter's intended content scope
 4. Run all three reviews independently (do not let one perspective soften another)
 5. Produce a consolidated report followed by an edit plan
 6. Apply the high-priority edits directly to the chapter file
@@ -38,7 +38,7 @@ When invoked with a chapter file (e.g., `/review-chapter src/chapter_2.md`):
 
 - **Hook** — Does the chapter open with something a reader would actually want to read? Or does it start with a definition, a sweeping claim, or a meta-announcement ("in this chapter we will…")?
 - **Learning objectives** — Are they measurable and specific? Can a student genuinely know whether they achieved each one? Are they all actually taught in the chapter?
-- **Scope** — Does the chapter cover what `outline.md` promises? Is anything promised but missing? Is anything present that belongs in a different chapter?
+- **Scope** — Does the chapter cover what `summary.md` promises? Is anything promised but missing? Is anything present that belongs in a different chapter?
 - **Pedagogical flow** — Does each section build on the last? Would a student who reads linearly be able to follow?
 - **Case studies** — Are real incidents used? Are they cited? Are they recent enough to be credible? Do they connect to the section's claim, or are they decorative?
 - **Review questions** — Are they scenario-based (require reasoning) or recall-based (require memorisation)? At least 80% should require reasoning.
@@ -56,7 +56,7 @@ When invoked with a chapter file (e.g., `/review-chapter src/chapter_2.md`):
 **What to check:**
 
 - **Technical accuracy** — Are all claims correct? Are dates, names, and attributions accurate? Is the Waterfall model correctly attributed to Royce (who criticised it)? Is the Agile Manifesto's year correct (2001)? Are tool names and version numbers current?
-- **Completeness vs. outline** — Does the chapter cover all topics listed for this chapter in `outline.md`? Flag anything missing, not just things that are wrong.
+- **Completeness vs. outline** — Does the chapter cover all topics listed for this chapter in `summary.md`? Flag anything missing, not just things that are wrong.
 - **Conceptual depth** — Are important concepts explained at the right level, or glossed over? A chapter on requirements that doesn't distinguish functional from non-functional requirements has a gap. A chapter on testing that doesn't mention coverage has a gap.
 - **Learning objective alignment** — Map each learning objective to the section that teaches it. Flag any objective with no corresponding content.
 - **Citation quality** — Are canonical sources cited (Sommerville, Brooks, Pressman, Beck, Fowler)? Are citations properly formatted? Are any claims made without evidence that should have one?
@@ -115,7 +115,7 @@ When invoked with a tutorial file (e.g., `/review-chapter src/tutorial_2.md`):
 1. Read the target tutorial file in full
 2. Read `src/tutorial_1.md` as the established style baseline
 3. Read the chapter the tutorial accompanies (e.g., `src/chapter_2.md`) to verify the tutorial reinforces the right concepts
-4. Read `outline.md` if a tutorial entry exists there
+4. Read `summary.md` if a tutorial entry exists there
 5. Run all three reviews independently
 6. Produce a consolidated report followed by an edit plan
 7. Apply the high-priority edits directly to the tutorial file

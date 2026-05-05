@@ -1,4 +1,4 @@
-# Chapter 4: Software Testing, Code Quality, Code Review, and CI/CD
+# Chapter 4: Software Quality & Testing
 
 > *"Testing shows the presence, not the absence of bugs."*
 > — Edsger W. Dijkstra
@@ -9,32 +9,146 @@
 
 By the end of this chapter, you will be able to:
 
-1. Explain the different levels of software testing and when to apply each.
-2. Write unit tests and integration tests in Python using pytest.
-3. Measure and interpret code coverage and understand its limitations.
-4. Configure a CI/CD pipeline using GitHub Actions.
-5. Apply static analysis and code review techniques to catch defects early.
-6. Critically evaluate AI-generated tests and understand why AI cannot replace a thoughtful testing strategy.
+1. Define software quality and explain its key attributes according to ISO 25010.
+2. Distinguish between functional quality, structural quality, and process quality.
+3. Explain the difference between verification and validation, and between fault, error, and failure.
+4. Describe the levels of testing and when to apply each.
+5. Write unit tests in Python using unittest, and run tests and measure coverage with pytest.
+6. Measure and interpret code coverage and understand its limitations.
+7. Critically evaluate AI-generated tests and understand why AI cannot replace a thoughtful testing strategy.
 
 ---
 
-## 4.1 Why Testing Matters
+## 4.1 Introduction to Software Quality
 
-Software testing is the process of executing software with the intent of finding defects. It is not an optional step at the end of development — it is a discipline that runs throughout the entire software development lifecycle.
+Software quality is the degree to which a software system meets its specified requirements and satisfies user needs. It is not a binary property — software is not simply "good" or "bad" — but a multi-dimensional profile of attributes that must be traded off against each other and against cost and time.
+
+Key quality attributes include:
+
+- **Reliability**: the software produces correct results under normal and adverse conditions
+- **Correctness**: the software conforms to its specification
+- **Security**: the software is resistant to unauthorised access and misuse
+- **Usability**: the software is intuitive and efficient for its intended users
+- **Maintainability**: the software can be modified, extended, and debugged with reasonable effort
+
+**Quality is everyone's responsibility.** A common misconception is that quality belongs to a dedicated QA team. Quality is shaped by every decision made during design, development, and deployment — by the developer who skips input validation, the designer who ignores edge cases, and the project manager who cuts the testing phase. There is no dedicated "quality phase"; there are only decisions that raise or lower it.
+
+> **Key Insight**: Software defects cost the global economy an estimated $2.08 trillion annually ([CISQ, 2020](https://www.it-cisq.org/the-cost-of-poor-quality-software-in-the-us-a-2020-report/)). The cost to fix a defect grows by an order of magnitude at each phase of development — a bug caught in code review costs roughly 10× less to fix than one caught in production. Quality investment at the start is not an overhead; it is the cheapest form of defect prevention.
+
+---
+
+## 4.2 Software Quality Assurance (SQA)
+
+Software Quality Assurance (SQA) is the set of systematic processes and activities that ensure software products and processes conform to defined standards and meet quality objectives.
+
+### Goals of SQA
+
+- **Product quality**: ensuring the delivered software is correct, reliable, and secure
+- **Process quality**: ensuring the development process is disciplined, repeatable, and measurable
+- **Continuous quality control**: detecting and preventing defects throughout the lifecycle, not just at the end
+
+SQA encompasses reviews, audits, testing, static analysis, and process monitoring. Standards such as ISO/IEC 25010 and ISO 9001 provide frameworks for defining and measuring quality systematically.
+
+### Stakeholders
+
+Quality is a shared concern across multiple groups:
+
+| Stakeholder | Quality concern |
+|-------------|----------------|
+| **Users** | Does the software do what I need, reliably and safely? |
+| **Developers** | Is the code correct, maintainable, and testable? |
+| **Sponsors / management** | Does the product meet requirements on time and within budget? |
+
+When these concerns conflict — for example, when sponsors want to cut testing to meet a deadline — SQA provides the data (defect rates, coverage metrics, risk assessments) to make that trade-off visible before it is made, not after it backfires.
+
+---
+
+## 4.3 Software Quality Dimensions
+
+Software quality can be decomposed along three complementary dimensions.
+
+### Functional Quality
+
+Functional quality measures whether the software correctly implements its intended behaviour. It is evaluated by testing: does the software produce the right outputs for all valid inputs, and behave correctly at boundaries and in error conditions?
+
+### Structural Quality (Non-Functional)
+
+Structural quality measures properties of the system that are not directly visible in outputs but affect long-term viability:
+
+- **Usability**: can users accomplish tasks efficiently with low error rates?
+- **Security**: does the system resist known attack vectors?
+- **Performance**: does the system meet latency and throughput requirements under load?
+- **Maintainability**: can developers understand, modify, and extend the codebase?
+
+### Process Quality
+
+Process quality measures how software is built: are requirements gathered rigorously? Are code reviews conducted? Is CI/CD enforced? A poor process consistently produces poor products, even when individual engineers are skilled.
+
+### ISO 25010 Quality Model
+
+The ISO/IEC 25010 standard ([ISO, 2011 edition](https://www.iso.org/standard/35733.html); revised 2023) defines eight top-level quality characteristics:
+
+| Characteristic | Description |
+|---------------|-------------|
+| **Functional suitability** | Degree to which functions meet stated and implied needs |
+| **Reliability** | Ability to perform specified functions under defined conditions |
+| **Performance efficiency** | Performance relative to resources used |
+| **Usability** | Effectiveness, efficiency, and satisfaction of use |
+| **Security** | Protection of information and data |
+| **Maintainability** | Effectiveness with which the product can be modified |
+| **Compatibility** | Ability to exchange and use information with other systems |
+| **Portability** | Ability to be transferred to different environments |
+
+Each characteristic is further decomposed into sub-characteristics. For example, *reliability* includes fault tolerance, recoverability, and availability.
+
+---
+
+## 4.4 Software Testing Fundamentals
+
+Software testing is the process of evaluating and verifying that a software system meets its requirements and behaves as expected. It is an empirical activity: tests cannot prove the absence of bugs, only their presence.
+
+### 4.4.1 Why Testing Matters
 
 Testing serves several purposes:
 
-- **Defect detection**: Finding bugs before they reach users
-- **Regression prevention**: Ensuring that new changes do not break existing functionality
-- **Design feedback**: Tests that are hard to write often indicate design problems
-- **Documentation**: A well-named test suite describes exactly what a system does
-- **Confidence**: A passing test suite gives the team confidence to make changes
+- **Defect detection**: finding bugs before they reach users
+- **Regression prevention**: ensuring that new changes do not break existing functionality
+- **Design feedback**: tests that are hard to write often indicate design problems
+- **Documentation**: a well-named test suite describes exactly what a system does
+- **Confidence**: a passing test suite gives the team confidence to make changes
 
-The question is not whether to test, but *how* to test effectively given limited time and resources.
+Every team must test. The real decision is which tests to write, at what level, and in what quantity — given the risk profile and time available.
+
+### 4.4.2 Fault, Error, and Failure
+
+These three terms are often used interchangeably in informal conversation but have precise technical meanings:
+
+- **Fault** (defect): a static flaw in the code or design — for example, an off-by-one error in a loop condition. A fault is latent until it is exercised.
+- **Error**: an incorrect internal state that results from executing a fault — for example, a variable holding the wrong value.
+- **Failure**: the externally observable manifestation of an error — for example, a crash, an incorrect output, or a security breach.
+
+```
+Fault (code defect)
+    ↓  when executed
+Error (incorrect state)
+    ↓  when propagated to output
+Failure (visible incorrect behaviour)
+```
+
+The goal of testing is to trigger failures so that faults can be identified and removed before the software is deployed. A fault that is never exercised by any test may remain dormant until it is triggered in production.
+
+### 4.4.3 Verification and Validation
+
+Two complementary questions must be answered for any software system:
+
+- **Verification** — *"Are we building the product right?"* Does the software conform to its specification? Verification activities include code review, static analysis, and unit testing against a formal specification.
+- **Validation** — *"Are we building the right product?"* Does the software meet the actual needs of users? Validation activities include acceptance testing, user research, and beta testing.
+
+A system can be thoroughly verified (it exactly matches the specification) but fail validation (the specification was wrong). Conversely, a system can satisfy users in informal testing but contain specification violations that create security or reliability risks.
 
 ---
 
-## 4.2 The Testing Pyramid
+### 4.4.4 The Testing Pyramid
 
 The *testing pyramid* ([Cohn, 2009](https://www.mountaingoatsoftware.com/books/succeeding-with-agile-software-development-using-scrum)) describes the ideal distribution of test types:
 
@@ -58,13 +172,7 @@ The *testing pyramid* ([Cohn, 2009](https://www.mountaingoatsoftware.com/books/s
 
 This distribution is sometimes called the "1:10:100 rule" — for every E2E test, write ~10 integration tests and ~100 unit tests. The exact ratio varies by system, but the principle holds: favour fast, isolated tests over slow, coupled ones.
 
----
-
-## 4.3 Black-Box and White-Box Testing
-
-Testing approaches can be categorised by how much knowledge of the internal implementation the tester uses.
-
-### 4.3.1 Black-Box Testing
+### 4.4.5 Black-Box Testing
 
 In black-box testing, the tester has no knowledge of the internal implementation. Tests are derived entirely from the specification — inputs are provided and outputs are verified against expected behaviour.
 
@@ -75,17 +183,15 @@ In black-box testing, the tester has no knowledge of the internal implementation
 - **Boundary value analysis**: Test at the boundaries of valid input ranges. Bugs cluster at boundaries (off-by-one errors, empty inputs, maximum values).
 - **Decision table testing**: For systems with complex conditional logic, enumerate all combinations of conditions and expected outcomes.
 
-**Example — equivalence partitioning for task priority:**
+**Example — equivalence partitioning for `divide(a, b)`:**
 
-The system accepts priority values 1–4. Partitions:
-- **Valid**: 1, 2, 3, 4
-- **Below range**: 0, -1
-- **Above range**: 5, 100
-- **Non-integer**: "high", 2.5, None
+The `b` parameter has two meaningful partitions:
+- **Valid (non-zero)**: any `b != 0`, e.g. `2`, `-3`, `0.5`
+- **Invalid (zero)**: `b == 0`, which should raise `ValueError`
 
-Test one value from each partition: `priority=2` (valid), `priority=0` (below), `priority=5` (above), `priority="high"` (non-integer).
+Test one value from each partition: `divide(10, 2)` (valid path), `divide(10, 0)` (zero guard).
 
-### 4.3.2 White-Box Testing
+### 4.4.6 White-Box Testing
 
 In white-box testing (also called structural or glass-box testing), the tester has full knowledge of the internal implementation. Tests are derived from the source code, with the goal of exercising specific paths, branches, and conditions.
 
@@ -98,526 +204,221 @@ White-box testing is particularly valuable for finding dead code, unreachable br
 
 ---
 
-## 4.4 Unit Testing with pytest
+## 4.5 Levels of Testing
 
-Unit tests verify the behaviour of a single unit of code — typically a function or method — in isolation from its dependencies.
+Testing is typically organised into four levels, each with a different scope, objective, and owner.
 
-### 4.4.1 Writing Your First Tests
+### 4.5.1 Acceptance Testing
 
-```python
-# src/task_service.py
-from dataclasses import dataclass
-from datetime import date
-from uuid import UUID, uuid4
+**Scope**: the system from the user's perspective.
 
+**Objective**: validate (not just verify) that the system meets real user needs. Acceptance tests are defined in terms of user stories or business scenarios, not technical specifications.
 
-class TaskValidationError(ValueError):
-    pass
+**Characteristics**: written collaboratively by developers, testers, and product owners; often expressed in plain language using frameworks like Cucumber or Robot Framework. The final gate before a release.
 
+**Example**: "Given a user with an existing account, when they create a task with a future due date, then the task appears in their dashboard sorted by due date."
 
-@dataclass
-class Task:
-    id: UUID
-    title: str
-    priority: int  # 1–4
-    due_date: date | None = None
-    status: str = "open"
+### 4.5.2 System Testing
 
+**Scope**: the entire system as a deployed whole.
 
-def create_task(title: str, priority: int, due_date: date | None = None) -> Task:
-    """Create a new task with validation."""
-    if not title or not title.strip():
-        raise TaskValidationError("Title cannot be empty")
-    if priority not in range(1, 5):
-        raise TaskValidationError(f"Priority must be 1–4, got {priority}")
-    if due_date and due_date < date.today():
-        raise TaskValidationError("Due date cannot be in the past")
-    return Task(id=uuid4(), title=title.strip(), priority=priority, due_date=due_date)
-```
+**Objective**: verify that the system meets its functional and non-functional requirements in an environment that resembles production — including load balancers, external services, and realistic data volumes.
 
-```python
-# tests/test_task_service.py
-import pytest
-from datetime import date, timedelta
-from src.task_service import create_task, TaskValidationError
+**Characteristics**: slow, expensive, typically run in a dedicated staging environment before a release. Covers performance, security, and reliability alongside functional correctness.
 
+**Example**: a load test that sends 1,000 concurrent task-creation requests and verifies that all succeed within 500 ms at the 95th percentile.
 
-class TestCreateTask:
-    def test_creates_task_with_valid_inputs(self) -> None:
-        task = create_task("Write tests", priority=2)
-        assert task.title == "Write tests"
-        assert task.priority == 2
-        assert task.status == "open"
-        assert task.id is not None
+### 4.5.3 Integration Testing
 
-    def test_strips_whitespace_from_title(self) -> None:
-        task = create_task("  Write tests  ", priority=1)
-        assert task.title == "Write tests"
+**Scope**: interactions between two or more components — for example, a service and its repository, or an API handler and its business logic layer.
 
-    def test_raises_for_empty_title(self) -> None:
-        with pytest.raises(TaskValidationError, match="Title cannot be empty"):
-            create_task("", priority=1)
+**Objective**: verify that components communicate correctly and that integration assumptions (data formats, error handling, transaction boundaries) hold.
 
-    def test_raises_for_whitespace_only_title(self) -> None:
-        with pytest.raises(TaskValidationError):
-            create_task("   ", priority=1)
+**Characteristics**: slower than unit tests (seconds per test), may require a running database or message broker, written by developers.
 
-    @pytest.mark.parametrize("priority", [0, -1, 5, 100])
-    def test_raises_for_invalid_priority(self, priority: int) -> None:
-        with pytest.raises(TaskValidationError, match="Priority must be 1–4"):
-            create_task("Valid title", priority=priority)
+**Example**: testing that saving a task via the repository and then retrieving it by ID returns the same data, end to end through the real database driver.
 
-    @pytest.mark.parametrize("priority", [1, 2, 3, 4])
-    def test_accepts_valid_priorities(self, priority: int) -> None:
-        task = create_task("Valid title", priority=priority)
-        assert task.priority == priority
+### 4.5.4 Unit Testing
 
-    def test_raises_for_past_due_date(self) -> None:
-        yesterday = date.today() - timedelta(days=1)
-        with pytest.raises(TaskValidationError, match="Due date cannot be in the past"):
-            create_task("Valid title", priority=1, due_date=yesterday)
+**Scope**: a single function, method, or class in isolation.
 
-    def test_accepts_future_due_date(self) -> None:
-        tomorrow = date.today() + timedelta(days=1)
-        task = create_task("Valid title", priority=1, due_date=tomorrow)
-        assert task.due_date == tomorrow
+**Objective**: verify that each unit of code behaves correctly according to its contract. External dependencies (databases, APIs, file systems) are replaced with mocks or stubs.
 
-    def test_accepts_no_due_date(self) -> None:
-        task = create_task("Valid title", priority=1)
-        assert task.due_date is None
-```
+**Characteristics**: fast (milliseconds per test), deterministic, run on every commit, written by developers.
 
-Run the tests:
+**Example**: testing that `add(3, 5)` returns `8.0`, and that `divide(10, 0)` raises `ValueError`.
 
-```bash
-pytest tests/test_task_service.py -v
-```
+> **Key idea**: No single level catches everything. Acceptance tests miss deeply nested logic errors that no user scenario reaches; unit tests miss failures that only appear when two components interact. The four levels are not redundant — they are complementary, each surfacing what the others cannot.
 
-### 4.4.2 Fixtures
-
-Fixtures are reusable setup functions that provide test dependencies. They replace repetitive setup code and enable dependency injection in tests.
-
-```python
-# tests/conftest.py
-import pytest
-from uuid import uuid4
-from datetime import date, timedelta
-from src.task_service import Task
-from src.repository import InMemoryTaskRepository
-
-
-@pytest.fixture
-def repository() -> InMemoryTaskRepository:
-    return InMemoryTaskRepository()
-
-
-@pytest.fixture
-def sample_task() -> Task:
-    return Task(
-        id=uuid4(),
-        title="Sample task",
-        priority=2,
-        due_date=date.today() + timedelta(days=7),
-    )
-```
-
-```python
-# tests/test_repository.py
-from uuid import uuid4
-from src.task_service import Task
-from src.repository import InMemoryTaskRepository
-
-
-def test_save_and_retrieve_task(
-    repository: InMemoryTaskRepository, sample_task: Task
-) -> None:
-    repository.save(sample_task)
-    retrieved = repository.find_by_id(sample_task.id)
-    assert retrieved == sample_task
-
-
-def test_returns_none_for_missing_task(repository: InMemoryTaskRepository) -> None:
-    result = repository.find_by_id(uuid4())
-    assert result is None
-
-
-def test_delete_removes_task(
-    repository: InMemoryTaskRepository, sample_task: Task
-) -> None:
-    repository.save(sample_task)
-    repository.delete(sample_task.id)
-    assert repository.find_by_id(sample_task.id) is None
-```
-
-### 4.4.3 Mocking
-
-When a unit under test depends on external systems (databases, email services, APIs), mocking replaces those dependencies with controlled substitutes.
-
-```python
-# tests/test_assignment_service.py
-from unittest.mock import MagicMock, patch
-from uuid import uuid4
-from src.assignment_service import AssignmentService
-from src.task_service import Task
-
-
-def test_assign_task_sends_notification() -> None:
-    # Arrange
-    mock_repo = MagicMock()
-    mock_notifier = MagicMock()
-    service = AssignmentService(repo=mock_repo, notifier=mock_notifier)
-
-    task_id = uuid4()
-    mock_repo.find_by_id.return_value = Task(
-        id=task_id, title="Test task", priority=1
-    )
-
-    # Act
-    service.assign(task_id=task_id, assignee_email="alice@example.com")
-
-    # Assert
-    mock_repo.save.assert_called_once()
-    mock_notifier.notify.assert_called_once_with(
-        recipient="alice@example.com",
-        subject="You have been assigned a task",
-    )
-```
+Unit tests sit at the base of the pyramid because they are fast enough to run on every commit and precise enough to pinpoint exactly which function broke. The next section shows how to write them in Python.
 
 ---
 
-## 4.5 Code Coverage
+## 4.6 Unit Testing in Python
 
-Code coverage measures how much of your source code is executed by your test suite. It is a useful indicator of untested areas, but it is not a measure of test quality.
+### 4.6.1 The Anatomy of a Unit Test
 
-```bash
-pip install pytest-cov
-pytest tests/ --cov=src --cov-report=term-missing
+Every unit test answers three questions:
+
+- **Expected input** — what data is the unit given?
+- **Expected output** — what should the unit produce for that input?
+- **Actual output** — what did the unit actually produce?
+
+When expected and actual outputs match, the test passes. When they diverge, the test fails and the discrepancy pinpoints what the code got wrong. This simple structure is formalised as the **Arrange–Act–Assert (AAA)** pattern.
+
+Recall the full calculator from Tutorial 1 (extended in the Step 8 activity):
+
+```python
+# src/calculator.py
+def add(a: float, b: float) -> float:
+    return a + b
+
+def subtract(a: float, b: float) -> float:
+    return a - b
+
+def multiply(a: float, b: float) -> float:
+    return a * b
+
+def divide(a: float, b: float) -> float:
+    if b == 0:
+        raise ValueError("Cannot divide by zero")
+    return a / b
 ```
 
-Sample output:
+A unit test for `add` looks like this:
+
+```python
+import unittest
+from src.calculator import add
+
+class TestAdd(unittest.TestCase):
+    def test_add_returns_correct_sum(self):
+        # Arrange — set up inputs
+        a = 3
+        b = 5
+
+        # Act — call the unit under test
+        result = add(a, b)
+
+        # Assert — compare actual output to expected output
+        self.assertEqual(result, 8)
+```
+
+Keeping the three phases visually separate — even with a blank line — makes the test's intent immediately clear to the next reader. When a test fails, the `Act` line is the fault site and the `Assert` line tells you what was wrong.
+
+> **Activity:** Following the same AAA pattern, write one test for each of the remaining operations:
+> - `test_subtract_returns_correct_difference` — e.g. `subtract(10, 3)` should return `7`
+> - `test_multiply_returns_correct_product` — e.g. `multiply(4, 5)` should return `20`
+> - `test_divide_returns_correct_quotient` — e.g. `divide(10, 2)` should return `5.0`
+
+### 4.6.2 Assertion Methods in unittest
+
+`unittest.TestCase` provides named assertion methods on `self`. Each method produces a descriptive failure message automatically — you do not need to write one.
+
+**Equality and comparison:**
+
+```python
+self.assertEqual(add(3, 5), 8)          # fails if not equal
+self.assertNotEqual(add(3, 5), 0)       # fails if equal
+self.assertAlmostEqual(add(0.1, 0.2), 0.3, places=10)  # safe for floats
+self.assertTrue(add(1, 1) > 0)          # fails if expression is False
+```
+
+**Checking exceptions with `assertRaises`:**
+
+When a unit should raise an exception for invalid input, use `assertRaises` as a context manager. The test fails if the exception is *not* raised.
+
+```python
+from src.calculator import divide
+
+class TestDivide(unittest.TestCase):
+    def test_divide_raises_on_zero(self):
+        # Arrange
+        a = 10
+        b = 0
+
+        # Act + Assert — the exception is the expected output
+        with self.assertRaises(ValueError):
+            divide(a, b)
+```
+
+To also check the exception message, use `assertRaisesRegex`:
+
+```python
+    def test_divide_raises_correct_message(self):
+        with self.assertRaisesRegex(ValueError, "Cannot divide by zero"):
+            divide(10, 0)
+```
+
+**Common assertion methods:**
+
+| Scenario | Method |
+|----------|--------|
+| Values are equal | `self.assertEqual(a, b)` |
+| Values are not equal | `self.assertNotEqual(a, b)` |
+| Floats are approximately equal | `self.assertAlmostEqual(a, b, places=N)` |
+| Condition is true | `self.assertTrue(expr)` |
+| Function raises exception | `with self.assertRaises(SomeError):` |
+| Exception message matches | `with self.assertRaisesRegex(SomeError, "pattern"):` |
+
+### 4.6.3 Code Coverage
+
+Writing tests is not enough — you also need to know which parts of the code are actually being executed by those tests. **Code coverage** measures this.
+
+**Running coverage with pytest-cov:**
+
+```bash
+uv add --dev pytest-cov
+pytest --cov=src --cov-report=term-missing
+```
+
+If your tests only cover `add` and not `divide`, the report will flag the untested lines:
+
 ```
 Name                      Stmts   Miss  Cover   Missing
----------------------------------------------------------
-src/task_service.py          18      2    89%   34-35
-src/repository.py            22      0   100%
-src/assignment_service.py    15      3    80%   28, 41-42
----------------------------------------------------------
-TOTAL                        55      5    91%
+-------------------------------------------------------
+src/calculator.py             9      3    67%   8-10
+-------------------------------------------------------
+TOTAL                         9      3    67%
 ```
 
-The `Missing` column shows which lines are not covered — useful for targeting additional tests.
+The `Missing` column shows the exact lines not reached by any test — these are your blind spots. Lines 8–10 correspond to the `if b == 0` guard and the return inside `divide`.
 
-**Coverage targets**: 80% is a common minimum threshold for production code. 100% coverage is neither necessary nor sufficient — you can have 100% coverage with tests that make no meaningful assertions.
+**Statement coverage vs. branch coverage:**
 
-**What coverage cannot tell you**:
-- Whether the tests assert the *right* things
-- Whether edge cases are tested (a line can be covered by a single happy-path test)
-- Whether the system behaves correctly at the integration level
+Statement coverage (the default) counts whether each *line* was executed. Branch coverage goes further: it checks whether each *decision* was exercised in both directions.
+
+The `divide` function has two branches: the normal path and the zero-division guard. A single test with `b != 0` executes the return statement but never enters the `if` block. To reach 100% branch coverage, you need one test per branch:
+
+```python
+def test_divide_normal(self):
+    self.assertEqual(divide(10, 2), 5.0)   # exercises the normal branch
+
+def test_divide_by_zero(self):
+    with self.assertRaises(ValueError):
+        divide(10, 0)                       # exercises the guard branch
+```
+
+Run branch coverage with:
+
+```bash
+pytest --cov=src --cov-branch --cov-report=term-missing
+```
+
+**Limitations of coverage:**
+
+Coverage tells you which code was *executed*, not whether it was *tested correctly*. Consider:
+
+```python
+class TestCoverageTrap(unittest.TestCase):
+    def test_coverage_trap(self):
+        add(3, 5)   # no assertion
+```
+
+This test executes `add` — contributing to coverage — but asserts nothing. A bug that made `add` return `0` for all inputs would go undetected. High coverage with weak assertions is worse than honest low coverage, because it creates false confidence.
+
+Two rules of thumb:
+- Aim for ≥80% statement coverage on business logic; 100% branch coverage on code with error-handling paths.
+- Coverage is a floor, not a ceiling. A 95% covered codebase with no assertions on the remaining 5% may still ship critical bugs in those five lines.
 
 ---
-
-## 4.6 Code Quality and Static Analysis
-
-Beyond testing, several automated tools catch quality issues before code review.
-
-### 4.6.1 Linting with Ruff
-
-Ruff (introduced in Chapter 1) enforces style rules and catches common programming errors:
-
-```bash
-ruff check src/
-ruff format src/
-```
-
-Ruff subsumes the functionality of flake8, isort, and black, and is significantly faster than any of them individually.
-
-### 4.6.2 Type Checking with mypy
-
-Type annotations in Python (since PEP 484, [van Rossum et al., 2015](https://peps.python.org/pep-0484/)) enable static analysis. mypy verifies that type annotations are consistent throughout the codebase, catching a class of bugs that tests can miss.
-
-```bash
-mypy src/ --strict
-```
-
-Common errors mypy catches:
-- Passing `None` where a non-optional value is expected
-- Calling a method that does not exist on a type
-- Returning the wrong type from a function
-- Missing return statements
-
-### 4.6.3 Security Scanning with Bandit
-
-Bandit ([PyCQA, 2014](https://bandit.readthedocs.io/en/latest/)) scans Python code for common security vulnerabilities:
-
-```bash
-pip install bandit
-bandit -r src/
-```
-
-Bandit flags issues like SQL injection risks, hardcoded passwords, use of weak cryptographic algorithms, and unsafe deserialization. Security scanning is covered in depth in Chapter 9.
-
----
-
-## 4.7 Pull Requests and Code Review
-
-Before code reaches the main branch, it passes through two gates: a *pull request* (PR), which is the mechanism for proposing and discussing a change, and *code review*, which is the human evaluation of that change. Together they are among the most effective defect-detection and knowledge-sharing practices in software engineering ([Fagan, 1976](https://ieeexplore.ieee.org/document/5388086); [Rigby & Bird, 2013](https://dl.acm.org/doi/10.1145/2491411.2491444)).
-
-### 4.7.1 What Is a Pull Request?
-
-A pull request is a request to merge a set of commits from one branch into another — typically from a feature branch into `main`. It serves as a structured checkpoint that combines:
-
-- **Change visibility**: a diff showing exactly what changed and why
-- **Discussion space**: a thread where reviewers can ask questions, raise concerns, and suggest improvements
-- **Automated gate**: a trigger for CI checks (tests, linting, security scans) that must pass before merging
-- **Audit trail**: a permanent record of what was changed, who reviewed it, and what was discussed
-
-PRs are not just a technical mechanism — they are a communication artefact. A well-written PR description gives reviewers the context they need to evaluate the change without having to reconstruct it from the diff.
-
-### 4.7.2 Why Pull Requests Matter
-
-Without a PR discipline, several things tend to go wrong:
-
-- **Bugs accumulate**: changes that look correct in isolation often reveal problems only when another developer reads them with fresh eyes
-- **Knowledge silos form**: when code is never reviewed, only the author understands it
-- **Standards drift**: without a review gate, style, architecture, and quality standards erode incrementally
-- **Security vulnerabilities ship**: many common vulnerabilities (injection, broken auth, unsafe defaults) are easy to catch in review and expensive to fix in production
-
-The PR process imposes a small cost per change — typically 30–60 minutes of reviewer time — in exchange for substantially lower defect rates and better collective code ownership.
-
-### 4.7.3 Writing an Effective Pull Request
-
-A good PR is small, focused, and self-explanatory. The title and description should answer three questions:
-
-1. **What changed?** — a one-line summary that a reader can understand without opening the diff
-2. **Why?** — the motivation: the bug being fixed, the requirement being met, the tech debt being addressed
-3. **How should reviewers test it?** — the steps to verify the change works as intended
-
-```markdown
-## What
-Add pagination to the task list endpoint (`GET /tasks`).
-
-## Why
-The endpoint currently returns all tasks in a single response. With >10,000 tasks 
-in staging, response times exceed 5 s and memory usage spikes. Fixes #142.
-
-## How to test
-1. Run `pytest tests/test_task_endpoint.py -k pagination`
-2. Manually: `curl "localhost:8000/tasks?page=2&page_size=20"` — should return 
-   tasks 21–40 with `X-Total-Count` header set correctly.
-3. Edge case: `page=0` should return HTTP 422.
-```
-
-**Keep PRs small.** A PR touching 10 files is reviewed carefully; a PR touching 50 files is rubber-stamped. Aim for changes that can be reviewed in under 20 minutes. If a feature requires large changes, break it into sequential PRs: data model first, then business logic, then API layer.
-
-### 4.7.4 The Code Review Process
-
-Code review is the practice of having another developer read and evaluate your code before it is merged. A standard review cycle proceeds as follows:
-
-```mermaid
-flowchart TD
-    A[Author opens PR] --> B[CI runs automatically\ntests · lint · type check · security scan]
-    B --> C{CI passes?}
-    C -- No --> D[Author fixes failures] --> B
-    C -- Yes --> E[Reviewer reads diff and description]
-    E --> F[Leaves inline comments\nmust-fix · suggestion · question]
-    F --> G[Author responds to all comments\nand makes changes]
-    G --> H{Reviewer satisfied?}
-    H -- No --> F
-    H -- Yes --> I[Reviewer approves]
-    I --> J[PR merged\nsquash or merge commit]
-```
-
-### 4.7.5 What to Look for in a Code Review
-
-An effective reviewer checks:
-
-- **Correctness**: Does the code do what the description claims? Are there edge cases the author missed?
-- **Tests**: Are there sufficient tests? Do they cover the important cases, not just the happy path?
-- **Design**: Does the change fit the existing architecture? Does it introduce unnecessary coupling or complexity?
-- **Security**: Does the change introduce any security vulnerabilities? (See Chapter 5.)
-- **Readability**: Can you understand the code without asking the author?
-- **Performance**: Are there obvious performance issues — N+1 queries, unbounded loops, unnecessary allocations?
-
-Reviewers are not responsible for finding every bug — that is what tests are for. The goal is a second pair of eyes that catches what the author's familiarity with their own code conceals.
-
-### 4.7.6 Code Review Etiquette
-
-Effective code review requires clear, respectful communication:
-
-- Review the code, not the person: "This function is hard to follow" not "You wrote this poorly"
-- Be specific: "Line 42: extracting this into a helper function would make it easier to test" not "this is messy"
-- Distinguish must-fix from suggestions: prefix non-blocking suggestions with "nit:" or "optional:"
-- Respond to all review comments, even briefly: "agreed, fixed" or "I disagree because X — open to discussion"
-- Approve when it is good enough to ship, not when it is perfect
-
-### 4.7.7 Automated Code Review
-
-AI-powered tools (GitHub Copilot code review, CodeRabbit, Sourcery) can perform a first-pass review, catching mechanical issues before human reviewers see the code. These tools are most effective at:
-
-- Identifying obvious bugs and null pointer issues
-- Suggesting more idiomatic patterns
-- Flagging inconsistency with the surrounding codebase
-- Checking for common security anti-patterns
-
-They are least effective at:
-- Understanding business context and domain logic
-- Evaluating architectural decisions
-- Catching subtle security vulnerabilities that require domain knowledge
-- Judging whether a change is the *right* change
-
-Use automated review as a pre-filter, not a replacement for human review. Run it before the human reviewer sees the PR so reviewers can focus on what tools cannot catch.
-
----
-
-## 4.8 Continuous Integration and Continuous Delivery (CI/CD)
-
-Continuous integration (CI) is the practice of merging all developer branches into the main branch frequently — at least daily — with each merge triggering an automated build and test run ([Fowler, 2006](https://martinfowler.com/articles/continuousIntegration.html)).
-
-Continuous delivery (CD) extends CI to ensure that the software is always in a deployable state. Every passing build is a release candidate.
-
-### 4.8.1 GitHub Actions
-
-GitHub Actions is a CI/CD platform built into GitHub. Workflows are defined as YAML files in `.github/workflows/`.
-
-```yaml
-# .github/workflows/ci.yml
-name: CI
-
-on:
-  push:
-    branches: [main]
-  pull_request:
-    branches: [main]
-
-jobs:
-  test:
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: "3.11"
-
-      - name: Install dependencies
-        run: |
-          python -m pip install --upgrade pip
-          pip install -r requirements.txt
-
-      - name: Run linter
-        run: ruff check src/ tests/
-
-      - name: Run type checker
-        run: mypy src/ --strict
-
-      - name: Run tests with coverage
-        run: pytest tests/ --cov=src --cov-report=xml --cov-fail-under=80
-
-      - name: Run security scan
-        run: bandit -r src/ -ll
-
-      - name: Upload coverage report
-        uses: codecov/codecov-action@v4
-        with:
-          file: ./coverage.xml
-```
-
-This workflow runs on every push to `main` and on every pull request. It will fail if:
-- The linter finds any issues
-- The type checker finds any errors
-- Any test fails
-- Code coverage drops below 80%
-- Bandit finds any medium or higher severity issues
-
-A failing CI pipeline blocks the pull request from being merged, enforcing quality standards automatically.
-
-### 4.8.2 Branch Protection
-
-Configuring branch protection ensures no code reaches the main branch without passing all automated checks.
-
-**GitHub**
-
-1. Repository Settings → Branches → Branch protection rules
-2. Add a rule for `main`
-3. Enable: "Require status checks to pass before merging"
-4. Select the CI workflow checks
-5. Optionally enable "Require approvals" to enforce peer review before merge
-
-**GitLab**
-
-1. Settings → Repository → Protected Branches
-2. Add `main` as a protected branch
-3. Set "Allowed to merge" to *Maintainers* (or your team's policy)
-4. Set "Allowed to push" to *No one* to prevent direct pushes
-5. Navigate to Settings → CI/CD → General pipelines and enable "Pipelines must succeed" under Merge Requests
-6. Optionally set "Require approval from code owners" under Settings → Merge Requests
-
----
-
-## 4.9 Tutorial: Full Testing and CI Setup for the Course Project
-
-### Project Structure
-
-```
-online-shopping/
-├── src/
-│   ├── __init__.py
-│   ├── task_service.py
-│   ├── repository.py
-│   └── assignment_service.py
-├── tests/
-│   ├── __init__.py
-│   ├── conftest.py
-│   ├── test_task_service.py
-│   ├── test_repository.py
-│   └── test_assignment_service.py
-├── .github/
-│   └── workflows/
-│       └── ci.yml
-├── pyproject.toml
-├── requirements.txt
-└── .pre-commit-config.yaml
-```
-
-### Running the Full Quality Suite Locally
-
-```bash
-# Run all checks in order
-ruff check src/ tests/          # Linting
-ruff format --check src/ tests/ # Formatting
-mypy src/ --strict              # Type checking
-pytest tests/ -v --cov=src \
-  --cov-report=term-missing \
-  --cov-fail-under=80           # Tests + coverage
-bandit -r src/ -ll              # Security scan
-```
-
-Add a `Makefile` to run all checks with one command:
-
-```makefile
-# Makefile
-.PHONY: check test lint typecheck security
-
-check: lint typecheck test security
-
-lint:
-	ruff check src/ tests/
-	ruff format --check src/ tests/
-
-typecheck:
-	mypy src/ --strict
-
-test:
-	pytest tests/ -v --cov=src --cov-report=term-missing --cov-fail-under=80
-
-security:
-	bandit -r src/ -ll
-```
-
-```bash
-make check
-```
-

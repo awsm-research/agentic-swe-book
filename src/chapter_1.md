@@ -5,7 +5,7 @@
 
 ---
 
-In 2012, a software engineer at the Commonwealth Bank of Australia changed code that handled automated deposit machine reporting. The change introduced a bug. Nobody caught it in testing. For the next three years, the bank unknowingly helped criminals launder money — and then paid AUD$700 million to settle the case. The engineer was not incompetent. The bank was not careless. They were operating, like most software teams, without the processes, tests, and oversight that would have surfaced such a failure early. That gap between writing code and engineering software is what this book addresses.
+In 2012, a software engineer at the Commonwealth Bank of Australia updated code that handled automated deposit machine reporting. The update introduced a bug. Nobody caught it in testing. For the next three years, the bank unknowingly processed transactions that helped criminals launder money — and then paid AUD$700 million to settle the case ([AUSTRAC, 2018](https://www.austrac.gov.au/news-and-media/media-release/austrac-and-cba-agree-700m-penalty)). The engineer was not incompetent. The bank was not reckless. The failure was not technical. It was the absence of the processes, tests, and monitoring that would have surfaced a silent defect before it compounded for three years. That absence — and how to close it — is what software engineering is for.
 
 ---
 

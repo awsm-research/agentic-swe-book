@@ -9,8 +9,8 @@
 - [Chapter 1: Software Engineering Fundamentals](./chapter_1.md)
 - [Chapter 2: Requirements Engineering](./chapter_2.md)
 - [Chapter 3: Software Design, Architecture, and Patterns](./chapter_3.md)
-- [Chapter 4: Software Testing, Code Quality, Code Review, and CI/CD](./chapter_4.md)
-- [Chapter 5: Software Security](./chapter_5.md)
+- [Chapter 4: Software Quality & Testing](./chapter_4.md)
+- [Chapter 5: Automated Code Review, Code Quality, and CI/CD](./chapter_5.md)
 
 # Part II: Agentic Software Engineering
 

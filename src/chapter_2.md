@@ -5,6 +5,10 @@
 
 ---
 
+In 2005, the FBI cancelled its Virtual Case File system — a digital case management platform four years and $170 million in the making — without deploying it to a single agent. The contractor had built what was asked. The problem was that what was asked had changed more than 400 times during development, each change small and seemingly reasonable, until the accumulated requirements bore no relationship to the original architecture or budget ([US DOJ OIG, 2005](https://oig.justice.gov/reports/FBI/a0536.pdf)). The FBI spent another $451 million on a replacement. The failure was not technical. It was a failure to define, manage, and hold to what the system actually needed to do. That discipline — deciding precisely what to build, and making that decision rigorous enough to build from — is requirements engineering. It is the highest-leverage work in any software project, and in an AI-assisted workflow it is the only work that a language model cannot do for you.
+
+---
+
 ## Learning Objectives
 
 By the end of this chapter, you will be able to:
@@ -14,6 +18,7 @@ By the end of this chapter, you will be able to:
 3. Distinguish between functional and non-functional requirements and write both clearly.
 4. Define epics, user stories, and acceptance criteria, and construct each for a realistic system.
 5. Write a Definition of Done for a software team.
+6. Use an LLM to generate and critique requirements, and explain how specification quality determines the quality of AI-generated outputs.
 
 ---
 
@@ -119,9 +124,9 @@ Functional requirements describe *what* the system must do — specific behaviou
 
 Non-functional requirements (NFRs) describe *how* the system must behave — quality attributes that constrain the system's operation. They are sometimes called quality attributes or system properties.
 
-NFRs are often harder to specify precisely than functional requirements, but they are equally important. A system that does the right thing slowly, insecurely, or unreliably fails its users just as surely as one that does the wrong thing.
+NFRs are consistently under-specified in practice and disproportionately responsible for system failures. A system that does the right thing slowly, insecurely, or unreliably has failed on its NFRs — and those failures are often invisible until they manifest as outages, breaches, or regulatory penalties.
 
-Key categories of non-functional requirements ([ISO/IEC 25002:2024](https://www.iso.org/standard/78175.html)):
+Key categories of non-functional requirements ([ISO/IEC 25010:2023](https://www.iso.org/standard/78176.html)):
 
 | Category | Description | Example |
 |---|---|---|
@@ -261,7 +266,7 @@ Scope creep happens when:
 - The team adds features without formal approval
 - External factors force new work mid-project
 
-MoSCoW directly addresses this: by explicitly documenting what is *Won't Have*, teams create a shared boundary that makes adding new scope a visible, deliberate decision rather than a gradual drift. Combined with regular backlog grooming and formal change control, user stories, prioritisation, and scope discipline together form the core of agile requirements management.
+MoSCoW directly addresses this: by explicitly documenting what is *Won't Have*, teams create a shared boundary that makes adding new scope a visible, deliberate decision rather than a gradual drift.
 
 ---
 
@@ -329,139 +334,72 @@ A DoD prevents "almost done" from becoming a permanent state and makes quality e
 
 ---
 
-## 2.10 Tutorial Activity: "AI As Your Client"
+## 2.10 Requirements Engineering with AI Assistance
 
-**Concepts covered:** Elicitation techniques, requirements specification, quality attributes, conflict resolution, scope management
+### 2.10.1 Using LLMs to Generate, Critique, and Refine Requirements
 
-**Format:** Individual or pairs | **Duration:** 2 hours | **Tool:** AI Assistant
+Large language models can accelerate requirements work at several points in the RE process, but they require precise inputs to be useful — and they fail in characteristic ways when inputs are vague.
 
----
+**Where LLMs add value:**
 
-### Background
+- **Drafting initial stories**: Given a brief problem description, an LLM can generate a starting backlog of user stories faster than a requirements engineer working from a blank page. The output is rarely final, but it surfaces coverage gaps and provides a concrete artefact for stakeholder review.
+- **Critiquing for quality**: An LLM prompted to review a requirements document against the quality attributes in §2.4 (unambiguous, complete, verifiable) will reliably flag vague language — "the system shall be fast," "the interface shall be intuitive," "the system shall handle errors gracefully." These are the same failures human reviewers miss because they are reading for intent rather than precision.
+- **Generating acceptance criteria**: Given a user story, an LLM can generate Gherkin scenarios covering the happy path and common error cases. This is mechanical but time-consuming work that LLMs handle well — with the caveat that the generated scenarios must be reviewed against actual business rules, which the LLM does not know.
 
-In this activity, AI Assistant plays the role of your client. You will conduct a requirements elicitation interview, produce specification artefacts, audit their quality, resolve stakeholder conflicts, and respond to scope creep — mirroring the full requirements engineering lifecycle from §2.1.
+**Where LLMs fail:**
 
----
+LLMs have no knowledge of your domain, your users' actual behaviour, or your regulatory environment. They will generate plausible-sounding requirements that conform to templates but miss tacit constraints. The NHS *National Programme for IT* failed in part because requirements were produced by a small group working top-down, without consulting the 18,000 clinicians who would use the system ([NAO, 2011](https://www.nao.org.uk/reports/the-national-programme-for-it-in-the-nhs-an-update/)). An LLM would have produced the same failure faster.
 
-### Phase 1 — Elicitation Interview (25 min)
+The workflow that works: **human-provided context** (stakeholder interviews, domain documentation, existing system behaviour) → **LLM draft** → **human review and correction** → **LLM refinement**. The human brings domain knowledge and stakeholder relationships; the LLM provides generation speed and systematic coverage checking.
 
-Prompt AI Assistant with the following system prompt at the start of your conversation:
+### 2.10.2 Specification Quality as a Direct Determinant of LLM Output Quality
 
-<div class="admonish-prompt">
-You are Jordan, the founder of a small retail business. You want to build a new online shopping application to sell your products directly to customers, replacing your current manual order-taking process via phone and email. You have opinions and preferences but are not technical. You will only answer questions I ask — do not volunteer information I haven't asked for. If I ask a vague question, give a vague answer. Stay in character for the entire conversation.
-</div>
+Requirements are the input to the next phase of development. In an AI-native workflow, they are also the input to code generation. This changes what is at stake when a requirement is vague.
 
-![An example UI when using Microsoft Copilot as an AI Client](images/chapter2-copilot-ui.png)
-*An example UI of [Microsoft Copilot](https://copilot.microsoft.com/) as an AI Client.*
+Consider the difference between:
 
-Conduct a semi-structured interview with Jordan using the elicitation techniques from §2.2.1. Log every question and Copilot's response in a worksheet.
+> *The system shall notify users when a task is assigned.*
 
-**Requirements:**
-- Ask at least **8 questions**
-- Cover at least **3 stakeholder concerns** (e.g., product browsing, checkout and payment, order management)
-- Use at least **one follow-up question** that digs deeper into a vague answer
+and:
 
-> **Tip:** Copilot will not give you everything you need unless you ask the right questions. Vague questions will produce vague answers — just as in real stakeholder interviews.
+> *The system shall send an email notification to each assignee within 5 minutes of task assignment. If delivery fails, the system shall retry up to 3 times at 5-minute intervals. Notifications shall include the task title, the assigning user's name, and a direct link to the task.*
 
----
+The first requirement, fed to a code-generating LLM, gives the model room to invent: it might generate a push notification instead of email, send only to the first assignee, skip retry logic, or omit the direct link. Each decision is plausible given the specification. Each might also be wrong. The engineer reviewing the generated code has no written requirement against which to check it.
 
-### Phase 2 — Produce Artefacts (20 min)
+This is the core of what makes requirements engineering more important in an AI-native workflow, not less. A vague requirement is always a problem — but in a manual development workflow, the developer who writes the code often attended the stakeholder meeting and absorbed the implicit intent. That tacit knowledge does not transfer to a language model. The specification is all it has.
 
-From your interview transcript, produce the following:
-
-1. **4 functional requirements** in "The system shall…" format
-2. **2 non-functional requirements** — each must be measurable (apply the test from §2.3.2)
-3. **2 user stories** in "As a [role]…" format
-4. **A MoSCoW table** with at least 5 features prioritised
+The quality attributes in §2.4 — unambiguous, complete, verifiable — are the minimum bar for requirements that will drive AI-assisted generation. A requirement that fails any of these attributes is an invitation for the model to fill in the missing constraint with a plausible guess.
 
 ---
 
-### Phase 3 — Acceptance Criteria and Definition of Done (25 min)
+## 2.11 Key Takeaways
 
-#### Part A — Acceptance Criteria (15 min)
+Requirements engineering is the discipline that determines what gets built before implementation begins. Its quality has more leverage on outcomes than any other phase of development. The key ideas from this chapter:
 
-For each of your 2 user stories from Phase 2, write acceptance criteria in Gherkin format (§2.8). Each user story must have:
+1. **Requirements are constructed, not collected.** They emerge through dialogue, observation, and iteration between engineers and stakeholders — not from a single interview or a sign-off on a specification document.
 
-- **1 happy path scenario** — the successful case
-- **1 error or edge case scenario** — invalid input, missing data, or unauthorised access
+2. **The four RE activities loop.** Elicitation, analysis, specification, and validation do not proceed in sequence. Validation uncovers gaps that require re-elicitation; analysis surfaces conflicts that require new specification.
 
-**Example structure:**
+3. **The functional/non-functional distinction matters.** Functional requirements define what the system does; non-functional requirements define how well. NFRs are consistently under-specified in practice and disproportionately responsible for system failures — a system that crashes under load or exposes user data has failed on its NFRs, regardless of how correct its functional behaviour is.
 
-```gherkin
-Scenario: [descriptive name]
-  Given [initial context]
-  When  [action taken]
-  Then  [observable outcome]
-```
+4. **Good requirements are measurable.** Unambiguous, complete, consistent, verifiable, and traceable are not style preferences — they are the minimum attributes that allow a requirement to be tested. "The system shall be reliable" is a wish. "The system shall achieve 99.9% uptime" is a requirement.
 
-> **Check:** Can each scenario be tested without ambiguity? If a tester cannot determine pass or fail from the scenario alone, rewrite it.
+5. **Agile work items form a hierarchy.** Epics decompose into user stories; user stories decompose into tasks. Acceptance criteria in Gherkin format connect user stories directly to test cases, closing the loop between requirements and verification.
 
-#### Part B — Definition of Done (10 min)
+6. **MoSCoW makes trade-offs explicit.** The "Won't Have" category is as valuable as "Must Have" — it converts unspoken assumptions into shared agreements and makes adding new scope a visible decision rather than a gradual drift.
 
-Write a **Definition of Done** (§2.9) for your online shopping application project. It must include at least **6 items** covering:
-
-- Functional correctness (acceptance criteria)
-- Code quality (testing, review)
-- Non-functional validation (performance, security)
-- Deployment and documentation
-
-Compare your DoD with another pair. Identify one item they included that you missed, and add it with a one-sentence justification for why it belongs.
+7. **In an AI-native workflow, specification quality is code quality.** Vague requirements do not just produce ambiguous documents — they produce incorrect, insecure, or hallucinated code. The quality attributes in §2.4 are the minimum bar for requirements that will drive AI-assisted generation. The more precisely a requirement is specified, the less room the model has to invent behaviour you did not intend.
 
 ---
 
-### Phase 4 — Requirements Quality Audit (20 min)
+## Review Questions
 
-Swap your requirements artefacts with another pair. Audit each other's requirements against the IEEE quality criteria from §2.4:
+1. A hospital is replacing its paper-based ward scheduling system with a digital one. The ward manager says: "We just need something that works like the paper system, but on a computer." Identify two elicitation techniques from §2.2 that you would use and explain what each would reveal that the ward manager's statement does not.
 
-| Requirement | Correct | Unambiguous | Complete | Consistent | Verifiable | Traceable | Prioritised |
-|---|---|---|---|---|---|---|---|
-| FR-01 | | | | | | | |
-| FR-02 | | | | | | | |
-| FR-03 | | | | | | | |
-| FR-04 | | | | | | | |
-| NFR-01 | | | | | | | |
-| NFR-02 | | | | | | | |
+2. A development team has documented the following requirements for a healthcare appointment system: "The system shall allow patients to book appointments" and "The system shall be secure and fast." Classify each as functional or non-functional, identify which quality attributes from §2.4 each violates, and rewrite the deficient ones so they are verifiable.
 
-Mark each cell ✓ (satisfies the attribute), ✗ (fails), or ? (unclear). For every ✗, write a one-sentence explanation of the flaw and a corrected version of the requirement.
+3. Write three user stories and at least two Gherkin acceptance criteria scenarios for the following epic: *"As a student, I want to track my assignment deadlines so that I do not miss submissions."* Your scenarios must include one happy path and one error or edge case.
 
----
+4. A fintech startup building a mobile payment app has produced a backlog of 47 user stories but cannot agree on what to build first. Apply MoSCoW to the following features and justify each classification: (a) user registration and login; (b) payment confirmation notifications; (c) transaction history export to CSV; (d) cryptocurrency wallet integration; (e) dark mode. Then identify which item most commonly triggers conflict in prioritisation sessions and explain why.
 
-### Phase 5 — Conflict Injection (20 min)
-
-Start a new Copilot conversation with this persona:
-
-> *"You are Sam, a frequent online shopper in their late 20s. You shop on your phone and expect a fast, frictionless experience — ideally guest checkout with no account required. You find long forms and mandatory registration frustrating. Stay in character."*
-
-Interview Sam for 10 minutes, then:
-
-1. Identify **at least 2 conflicts** between Jordan's requirements and Sam's
-2. Document each conflict explicitly — which requirement from each stakeholder, and why they are incompatible
-3. Propose a written resolution for each: either a requirement that satisfies both stakeholders, or a justified MoSCoW trade-off that explicitly records what was deferred and why
-
----
-
-### Phase 6 — Scope Creep Simulation (15 min)
-
-Your instructor will send the following message, simulating a client email received mid-project:
-
-> *"Hi team — Jordan here. I forgot to mention, we'd also love the app to integrate with our Instagram and Facebook pages so customers can buy directly from our social media posts. Also, can it support a loyalty points system? Oh, and my business partner just asked if we could add a B2B wholesale portal for bulk orders."*
-
-For each new request:
-
-1. Classify it using MoSCoW — does it change any existing priorities?
-2. Determine whether it is **scope creep** or a legitimate missed requirement, and justify your decision
-3. Write a one-paragraph **change response** to Jordan that acknowledges all three requests, documents what is accepted or deferred, and explains why
-
----
-
-### Phase 7 — Reflection (15 min)
-
-Answer the following questions individually in writing:
-
-1. After the quality audit, which quality attribute (§2.4) was hardest to satisfy in your requirements — and why?
-2. Could the conflict between Jordan and Sam have been discovered from a single stakeholder interview? What does this tell you about elicitation breadth?
-3. Which of Jordan's scope creep requests was hardest to classify — the social media integration, loyalty points, or B2B portal — and why?
-4. What does Copilot-as-client *cannot* replicate compared to a real stakeholder interview? Think about §2.2.3 (observation and tacit knowledge).
-5. Where in this activity did Copilot add genuine value — and where did it fall short?
-
----
+5. A developer is given the requirement "the system shall respond quickly" and uses an LLM to generate the corresponding API endpoint. Explain two ways this requirement causes problems in an AI-assisted workflow, rewrite it to meet the quality attributes in §2.4, and describe what changes in the LLM's output when the improved requirement is used.

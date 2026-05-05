@@ -36,7 +36,7 @@
 
 # Tutorials
 
-- [Tutorial 1: Setting Up Your Python Project and Git Repo](./tutorial_1.md)
+- [Tutorial 1: Setting Up Your Python and GitLab for Code and Project Management](./tutorial_1.md)
 - [Tutorial 2: Setting Up GitLab for Project and Feature Development](./tutorial_2.md)
 
 # Appendices

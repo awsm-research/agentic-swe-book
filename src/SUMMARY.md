@@ -37,7 +37,7 @@
 # Tutorials
 
 - [Tutorial 1: Setting Up Your Python and GitLab for Code and Project Management](./tutorial_1.md)
-- [Tutorial 2: Setting Up GitLab for Project and Feature Development](./tutorial_2.md)
+- [Tutorial 2: Eliciting Requirements from AI As Your Client](./tutorial_2.md)
 
 # Appendices
  

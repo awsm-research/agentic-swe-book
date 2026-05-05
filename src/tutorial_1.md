@@ -2,13 +2,17 @@
 
 Before your first commit reaches a shared repository, three things need to be in place: a reproducible local environment, a protected branch, and a way to track what you're building. This tutorial sets up all three.
 
+**Concepts covered:** Python environments, pre-commit hooks, conventional commits, GitLab branch protection, issue tracking, milestones, and burndown charts
+
+**Format:** Individual or pairs | **Duration:** 2 hours | **Tool:** Python, Git, GitLab
+
 ---
 
 ## Outline
 
-- [Part A: Setting Up Your Python Development Environment](#part-a-setting-up-your-python-development-environment)
-- [Part B: Setting Up GitLab for Code Management](#part-b-setting-up-gitlab-for-code-management)
-- [Part C: Setting Up GitLab for Project Management](#part-c-setting-up-gitlab-for-project-management)
+- [Part A: Setting Up Your Python Development Environment](#part-a-setting-up-your-python-development-environment-60-min)
+- [Part B: Setting Up GitLab for Code Management](#part-b-setting-up-gitlab-for-code-management-20-min)
+- [Part C: Setting Up GitLab for Project Management](#part-c-setting-up-gitlab-for-project-management-40-min)
 - [References](#references)
 
 ---
@@ -26,7 +30,7 @@ By the end of this tutorial, you will be able to:
 
 ---
 
-## Part A: Setting Up Your Python Development Environment
+## Part A: Setting Up Your Python Development Environment *(~60 min)*
 
 ### Prerequisites
 
@@ -116,7 +120,7 @@ __pycache__/
 .env
 EOF
 git add .gitignore pyproject.toml .python-version
-git commit -m "Initial commit: add .gitignore and project config"
+git commit -m "chore: initial project setup with .gitignore and pyproject.toml"
 ```
 
 > **What to commit from `uv init`:** Commit `pyproject.toml` (project metadata and dependencies) and `.python-version` (pins the Python version). Do **not** commit `.venv/`. The `uv.lock` file is added after the first `uv add` in Step 3 — commit it then.
@@ -133,12 +137,14 @@ uv add --dev pre-commit
 
 ```bash
 git add pyproject.toml uv.lock
-git commit -m "Add dev dependencies: pre-commit"
+git commit -m "chore: add pre-commit as dev dependency"
 ```
 
 ---
 
 ### Step 4: Set Up Pre-commit Hooks
+
+Create `.pre-commit-config.yaml` in the project root with the following content:
 
 ```yaml
 # .pre-commit-config.yaml
@@ -213,7 +219,7 @@ With a working script, you are ready to make a proper commit.
 **Stage only the files you intend to commit:**
 
 ```bash
-git add src/calculator.py pyproject.toml .pre-commit-config.yaml uv.lock
+git add src/calculator.py .pre-commit-config.yaml
 ```
 
 **Check what is staged before committing:**
@@ -223,15 +229,31 @@ git status
 git diff --staged
 ```
 
-**Write a descriptive commit message.** A good message has a short subject line (under 72 characters) and a body explaining *why* — not just what:
+**Write a descriptive commit message.** A good message has a short subject line (under 72 characters) prefixed with a type tag, and a body explaining *why* — not just what:
 
 ```bash
-git commit -m "Add calculator module with add and divide operations
+git commit -m "feat: add calculator module with add and divide operations
 
 - Implements add() and divide() with type hints
 - divide() raises ValueError on division by zero
 - CLI entry point via argparse"
 ```
+
+#### Commit Message Type Tags
+
+Prefix every commit subject with a tag that signals the *kind* of change. This makes the history scannable and is required by tools that auto-generate changelogs.
+
+| Tag | Meaning | Example |
+|---|---|---|
+| `feat` | A new feature or capability | `feat: add divide operation` |
+| `fix` | A bug fix | `fix: handle division by zero in divide()` |
+| `chore` | Housekeeping — no production code change | `chore: update .gitignore` |
+| `refactor` | Code restructured without changing behaviour | `refactor: extract parser into parse_args()` |
+| `test` | Adding or updating tests | `test: add unit tests for calculator` |
+| `docs` | Documentation only | `docs: add usage examples to README` |
+| `ci` | CI/CD pipeline changes | `ci: add pre-commit hook to pipeline` |
+
+> **Why bother?** A log full of "fix stuff" and "update" is useless in a code review and impossible to search. Tags cost one word and pay back every time a teammate runs `git log --oneline` looking for when a feature was added or a bug was introduced.
 
 **View your commit history:**
 
@@ -242,8 +264,8 @@ git log --oneline
 Expected output:
 
 ```
-a3f92c1 Add calculator module with add and divide operations
-e1b4d07 Initial commit: add .gitignore
+a3f92c1 feat: add calculator module with add and divide operations
+e1b4d07 chore: initial project setup with .gitignore and pyproject.toml
 ```
 
 ---
@@ -283,7 +305,7 @@ git restore --staged .env
 
 ```bash
 git add src/calculator.py
-git commit -m "Add multiply and subtract operations to calculator"
+git commit -m "feat: add multiply and subtract operations to calculator"
 ```
 
 5. Verify the commit appears in your log:
@@ -294,11 +316,13 @@ git log --oneline
 
 ---
 
-## Part B: Setting Up GitLab for Code Management
+## Part B: Setting Up GitLab for Code Management *(~20 min)*
 
 GitLab hosts your repository and enforces team workflows through **protected branches** — rules that block direct pushes to `main` and require all changes to go through a reviewed merge request.
 
-### What Is a Protected Branch?
+### Step 1: Understand Protected Branches
+
+#### What Is a Protected Branch?
 
 When a team collaborates on a shared repository, uncontrolled pushes to the `main` branch can introduce broken code, overwrite teammates' work, and bypass code review. A **protected branch** enforces rules about who can push directly and who must go through a reviewed merge request.
 
@@ -316,7 +340,7 @@ In professional teams, `main` almost always has branch protection enabled. Featu
 
 ---
 
-### Setting Up a Protected Branch in GitLab
+### Step 2: Set Up a Protected Branch in GitLab
 
 **Prerequisites:** Maintainer role on the project.
 
@@ -343,7 +367,7 @@ The recommended setting for most student teams is:
 
 ---
 
-### Verify the Protection Works
+### Step 3: Activity — Verify Branch Protection
 
 After protecting `main`, attempt a direct push to confirm it is blocked:
 
@@ -368,7 +392,7 @@ This rejection confirms the protection is working. All changes to `main` must no
 
 ---
 
-## Part C: Setting Up GitLab for Project Management
+## Part C: Setting Up GitLab for Project Management *(~40 min)*
 
 GitLab provides a built-in planning suite under the **Plan** menu. The recommended workflow follows a top-down structure:
 
@@ -625,8 +649,39 @@ When the MR is merged, Issue #12 is automatically closed and the burndown chart 
 
 ---
 
+### Step 8: Activity — Link a Merge Request to a Work Item
+
+Using the milestone and issues you created in Steps 2–4:
+
+1. Open one of your issues and click **Create merge request** to generate a branch and draft MR.
+2. Check out the branch locally and make a small change (e.g., add a comment to a source file):
+
+```bash
+git fetch origin
+git checkout <branch-name>
+# make a change, then:
+git add <file>
+git commit -m "chore: placeholder change for MR activity"
+git push origin <branch-name>
+```
+
+3. Open the merge request on GitLab and add a closing keyword to the description:
+
+```
+Closes #<issue-number>
+```
+
+4. Mark the MR as **Ready** (remove Draft status) and merge it.
+5. Navigate back to the issue and confirm it is now closed.
+6. Open your milestone and verify the burndown chart reflects the closed issue.
+
+---
+
 ## References
 
+- [uv Documentation](https://docs.astral.sh/uv/) — Python package and project manager: installation, virtual environments, and lockfiles
+- [pre-commit Documentation](https://pre-commit.com/) — Managing and installing pre-commit hooks
+- [Conventional Commits](https://www.conventionalcommits.org/) — Specification for the commit message type tag format (`feat:`, `fix:`, `chore:`, etc.)
 - [GitLab Protected Branches](https://docs.gitlab.com/ee/user/project/protected_branches.html) — Configuring branch protection rules
 - [GitLab Requirements](https://docs.gitlab.com/user/project/requirements/) — Creating and managing long-lived requirements
 - [GitLab Milestones](https://docs.gitlab.com/ee/user/project/milestones/) — Setting up and managing milestones

@@ -194,7 +194,7 @@ Hyperlink URLs in markdown: `[text](url)`. 4–8 references.
 When invoked with a chapter number and title (e.g., `/write-chapter 2 Requirements Engineering`):
 
 1. Read `src/SUMMARY.md` to confirm the chapter's place in the book
-2. Read `outline.md` to get the intended content list for this chapter
+2. Read `summary.md` to get the intended content list for this chapter
 3. Read `src/chapter_1.md` as the style reference
 4. If a prior chapter exists in `src/`, read it to check for concepts that should carry forward
 5. Draft the full chapter following the template above

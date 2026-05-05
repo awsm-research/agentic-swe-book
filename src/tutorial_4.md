@@ -1,5 +1,21 @@
 # Tutorial 4: Unit Testing in Practice
 
+You have a function that calculates tax deductions — but you cannot trust it until you have tested it, measured the coverage, and confirmed every decision branch has been exercised. This tutorial builds that test suite from scratch: you will write the initial tests, run statement and branch coverage reports, identify the gaps, and close them until the suite reaches 100% branch coverage.
+
+**Concepts covered:** unit testing with `unittest`, Arrange–Act–Assert pattern, statement coverage, branch coverage, `pytest-cov`
+
+**Format:** Individual or pairs | **Duration:** ~1 hour | **Tool:** Python, pytest, pytest-cov
+
+---
+
+## Outline
+
+- [Part A: Build the Initial Test Suite](#part-a-build-the-initial-test-suite-35-min)
+- [Part B: Measure and Close Coverage Gaps](#part-b-measure-and-close-coverage-gaps-25-min)
+- [References](#references)
+
+---
+
 ## Learning Objectives
 
 - Write unit tests using `unittest.TestCase` assertion methods with the Arrange–Act–Assert (AAA) pattern
@@ -8,7 +24,9 @@
 
 ---
 
-## 4.8 The Scenario
+## Part A: Build the Initial Test Suite *(~35 min)*
+
+### Step 1: The Scenario
 
 You are writing a tax deduction calculator for the Australian Taxation Office (ATO). Given a taxpayer's income, age, and personal circumstances, the function returns the total deduction amount they qualify for under the following hypothetical rules:
 
@@ -21,7 +39,7 @@ You are writing a tax deduction calculator for the Australian Taxation Office (A
 | Disability supplement | `disabled == True` | +$600 |
 | Invalid input | `income < 0` | raise `ValueError` |
 
-### 4.8.1 Production Code
+**Production code:**
 
 ```python
 # src/tax.py
@@ -84,7 +102,9 @@ The function contains six decision points — one True branch and one False bran
 | Spouse | `has_spouse` | add $200 | no supplement |
 | Disability | `disabled` | add $600 | no supplement |
 
-### 4.8.2 Assertion Methods in `unittest`
+---
+
+### Step 2: Assertion Methods in `unittest`
 
 All tests in this tutorial use `unittest.TestCase`. Each method produces a descriptive failure message automatically — you do not need to write one.
 
@@ -100,7 +120,9 @@ All tests in this tutorial use `unittest.TestCase`. Each method produces a descr
 | `self.assertRaises(Exc)` | expected exception type |
 | `self.assertRaisesRegex(Exc, pattern)` | expected exception and message |
 
-### 4.8.3 Initial Test Suite
+---
+
+### Step 3: Write the Initial Test Suite
 
 Each test follows the **Arrange–Act–Assert** pattern: set up inputs, call the function, verify the output.
 
@@ -195,22 +217,55 @@ class TestCalculateDeduction(unittest.TestCase):
         self.assertGreaterEqual(result, 1_000.0)
 ```
 
-Run the suite to confirm all six tests pass:
+---
+
+### Step 4: Activity — Run the Suite and Confirm All Tests Pass
+
+Run the suite in verbose mode. For each of the six tests, identify which row in the branch table from Step 1 it exercises.
 
 ```bash
 pytest tests/test_tax.py -v
 ```
 
-### 4.8.4 Checking Statement Coverage
+<details>
+<summary>Expected output</summary>
 
-Install `pytest-cov` and measure which statements in `tax.py` the tests execute:
+```
+tests/test_tax.py::TestCalculateDeduction::test_no_supplements_above_mid_income PASSED
+tests/test_tax.py::TestCalculateDeduction::test_full_low_income_supplement PASSED
+tests/test_tax.py::TestCalculateDeduction::test_senior_supplement PASSED
+tests/test_tax.py::TestCalculateDeduction::test_spouse_offset PASSED
+tests/test_tax.py::TestCalculateDeduction::test_disability_supplement PASSED
+tests/test_tax.py::TestCalculateDeduction::test_all_supplements_combined PASSED
+
+6 passed in 0.XXs
+```
+
+All six tests pass. Notice that not every branch table row has a test that exercises it exclusively — `test_all_supplements_combined` exercises four True branches at once. Coverage analysis in Part B will show exactly which branches remain untested.
+
+</details>
+
+---
+
+## Part B: Measure and Close Coverage Gaps *(~25 min)*
+
+### Step 1: Install pytest-cov
+
+`pytest-cov` extends pytest with statement and branch coverage reporting. Install it as a development dependency:
 
 ```bash
 uv add --dev pytest-cov
-pytest tests/test_tax.py --cov=src --cov-report=term-missing -q
 ```
 
-**Activity:** Before running the command, look at the initial tests and the branch table above. Which lines in `tax.py` do you expect to be missing?
+---
+
+### Step 2: Activity — Predict and Verify Statement Coverage
+
+`pytest-cov` measures which statements in `tax.py` are executed by the test suite. Before running the command below, look at the six tests and the branch table in Step 1 of Part A. Which lines do you predict will be missing?
+
+```bash
+pytest tests/test_tax.py --cov=src --cov-report=term-missing -q
+```
 
 <details>
 <summary>Expected output</summary>
@@ -232,7 +287,9 @@ Two lines are never executed:
 
 </details>
 
-### 4.8.5 Branch Coverage: Going Deeper
+---
+
+### Step 3: Check Branch Coverage
 
 Statement coverage tells you whether a line was *ever* executed — not whether every *decision* was exercised in both directions. Enable branch coverage to see the full picture:
 
@@ -240,7 +297,11 @@ Statement coverage tells you whether a line was *ever* executed — not whether 
 pytest tests/test_tax.py --cov=src --cov-branch --cov-report=term-missing -q
 ```
 
-**Activity:** What additional information does the branch coverage report reveal compared to statement coverage?
+---
+
+### Step 4: Activity — Compare Statement and Branch Coverage
+
+What additional information does the branch coverage report reveal compared to statement coverage?
 
 <details>
 <summary>Expected output</summary>
@@ -265,9 +326,9 @@ TOTAL           12      2      12      2    83%
 
 ---
 
-## 4.9 Closing the Coverage Gaps
+### Step 5: Activity — Write Tests for the Missing Branches
 
-**Activity:** Write one test for each missing branch. Use the branch table in section 4.8.1 to identify what input values would trigger each uncovered condition.
+Write one test for each missing branch. Use the branch table in Step 1 of Part A to identify what input values would trigger each uncovered condition.
 
 When a function is expected to raise an exception, Act and Assert merge into a single `with self.assertRaises(...)` block — the exception itself is the output being verified.
 
@@ -322,3 +383,12 @@ Every statement is executed and every decision point is exercised in both direct
 </details>
 
 > **Reflection:** Eight tests and 100% branch coverage do not prove the deduction logic is correct — they prove it behaves *as written*. If the low-income threshold were typed as `18_000` instead of `18_200`, all tests would still pass as long as the test data did not land in the gap. Coverage identifies *untested* code; meaningful assertions on the *right* boundary values are what catch bugs.
+
+---
+
+## References
+
+- [Python `unittest` Documentation](https://docs.python.org/3/library/unittest.html) — Built-in test framework: `TestCase`, assertion methods, and test discovery
+- [pytest Documentation](https://docs.pytest.org/) — Test runner used throughout this tutorial; compatible with `unittest.TestCase` subclasses
+- [pytest-cov Documentation](https://pytest-cov.readthedocs.io/) — Statement and branch coverage reporting with pytest; `--cov`, `--cov-branch`, and `--cov-report` flags
+- [Coverage.py Documentation](https://coverage.readthedocs.io/) — The underlying coverage engine; explains how statement and branch coverage are measured

@@ -1,5 +1,5 @@
 # Chapter 6: Agentic Software Engineering: A New Paradigm
-<!-- 
+
 > *"The question is not whether AI will change software engineering. It already has. The question is whether you are shaping that change or being shaped by it."*
 
 ---
@@ -459,4 +459,4 @@ This chapter introduced the paradigm shift from AI-assisted to AI-native softwar
 
 4. You are building an agent that monitors a production database, detects anomalies, and automatically rolls back suspicious transactions. Using the HITL/HOTL framework from Section 4.8, justify which oversight posture is appropriate for each phase of the agent's operation (detection, decision, rollback). What automated verification would you put in place to support your chosen posture?
 
-5. Your team has been tasked with using the Agentic SDLC to add a password reset feature to the course project. Write a complete specification (Step 1 of the tutorial) for a `request_password_reset(email: str) -> None` function, suitable for use in a `client.messages.create` call. Your specification must include: context, function signature, behaviour (at least five rules), constraints (at least two things the function must NOT do), and three concrete input-output examples covering normal operation, a missing account, and an invalid email format. Then identify two specific behaviours you would check in the verification step that an AI is likely to implement incorrectly or omit. -->
+5. Your team has been tasked with using the Agentic SDLC to add a password reset feature to the course project. Write a complete specification (Step 1 of the tutorial) for a `request_password_reset(email: str) -> None` function, suitable for use in a `client.messages.create` call. Your specification must include: context, function signature, behaviour (at least five rules), constraints (at least two things the function must NOT do), and three concrete input-output examples covering normal operation, a missing account, and an invalid email format. Then identify two specific behaviours you would check in the verification step that an AI is likely to implement incorrectly or omit.

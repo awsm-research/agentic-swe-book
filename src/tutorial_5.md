@@ -456,7 +456,7 @@ ERROR: Job failed: exit code 1
 
 ---
 
-### Step 3: Fix and Restore Green
+### Step 3: Activity — Fix and Restore Green
 
 Remove the `import sys` line from `src/tax.py`, commit, and push:
 

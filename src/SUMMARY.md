@@ -15,7 +15,7 @@
 # Part II: Agentic Software Engineering
 
 - [Chapter 6: Agentic Software Engineering: A New Paradigm](./chapter_6.md)
-- [Chapter 7: Hands-on Activities with AI Coding Agents](./chapter_7.md)
+<!-- - [Chapter 7: Hands-on Activities with AI Coding Agents](./chapter_7.md) -->
 - [Chapter 8: Configuring the Agent's World — Context, Skills, and Tools](./chapter_8.md)
 - [Chapter 9: Emerging Security Concerns in Agentic Software Engineering](./chapter_9.md)
 
@@ -41,6 +41,8 @@
 - [Tutorial 3: Designing a Learning Management System](./tutorial_3.md)
 - [Tutorial 4: Unit Testing 101](./tutorial_4.md)
 - [Tutorial 5: Code Quality and CI/CD](./tutorial_5.md)
+- [Tutorial 6: The AI-Assisted SDLC: From Spec to Code](./tutorial_6.md)
+- [Tutorial 7: The AI-Assisted SDLC: From Code to Well-Tested App](./tutorial_7.md)
 
 # Appendices
  

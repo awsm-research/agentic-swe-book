@@ -1,27 +1,48 @@
-# Chapter 7: Hands-on Activities with AI Coding Agents
-<!-- 
-> *"The real leverage of AI in software engineering is not that it writes code faster — it is that it compresses the feedback loop between an idea and a working, tested, reviewed artefact."*
+# Tutorial 6: The AI-Assisted SDLC: From Spec to Code
+
+Your stakeholder just sent a brief: field technicians need to log repair jobs from their phones, a manager needs to assign them, and it should "work offline sometimes." That brief is the raw material for this tutorial. By the end, you will have transformed it into a fully specified, designed, and implemented feature — driving an AI agent through requirements, design, and code.
+
+**Concepts covered:** AI-assisted requirements engineering, UML diagram generation and critique, specification-driven code generation
+
+**Format:** Individual | **Duration:** 2 hours | **Tool:** AI Assistant
+
+---
+
+## Outline
+
+- [The Running Scenario](#the-running-scenario)
+- [Activity 1 — AI for Requirements Engineering](#activity-1--ai-for-requirements-engineering)
+- [Activity 2 — AI for Software Design](#activity-2--ai-for-software-design)
+- [Activity 3 — AI for Coding](#activity-3--ai-for-coding)
+- [References](#references)
 
 ---
 
 ## Learning Objectives
 
-By the end of this chapter, you will be able to:
+By the end of this tutorial, you will be able to:
 
 1. Apply AI coding agents across every phase of the SDLC using a single, evolving scenario.
 2. Use prompting techniques to refine vague requirements into well-formed specifications.
 3. Direct an AI agent to analyse requirement quality and generate Gherkin acceptance criteria.
 4. Use an AI agent to produce UML diagrams from a requirement document and critique their design quality.
 5. Generate implementation code from a specification and design artefact using an AI agent.
-6. Generate a complete, meaningful unit test suite from AI-produced code and evaluate its quality.
 
 ---
 
-## 7.1 The Running Scenario
+## Prerequisites
 
-Every activity in this chapter builds on the same system and the same vague, realistic starting point — a request that mirrors what engineers actually receive from non-technical stakeholders.
+- Completed Tutorial 5 — your Python project is set up with uv, pytest, and pre-commit
+- Claude Code CLI installed and authenticated ([Claude Code documentation](https://docs.anthropic.com/en/docs/claude-code)); a conversational AI assistant works for Activities 1 and 2 if Claude Code is unavailable
+- FastAPI and pytest-cov added to your project: `uv add fastapi "uvicorn[standard]" pytest pytest-cov`
 
-### 7.1.1 The Starting Brief
+---
+
+## The Running Scenario
+
+Every activity in this tutorial builds on the same system and the same vague, realistic starting point — a request that mirrors real stakeholder briefs.
+
+### The Starting Brief
 
 > *"We need a system where field technicians can log repair jobs from their phones. A manager should be able to see all the jobs and assign them to technicians. We also want some kind of notification when a job gets assigned. It should be fast and work offline sometimes."*
 
@@ -33,9 +54,9 @@ This brief is intentionally incomplete. It contains:
 - **Missing error cases**: what happens when a job is assigned to an unavailable technician?
 - **No non-functional measurability**: "fast" is not a requirement
 
-This is the raw material for the activities that follow. By the end of the chapter, the brief will have been transformed into a fully specified, designed, implemented, and tested feature — using AI agents at every step.
+This is the raw material for the activities that follow. By the end of this tutorial, the brief will have been transformed into a fully specified, designed, implemented, and tested feature.
 
-### 7.1.2 The System: Field Repair Tracker
+### The System: Field Repair Tracker
 
 For context, here is the system as it will exist after the activities are complete:
 
@@ -50,13 +71,9 @@ For context, here is the system as it will exist after the activities are comple
 
 ---
 
-## 7.2 Activity 1 — AI for Requirements Engineering
+## Activity 1 — AI for Requirements Engineering *(~45 min)*
 
 **Concepts covered:** Requirement elicitation, quality analysis, user story generation, acceptance criteria
-
-**Format:** Individual | **Duration:** 45 min | **Tool:** AI Assistant
-
-### 7.2.1 Background
 
 In Chapter 2, you learned to elicit requirements from stakeholders and write them in structured formats. In this activity, you will use an AI agent to perform three requirements engineering tasks on the starting brief:
 
@@ -64,7 +81,7 @@ In Chapter 2, you learned to elicit requirements from stakeholders and write the
 2. **Quality analysis** — ask the AI to audit the refined requirements against the IEEE 830 quality attributes (correct, unambiguous, complete, consistent, verifiable, traceable, prioritised)
 3. **Acceptance criteria generation** — ask the AI to generate Gherkin scenarios for the most important user stories
 
-### 7.2.2 Phase 1 — Elicitation and Refinement (15 min)
+### Step 1: Elicitation and Refinement *(~15 min)*
 
 Paste the starting brief into your AI agent and use the following prompt:
 
@@ -92,9 +109,9 @@ Answer the AI's clarifying questions using the following stakeholder answers:
 
 **Check your output:** Apply the quality attribute table from Chapter 2, §2.4. Can you identify any remaining ambiguities or non-measurable NFRs? Fix them before moving on.
 
-> See [Sample Answer: Activity 1 — Acceptance Criteria](#sample-answer-activity-1--acceptance-criteria) at the end of this chapter.
+> See [Sample Answer: Activity 1 — Acceptance Criteria](#sample-answer-activity-1--acceptance-criteria) at the end of this tutorial.
 
-### 7.2.3 Phase 2 — Quality Analysis (10 min)
+### Step 2: Quality Analysis *(~10 min)*
 
 Ask the AI to audit the requirements it just produced:
 
@@ -108,7 +125,7 @@ Review the AI's audit. Do you agree with its assessment? Note any requirements y
 
 > **Important:** AI quality audits are often too generous. The AI produced the requirements and tends to score its own output highly. Read each "Pass" verdict critically — could a developer interpret that requirement in two different ways?
 
-### 7.2.4 Phase 3 — User Stories and Acceptance Criteria (20 min)
+### Step 3: Activity — User Stories and Acceptance Criteria *(~20 min)*
 
 Ask the AI to generate structured work items:
 
@@ -124,27 +141,23 @@ From the refined requirements, produce:
 
 **Check your output:** Are all three acceptance criteria scenarios testable without ambiguity? Could a tester determine pass or fail from each scenario alone, without asking the author?
 
-> See [Sample Answer: Activity 1 — Acceptance Criteria](#sample-answer-activity-1--acceptance-criteria) at the end of this chapter.
+> See [Sample Answer: Activity 1 — Acceptance Criteria](#sample-answer-activity-1--acceptance-criteria) at the end of this tutorial.
 
 ---
 
-## 7.3 Activity 2 — AI for Software Design
+## Activity 2 — AI for Software Design *(~45 min)*
 
 **Concepts covered:** UML diagrams, class design, sequence diagrams, design critique
 
-**Format:** Individual | **Duration:** 45 min | **Tool:** AI Assistant
-
-### 7.3.1 Background
-
 In Chapter 3, you learned to read and produce UML diagrams and to apply design patterns. In this activity, you will direct an AI agent to produce design artefacts from the refined requirements — then critique whether those artefacts reflect good design.
 
-### 7.3.2 Phase 1 — Use Case Diagram (10 min)
+### Step 1: Use Case Diagram *(~10 min)*
 
 Provide the AI with your refined requirements and ask:
 
 <div class="admonish-prompt">
 
-You are a software architect. Given the requirements below, produce a UML use case diagram in Mermaid syntax. Include all actors (human and system), all use cases, and any include or extend relationships. Follow the style from the example below.
+You are a software architect. Given the requirements below, produce a UML use case diagram in Mermaid syntax. Include all actors (human and system), all use cases, and any include or extend relationships.
 
 Requirements: [paste your refined requirements from Activity 1]
 
@@ -155,9 +168,9 @@ Requirements: [paste your refined requirements from Activity 1]
 - Is every use case traceable to at least one requirement?
 - Does the `includes` relationship correctly capture mandatory sub-behaviours?
 
-> See [Sample Answer: Activity 2 — Use Case Diagram](#sample-answer-activity-2--use-case-diagram) at the end of this chapter.
+> See [Sample Answer: Activity 2 — Use Case Diagram](#sample-answer-activity-2--use-case-diagram) at the end of this tutorial.
 
-### 7.3.3 Phase 2 — Class Diagram (15 min)
+### Step 2: Class Diagram *(~15 min)*
 
 Ask the AI to produce a class diagram:
 
@@ -177,9 +190,9 @@ Critique the class diagram you just produced. Identify any violations of SOLID p
 
 Compare the AI's self-critique with your own reading. Do you agree? Is the `Manager` class doing too much? Should job assignment be delegated to a service layer rather than placed on the `Manager` entity?
 
-> See [Sample Answer: Activity 2 — Class Diagram](#sample-answer-activity-2--class-diagram) at the end of this chapter.
+> See [Sample Answer: Activity 2 — Class Diagram](#sample-answer-activity-2--class-diagram) at the end of this tutorial.
 
-### 7.3.4 Phase 3 — Sequence Diagram (20 min)
+### Step 3: Activity — Sequence Diagram *(~20 min)*
 
 Ask the AI to trace the most complex use case end-to-end:
 
@@ -192,23 +205,19 @@ Produce a UML sequence diagram in Mermaid syntax for the 'Assign Job' use case. 
 **Review questions:**
 - Does the diagram show the asynchronous notification correctly — not blocking the HTTP response?
 - Is JWT validation happening at the right layer?
-- Are all components visible in the sequence traceable to the component diagram from Chapter 3?
+- Are all participants visible in the sequence traceable to the class diagram from §7.3.3?
 
-> See [Sample Answer: Activity 2 — Sequence Diagram](#sample-answer-activity-2--sequence-diagram) at the end of this chapter.
+> See [Sample Answer: Activity 2 — Sequence Diagram](#sample-answer-activity-2--sequence-diagram) at the end of this tutorial.
 
 ---
 
-## 7.4 Activity 3 — AI for Coding
+## Activity 3 — AI for Coding *(~45 min)*
 
 **Concepts covered:** Specification-driven code generation, code review of AI output, layered architecture
 
-**Format:** Individual | **Duration:** 45 min | **Tool:** AI Assistant (CLI)
-
-### 7.4.1 Background
-
 In Chapter 6, you learned that code generation is only as good as the specification that drives it. In this activity, you will use AI Assistant to generate the implementation of the `assign_job` feature — the most complex use case in the system — from the requirements and design artefacts produced in Activities 1 and 2.
 
-### 7.4.2 Preparing the Specification
+### Step 1: Prepare the Specification
 
 Before invoking the agent, assemble a specification document. Save it as `spec_assign_job.md`:
 
@@ -260,7 +269,7 @@ POST /jobs/{job_id}/assign
 - The notification call must be non-blocking (use asyncio.create_task or BackgroundTasks)
 ```
 
-### 7.4.3 Invoking AI Assistant
+### Step 2: Invoke AI Assistant
 
 Open a terminal in your project directory and run:
 
@@ -283,7 +292,7 @@ Follow the constraints in the spec exactly. Use Python 3.12 type annotations thr
 
 </div>
 
-### 7.4.4 Reviewing the Generated Code
+### Step 3: Activity — Review the Generated Code
 
 After generation, review the output against the following checklist. For each item, either confirm it is satisfied or ask the AI to fix it:
 
@@ -304,9 +313,7 @@ The notification send is currently blocking the HTTP response. Refactor it to us
 
 </div>
 
-### 7.4.5 What AI Does Well and Poorly Here
-
-After reviewing the output, reflect on the following:
+**After reviewing the output, reflect on the following:**
 
 **AI tends to do well at:**
 - Generating boilerplate (dataclasses, Pydantic models, router structure)
@@ -322,102 +329,9 @@ These are not AI failures — they are specification gaps. Every item the AI get
 
 ---
 
-## 7.5 Activity 4 — AI for Testing
+## Tutorial Summary
 
-**Concepts covered:** Test generation, test quality evaluation, coverage analysis
-
-**Format:** Individual | **Duration:** 45 min | **Tool:** AI Assistant (CLI)
-
-### 7.5.1 Background
-
-In Chapter 4, you learned to write unit tests with pytest, to evaluate coverage, and to critically assess AI-generated tests. In this activity, you will use AI Assistant to generate a full unit test suite for the `AssignJobService` produced in Activity 3 — and then apply the evaluation criteria from Chapter 4, §4.9.3 to assess its quality.
-
-### 7.5.2 Generating the Test Suite
-
-In your AI Assistant session, give the following prompt:
-
-<div class="admonish-prompt">
-
-Read `src/service/job_service.py`. Generate a complete pytest test suite in `tests/test_job_service.py` for the AssignJobService.assign method. Requirements for the test suite:
-
-1. Use pytest fixtures for all shared setup (mock repository, mock notification service, sample job, sample technician)
-2. Cover all business rules from the specification: happy path, job not found (404), technician not found (409), technician not available (409), caller not a manager (403)
-3. Verify that the notification service is called exactly once on a successful assignment
-4. Verify that the notification service is NOT called when assignment fails
-5. Use unittest.mock.MagicMock for all external dependencies — do not use a real database
-6. Each test method name must describe the scenario it tests (not 'test_1', 'test_assign', etc.)
-
-</div>
-
-### 7.5.3 Evaluating the Generated Tests
-
-Apply the evaluation checklist from Chapter 4, §4.9.3 to the AI-generated suite:
-
-**1. Does each test assert something meaningful?**
-
-Look for tests that call `assign(...)` and only assert `result is not None`. These provide no value. Every test should assert a specific outcome: the returned job has the correct status, the repository's `update_assignee` was called with the correct arguments, or a specific exception was raised.
-
-**2. Are the boundary cases covered?**
-
-The specification has three error conditions. Count how many the AI tested. If any are missing, add them manually — do not ask the AI to fix this, so you can experience the gap directly.
-
-**3. Is the notification call verified correctly?**
-
-A common AI mistake is to assert `mock_notifier.send.assert_called()` (was it called at all?) rather than `mock_notifier.send.assert_called_once_with(expected_email, expected_message)`. The latter is a much stronger assertion.
-
-**4. Are the tests isolated?**
-
-Check that no test depends on the order in which tests run. If a fixture is modified inside a test (e.g., a list is appended to), subsequent tests may receive different state.
-
-> See [Sample Answer: Activity 4 — Unit Test Suite](#sample-answer-activity-4--unit-test-suite) at the end of this chapter.
-
-### 7.5.4 Coverage Analysis
-
-Run the test suite with coverage:
-
-```bash
-pytest tests/test_job_service.py -v --cov=src/service --cov-report=term-missing
-```
-
-If coverage is below 90% for `job_service.py`, identify the uncovered lines and ask the AI to explain what scenario each uncovered line represents. Then write a test for each gap — by hand, not by AI — so you experience what it means to design a test for a specific scenario rather than generate tests in bulk.
-
-### 7.5.5 Reflection
-
-After completing all four activities, consider:
-
-1. **Where did AI save the most time?** Generating boilerplate (models, routers, fixtures) is typically where AI provides the highest leverage.
-2. **Where did AI create the most risk?** Missing error conditions, non-blocking behaviour, and test assertions that check presence but not content are the most common gaps.
-3. **What did the specification do?** Compare the quality of AI output in Activity 3 (where you provided a structured spec) with what you would have received from the raw starting brief. The difference is not the AI — it is the specification.
-4. **What would the starting brief have produced?** Try asking the AI to generate a class diagram from the raw brief (§7.1.1) without any refinement. Compare it to the output from Activity 2. This difference is the value of requirements engineering.
-
----
-
-## Chapter Summary
-
-This chapter applied AI coding agents to all four phases of the SDLC using a single evolving scenario — from a vague client brief to a tested, reviewable feature:
-
-| Phase | Activity | AI Role | Human Role |
-|---|---|---|---|
-| **Requirements** | Activity 1 | Identify ambiguities, draft requirements, generate acceptance criteria | Answer clarifying questions, audit quality, reject vague NFRs |
-| **Design** | Activity 2 | Produce use case, class, and sequence diagrams | Verify design against requirements, critique SOLID violations |
-| **Implementation** | Activity 3 | Generate layered implementation from a structured spec | Write the spec, review for business rule correctness |
-| **Testing** | Activity 4 | Generate pytest fixtures and test cases | Evaluate assertion quality, fill coverage gaps by hand |
-
-The pattern that emerges is consistent: AI compresses the time to a first draft, but the quality of that draft is determined by the precision of the input. Vague briefs produce vague designs; precise specifications produce implementations that need only targeted corrections.
-
----
-
-## Review Questions
-
-1. The starting brief contained the constraint "work offline sometimes." How did you translate this into a testable non-functional requirement? What made the original phrasing unusable as a requirement?
-
-2. In Activity 2, you were asked to critique the AI's class diagram for SOLID violations. Identify one likely violation in the `Manager` class and explain which principle it violates and how you would fix it.
-
-3. In Activity 3, the AI was likely to make the notification call blocking unless explicitly instructed otherwise. Why is this a specification problem rather than an AI problem?
-
-4. Compare the test `assert result is not None` with `assert result.status == StatusEnum.ASSIGNED`. Why is the second assertion stronger? What specific bug could the first test miss?
-
-5. If you were to add a fifth activity covering deployment (Chapter 4, §4.8), what would you ask the AI to generate, and what would you review manually before merging the generated pipeline configuration?
+AI compresses the time to a first draft — but the quality of that draft is set by the precision of the input. Every gap between the vague starting brief and the working implementation you built in this tutorial was closed not by AI capability but by human judgement: answering clarifying questions, catching SOLID violations, and writing the spec.
 
 ---
 
@@ -612,150 +526,8 @@ sequenceDiagram
 
 ---
 
-### Sample Answer: Activity 4 — Unit Test Suite
+## References
 
-<details>
-<summary>Click to reveal sample pytest test suite for AssignJobService</summary>
-
-```python
-# tests/test_job_service.py
-import pytest
-from unittest.mock import MagicMock
-from uuid import uuid4
-
-from src.service.job_service import AssignJobService, JobNotFoundError, TechnicianNotAvailableError
-from src.domain.repair_job import RepairJob, Technician, StatusEnum, AvailabilityEnum
-
-
-@pytest.fixture
-def mock_job_repo():
-    return MagicMock()
-
-
-@pytest.fixture
-def mock_tech_repo():
-    return MagicMock()
-
-
-@pytest.fixture
-def mock_notifier():
-    return MagicMock()
-
-
-@pytest.fixture
-def service(mock_job_repo, mock_tech_repo, mock_notifier):
-    return AssignJobService(
-        job_repo=mock_job_repo,
-        tech_repo=mock_tech_repo,
-        notifier=mock_notifier,
-    )
-
-
-@pytest.fixture
-def available_technician():
-    return Technician(
-        id=uuid4(),
-        name="Alex Chen",
-        email="alex@fieldco.com",
-        availability=AvailabilityEnum.AVAILABLE,
-    )
-
-
-@pytest.fixture
-def unassigned_job():
-    return RepairJob(
-        id=uuid4(),
-        site_address="123 Main St",
-        fault_description="Power outage",
-        priority="high",
-        status=StatusEnum.UNASSIGNED,
-    )
-
-
-class TestAssignJob:
-    def test_assigns_job_to_available_technician(
-        self, service, mock_job_repo, mock_tech_repo,
-        unassigned_job, available_technician
-    ) -> None:
-        mock_job_repo.find_by_id.return_value = unassigned_job
-        mock_tech_repo.find_by_email.return_value = available_technician
-
-        result = service.assign(job_id=unassigned_job.id, assignee_email="alex@fieldco.com")
-
-        assert result.status == StatusEnum.ASSIGNED
-        assert result.assignee_id == available_technician.id
-        mock_job_repo.update_assignee.assert_called_once_with(
-            unassigned_job.id, available_technician.id
-        )
-
-    def test_sends_notification_on_successful_assignment(
-        self, service, mock_job_repo, mock_tech_repo, mock_notifier,
-        unassigned_job, available_technician
-    ) -> None:
-        mock_job_repo.find_by_id.return_value = unassigned_job
-        mock_tech_repo.find_by_email.return_value = available_technician
-
-        service.assign(job_id=unassigned_job.id, assignee_email="alex@fieldco.com")
-
-        mock_notifier.send.assert_called_once_with(
-            recipient="alex@fieldco.com",
-            message=f"You have been assigned job {unassigned_job.id}",
-        )
-
-    def test_raises_job_not_found_when_job_does_not_exist(
-        self, service, mock_job_repo
-    ) -> None:
-        mock_job_repo.find_by_id.return_value = None
-
-        with pytest.raises(JobNotFoundError):
-            service.assign(job_id=uuid4(), assignee_email="alex@fieldco.com")
-
-    def test_does_not_send_notification_when_job_not_found(
-        self, service, mock_job_repo, mock_notifier
-    ) -> None:
-        mock_job_repo.find_by_id.return_value = None
-
-        with pytest.raises(JobNotFoundError):
-            service.assign(job_id=uuid4(), assignee_email="alex@fieldco.com")
-
-        mock_notifier.send.assert_not_called()
-
-    def test_raises_technician_not_available_when_on_leave(
-        self, service, mock_job_repo, mock_tech_repo, unassigned_job
-    ) -> None:
-        on_leave_tech = Technician(
-            id=uuid4(),
-            name="Sam Rivera",
-            email="sam@fieldco.com",
-            availability=AvailabilityEnum.ON_LEAVE,
-        )
-        mock_job_repo.find_by_id.return_value = unassigned_job
-        mock_tech_repo.find_by_email.return_value = on_leave_tech
-
-        with pytest.raises(TechnicianNotAvailableError):
-            service.assign(job_id=unassigned_job.id, assignee_email="sam@fieldco.com")
-
-    def test_does_not_send_notification_when_technician_not_available(
-        self, service, mock_job_repo, mock_tech_repo, mock_notifier, unassigned_job
-    ) -> None:
-        on_leave_tech = Technician(
-            id=uuid4(),
-            name="Sam Rivera",
-            email="sam@fieldco.com",
-            availability=AvailabilityEnum.ON_LEAVE,
-        )
-        mock_job_repo.find_by_id.return_value = unassigned_job
-        mock_tech_repo.find_by_email.return_value = on_leave_tech
-
-        with pytest.raises(TechnicianNotAvailableError):
-            service.assign(job_id=unassigned_job.id, assignee_email="sam@fieldco.com")
-
-        mock_notifier.send.assert_not_called()
-```
-
-**What to look for in your own output:**
-- Does your AI generate `assert result is not None` instead of `assert result.status == StatusEnum.ASSIGNED`? The former passes even if the assignment logic sets the wrong status.
-- Does your AI use `assert_called()` instead of `assert_called_once_with(...)`? The former does not verify the arguments passed to the notifier.
-- Is the "notification not called on failure" test present? AI frequently omits this negative assertion, leaving a gap where a buggy implementation that always notifies would still pass.
-
-</details> -->
+- [FastAPI Documentation](https://fastapi.tiangolo.com/) — Web framework used in Activity 3; `APIRouter`, `BackgroundTasks`, dependency injection
+- [Mermaid Documentation](https://mermaid.js.org/) — Diagram-as-code syntax used in Activity 2 sample answers
+- [Gherkin Reference](https://cucumber.io/docs/gherkin/reference/) — Syntax for the `Given / When / Then` acceptance criteria format used in Activity 1

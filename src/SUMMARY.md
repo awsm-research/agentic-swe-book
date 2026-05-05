@@ -40,6 +40,7 @@
 - [Tutorial 2: Eliciting Requirements from AI As Your Client](./tutorial_2.md)
 - [Tutorial 3: Designing a Learning Management System](./tutorial_3.md)
 - [Tutorial 4: Unit Testing 101](./tutorial_4.md)
+- [Tutorial 5: Code Quality and CI/CD](./tutorial_5.md)
 
 # Appendices
  

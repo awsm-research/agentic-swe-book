@@ -11,9 +11,8 @@ By the end of this chapter, you will be able to:
 
 1. Define software and explain how it differs from hardware and other engineering products.
 2. Describe the key attributes of good software and the People–Process–Technology model of software engineering.
-3. Describe the historical evolution of software engineering from its origins to the present day, including the contributions of Margaret Hamilton.
-4. Identify real-world software engineering failures and the lessons they teach.
-5. Compare Waterfall, Incremental, Agile, Scrum, Kanban, and Open Source development — explaining the strengths, weaknesses, and appropriate contexts for each.
+3. Identify real-world software engineering failures and the lessons they teach.
+4. Compare Waterfall, Incremental, Agile, Scrum, Kanban, and Open Source development — explaining the strengths, weaknesses, and appropriate contexts for each.
 
 ---
 
@@ -150,71 +149,7 @@ This sounds simple. In practice, it is extraordinarily difficult. Quality and sp
 
 ---
 
-## 1.3 A Brief History of Software Engineering
-
-Understanding where software engineering came from helps explain why its practices exist — and why they are changing again now.
-
-### 1.3.1 The Early Years (1940s–1960s)
-
-The first programmers wrote machine code directly — sequences of binary instructions hand-crafted for specific hardware. Programming was considered a clerical task; the real intellectual work was thought to be mathematics and system design.
-
-As software grew more complex through the 1950s, assembly languages and early high-level languages like FORTRAN (1957) and COBOL (1959) emerged. Programs grew from hundreds of lines to hundreds of thousands. Managing this complexity became a serious problem.
-
-One pioneer who changed the field's self-understanding was **Margaret Hamilton**. In the early 1960s, Hamilton joined MIT's Instrumentation Laboratory, where she led the team responsible for developing the in-flight software for NASA's Apollo program. Her team's software had to be extraordinarily reliable — a failure mid-mission could be fatal. Hamilton introduced rigorous software development practices, including priority-based scheduling, error detection and recovery, and human-in-the-loop design. Her team's software famously helped save the Apollo 11 mission when a computer alarm triggered during the lunar descent.
-
-Hamilton is widely credited with coining the term *software engineering*, arguing that software development deserved the same rigour and professional recognition as other engineering disciplines. Her work demonstrated — before the field had a name — that software could be, and had to be, an engineering endeavour.
-
-### 1.3.2 The Software Crisis and Structured Programming (1968–1980s)
-
-The 1968 NATO conference crystallised the software crisis. Projects like the IBM OS/360 operating system — documented famously by Fred Brooks in *The Mythical Man-Month* ([Brooks, 1975](https://en.wikipedia.org/wiki/The_Mythical_Man-Month)) — demonstrated that adding more programmers to a late project often made it later. Software complexity was not a resource problem; it was a conceptual one.
-
-The response was *structured programming*, championed by Dijkstra, Hoare, and Wirth. Programs should be built from clear, hierarchical control structures — sequences, selections, and iterations — rather than the chaos of `GOTO` statements. This was the beginning of thinking about software as something that could be reasoned about formally.
-
-### 1.3.3 Object-Oriented Programming and Software Patterns (1980s–1990s)
-
-The 1980s and 1990s saw the rise of object-oriented programming (OOP) — a paradigm in which software is modelled as interacting objects with state and behaviour. Languages like C++, Smalltalk, and later Java brought OOP to mainstream development.
-
-In 1994, the "Gang of Four" — Gamma, Helm, Johnson, and Vlissides — published *Design Patterns: Elements of Reusable Object-Oriented Software* ([Gamma et al., 1994](https://en.wikipedia.org/wiki/Design_Patterns)), cataloguing 23 reusable solutions to common software design problems. These patterns are covered in depth in Chapter 3.
-
-### 1.3.4 The Internet Era and Agile Methods (1990s–2000s)
-
-The World Wide Web transformed software from shrink-wrapped products shipped on disks to continuously evolving services. Release cycles had to shrink from years to weeks. Traditional plan-driven methods struggled to keep pace.
-
-In 2001, seventeen software practitioners gathered in Snowbird, Utah, and published the [Agile Manifesto](https://agilemanifesto.org/) — a short document that valued:
-
-> *Individuals and interactions over processes and tools*
-> *Working software over comprehensive documentation*
-> *Customer collaboration over contract negotiation*
-> *Responding to change over following a plan*
-
-Agile methods — including Scrum, Extreme Programming (XP), and Kanban — spread rapidly through the industry. They emphasised short iterations, continuous feedback, and adaptive planning rather than upfront specification.
-
-### 1.3.5 DevOps and Continuous Delivery (2010s)
-
-As agile teams delivered software faster, operations teams struggled to deploy and maintain it. The DevOps movement ([Kim et al., 2016](https://itrevolution.com/product/the-devops-handbook/)) broke down the wall between development and operations, promoting:
-
-- Continuous integration (CI): merging code frequently, building and testing automatically
-- Continuous delivery (CD): keeping software always in a deployable state
-- Infrastructure as code: managing servers and environments through version-controlled scripts
-
-This shift made the pipeline from code commit to production deployment a first-class engineering concern — covered in depth in Chapter 4.
-
-### 1.3.6 The AI Era (2020s–Present)
-
-In 2021, GitHub released Copilot, powered by OpenAI Codex — a large language model trained on billions of lines of public code. For the first time, AI could generate syntactically correct, contextually relevant code at the level of individual functions and files.
-
-By 2023, models like GPT-4 and Claude could engage in multi-turn conversations about software design, debug complex issues, write test suites, and generate entire application scaffolds from natural language descriptions. 
-
-By 2024–2025, *AI coding agents*, powered by agentic AI architecture, that can plan, use tools, and execute code autonomously — began to handle multi-step engineering tasks with minimal human intervention.
-
-This is where this book begins.
-
-![From Copilot to autonomous agents: AI has evolved from completing code to planning, building, testing, and delivering software end to end.](images/the-rise-of-ai-in-se.png)
-*From Copilot to autonomous agents: AI has evolved from completing code to planning, building, testing, and delivering software end to end. (Illustrated by AI)*
-
----
-
-## 1.4 When Software Fails
+## 1.3 When Software Fails
 
 Software failures are not merely inconveniences. They cost money, erode trust, and — in safety-critical domains — cost lives. Understanding real failures is one of the most important things a software engineer can do. Every practice introduced in this book exists because its absence has caused failures like the ones below.
 
@@ -253,7 +188,7 @@ The CBA case illustrates a different but equally important class of failure:
 
 ---
 
-## 1.5 The Software Development Lifecycle (SDLC)
+## 1.4 The Software Development Lifecycle (SDLC)
 
 The Software Development Lifecycle (SDLC) is a structured process for planning, creating, testing, and deploying software.
 
@@ -274,20 +209,7 @@ A key insight from decades of software engineering research is that **maintenanc
 
 Another well-established finding is that **the cost of fixing a defect rises dramatically the later it is found**. A requirement error caught in a design review costs relatively little. The same error discovered after deployment may require changes to a live system, database migrations, user retraining, and regulatory notification.
 
-```
-Relative Cost to Fix a Defect
-│
-│                                          ×100+
-│                                    ╔══════╗
-│                              ×10   ║      ║
-│                        ╔═════╗     ║      ║
-│                 ×5     ║     ║     ║      ║
-│          ×1   ╔════╗   ║     ║     ║      ║
-│          ╔═╗  ║    ║   ║     ║     ║      ║
-│          ║ ║  ║    ║   ║     ║     ║      ║
-└──────────╨─╨──╨────╨───╨─────╨─────╨──────╨──▶
-       Requirem. Design  Code   Test  Production
-```
+![Cost to Fix Bugs Over Time](images/chapter-1-cost-to-fix-bugs.png)
 
 This cost curve is the economic argument for investing in requirements, design, and testing — and for short feedback cycles. The sooner a problem is discovered, the cheaper it is to fix.
 
@@ -353,43 +275,11 @@ A natural response to the moving target problem is to write more comprehensive d
 
 This does not mean documentation is bad — it means documentation alone is insufficient. This insight drove the Agile movement's preference for *working software* and *customer collaboration* over *comprehensive documentation*.
 
-### 1.5.7 Rapid Prototyping
-
-One way to address the limitations of documentation is **rapid prototyping** — building a quick, rough version of the system (or a key part of it) to get feedback before committing to full implementation.
-
-A prototype is not a finished product. It is a communication and learning tool:
-
-- **Throwaway prototypes** are built quickly, shown to stakeholders for feedback, and then discarded. The code is not production-quality; its purpose is to validate understanding.
-- **Evolutionary prototypes** are built incrementally and progressively refined into the final system.
-
-Rapid prototyping helps because users can react to something they can *see and use* far more effectively than to something they can only *read about*. It surfaces misunderstandings early — when they are cheap to correct — rather than late, when they are expensive.
-
-### 1.5.8 Incremental Development
-
-**Incremental development** is a strategy in which the system is built and delivered in functional pieces called *increments*, rather than all at once. Each increment is a working, usable subset of the final system.
-
-```
-Increment 1: Core functionality  ──▶  Delivered to users
-Increment 2: Extended features   ──▶  Delivered to users
-Increment 3: Full feature set    ──▶  Delivered to users
-```
-
-**Benefits:**
-- Users get working software early and can provide meaningful feedback
-- High-priority features are available sooner
-- Risk is distributed: if an increment fails, only partial investment is lost
-- Teams learn from early increments before building the more complex later ones
-
-**Drawbacks:**
-- System architecture can degrade if increments are not designed with the full picture in mind
-- Contracts and project governance are harder when the full scope is not fixed upfront
-- Integration between increments can be complex if interfaces were not anticipated
-
-Incremental development is the conceptual foundation of Agile methods, but it can also be applied alongside a more structured, plan-driven approach.
-
-### 1.5.9 Agile Software Development
+### 1.6 Agile Software Development
 
 Agile is not a single methodology but a family of approaches united by the values in the [Agile Manifesto](https://agilemanifesto.org/). The core insight is that software requirements and solutions evolve through collaboration — and that the ability to respond to change is more valuable than adherence to a plan.
+
+![The Agile Manifesto](images/chapter-1-agile-manifesto.png)
 
 Agile teams work in short cycles called *iterations* or *sprints*, typically 1–4 weeks long. Each iteration produces a working, tested increment of software. Stakeholders review the increment and provide feedback that informs the next iteration.
 
@@ -400,7 +290,9 @@ Key Agile principles include:
 - Business people and developers work together daily
 - Simplicity — the art of maximising the amount of work *not* done — is essential
 
-### 1.5.10 Scrum
+Agile values and principles are deliberately abstract — they describe *what* to aim for, not *how* to organise teams or structure work. Specific frameworks fill that gap. The two most widely adopted are **Scrum**, which prescribes a structured sprint cycle with defined roles and ceremonies, and **Kanban**, which takes a more continuous, flow-based approach with fewer fixed rules.
+
+### 1.6.1 Scrum
 
 Scrum is the most widely adopted Agile framework ([Schwaber & Sutherland, 2020](https://scrumguides.org/scrum-guide.html)). It defines specific roles, events, and artefacts:
 
@@ -438,7 +330,7 @@ Scrum is the most widely adopted Agile framework ([Schwaber & Sutherland, 2020](
                   Next Sprint...
 ```
 
-### 1.5.11 Kanban
+### 1.6.2 Kanban
 
 Kanban, adapted from Toyota's manufacturing system by David Anderson ([Anderson, 2010](https://kanbanbooks.com/)), is a flow-based method that focuses on visualising work, limiting work in progress (WIP), and continuously improving flow.
 
@@ -463,7 +355,21 @@ A Kanban board visualises work as cards moving through columns:
 
 Kanban suits teams with highly variable incoming work (e.g., support and maintenance teams) or those who want a lighter-weight alternative to Scrum's ceremonies.
 
-### 1.5.12 Open Source Development
+
+### 1.6.3 Rapid Prototyping
+
+Agile addresses many of Waterfall's rigidities, but it still assumes that stakeholders can articulate what they want — at least well enough to write user stories and prioritise a backlog. In practice, users often cannot describe their needs accurately until they have something concrete to react to. Sprint reviews help, but even a four-week sprint is long enough for a team to build in the wrong direction if the initial requirements were unclear. Agile reduces the cost of late changes; it does not eliminate misunderstanding at the outset.
+
+One way to address this gap is **rapid prototyping** — building a quick, rough version of the system (or a key part of it) to get feedback before committing to full implementation.
+
+A prototype is not a finished product. It is a communication and learning tool:
+
+- **Throwaway prototypes** are built quickly, shown to stakeholders for feedback, and then discarded. The code is not production-quality; its purpose is to validate understanding.
+- **Evolutionary prototypes** are built incrementally and progressively refined into the final system.
+
+Rapid prototyping helps because users can react to something they can *see and use* far more effectively than to something they can only *read about*. It surfaces misunderstandings early — when they are cheap to correct — rather than late, when they are expensive.
+
+### 1.7 Open Source Development
 
 Open source development is a model in which source code is made publicly available and developed collaboratively by a distributed community of contributors. Anyone can inspect, use, modify, and distribute the software, subject to the terms of its licence.
 
@@ -480,7 +386,7 @@ Open source raises interesting software engineering challenges: how do you maint
 
 ---
 
-## 1.6 Key Takeaways
+## 1.7 Key Takeaways
 
 Software engineering is a young discipline that is still evolving — but it has accumulated hard-won wisdom from decades of successes and failures. The key ideas from this chapter:
 

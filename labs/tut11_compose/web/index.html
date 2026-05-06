@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Bookshop</title>
+  <style>
+    body { font-family: system-ui, sans-serif; max-width: 40rem; margin: 2rem auto; }
+    form { display: flex; gap: 0.5rem; margin: 1rem 0; }
+    input { flex: 1; padding: 0.5rem; }
+    li { padding: 0.25rem 0; }
+    .meta { color: #888; font-size: 0.85rem; }
+  </style>
+</head>
+<body>
+  <h1>Bookshop</h1>
+  <p class="meta" id="meta">Loading…</p>
+  <ul id="books"></ul>
+  <form id="add">
+    <input name="title" placeholder="Title" required />
+    <input name="author" placeholder="Author" required />
+    <button type="submit">Add</button>
+  </form>
+  <script>
+    async function load() {
+      const meta = document.getElementById("meta");
+      const list = document.getElementById("books");
+      try {
+        const [books, health] = await Promise.all([
+          fetch("/api/books").then(r => r.json()),
+          fetch("/api/healthz").then(r => r.json()),
+        ]);
+        meta.textContent = `API ${health.version} — ${books.length} book(s)`;
+        list.innerHTML = books
+          .map(b => `<li><strong>${b.title}</strong> — ${b.author}</li>`)
+          .join("");
+      } catch (e) {
+        meta.textContent = "API unreachable: " + e;
+      }
+    }
+    document.getElementById("add").addEventListener("submit", async (ev) => {
+      ev.preventDefault();
+      const f = ev.target;
+      await fetch("/api/books", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ title: f.title.value, author: f.author.value }),
+      });
+      f.reset();
+      load();
+    });
+    load();
+  </script>
+</body>
+</html>

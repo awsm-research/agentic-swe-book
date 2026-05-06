@@ -1,0 +1,29 @@
+# Pin the base image by digest, not just tag, for reproducibility.
+FROM node:20.11.1-alpine3.19@sha256:e4ab... AS build
+
+WORKDIR /app
+
+# Copy dependency manifests first so dependency installation
+# is cached separately from source code changes.
+COPY package.json package-lock.json ./
+RUN npm ci
+
+# Now copy source and build.
+COPY src ./src
+RUN npm run build
+
+# Multi-stage: a fresh, minimal final image carries only the build output.
+FROM node:20.11.1-alpine3.19@sha256:e4ab...
+
+WORKDIR /app
+COPY --from=build /app/dist ./dist
+COPY --from=build /app/node_modules ./node_modules
+
+# Run as non-root.
+RUN addgroup -S app && adduser -S app -G app
+USER app
+
+EXPOSE 3000
+HEALTHCHECK --interval=10s --timeout=3s --retries=3 \
+  CMD wget -q -O- http://localhost:3000/healthz || exit 1
+CMD ["node", "dist/server.js"]

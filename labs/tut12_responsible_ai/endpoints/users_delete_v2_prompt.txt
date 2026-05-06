@@ -1,0 +1,11 @@
+Add a GDPR-compliant DELETE /users/{user_id} endpoint to our FastAPI application:
+- Verify the caller is the user themselves (JWT sub claim matches user_id) or has admin role
+- Cascade delete: remove all Task, Comment, and AuditLog rows owned by user_id
+- Anonymise rather than delete any OrderHistory rows: replace user name and email
+  with "Deleted User [user_id]" to preserve financial records
+- Create a DeletionRequest record with: user_id, requester_id, timestamp, list of
+  cascaded tables
+- Return 204 No Content on success
+- Send a confirmation email to the user's address before deleting it, using the
+  send_email(to, subject, body) utility already in the project
+Assume SQLAlchemy models: User, Task, Comment, AuditLog, OrderHistory, DeletionRequest.

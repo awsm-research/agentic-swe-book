@@ -381,7 +381,7 @@ Do not trust agent-generated artefacts without review. This is especially import
 - **Database migrations**: Review the generated migration file before running it — autogenerate tools frequently make incorrect decisions for complex schema changes
 - **Generated configuration**: Validate configuration files against a schema before using them
 
-The Spec → Generate → Verify → Refine loop from Chapter 5 embeds output validation as a structural requirement. The security insight is that "Verify" must include security verification, not just functional correctness.
+The Spec → Generate → Verify → Refine loop from Chapter 6 embeds output validation as a structural requirement. The security insight is that "Verify" must include security verification, not just functional correctness.
 
 ---
 

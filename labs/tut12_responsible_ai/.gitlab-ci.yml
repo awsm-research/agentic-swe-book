@@ -1,0 +1,18 @@
+licence-audit:
+  stage: test
+  image: python:3.12-slim
+  before_script:
+    - pip install pip-licenses
+  script:
+    - pip-licenses --format=json --output-file=licenses.json
+    - pip-licenses --fail-on="GPL;AGPL" --format=table
+  artifacts:
+    when: always
+    paths:
+      - licenses.json
+    expire_in: 30 days
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+      changes:
+        - pyproject.toml
+        - uv.lock

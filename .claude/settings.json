@@ -4,7 +4,22 @@
       "WebFetch(domain:docs.gitlab.com)",
       "WebFetch(domain:arxiv.org)",
       "WebSearch",
-      "WebFetch(domain:autos.yahoo.com)"
+      "WebFetch(domain:autos.yahoo.com)",
+      "Bash(grep -n '^```python' /Users/klainfo/Research/ai-native-engineer/src/chapter_3.md)",
+      "Bash(grep -n '^```\\\\\\(python\\\\|bash\\\\|yaml\\\\|dockerfile\\\\|toml\\\\|json\\\\|html\\\\|nginx\\\\|Dockerfile\\\\\\)' /Users/klainfo/Research/ai-native-engineer/src/chapter_4.md)",
+      "Bash(grep -n '^```\\\\\\(python\\\\|bash\\\\|yaml\\\\|dockerfile\\\\|toml\\\\|json\\\\|html\\\\|nginx\\\\|Dockerfile\\\\\\)' /Users/klainfo/Research/ai-native-engineer/src/chapter_5.md /Users/klainfo/Research/ai-native-engineer/src/chapter_8.md /Users/klainfo/Research/ai-native-engineer/src/chapter_9.md)",
+      "Bash(xargs -0 -I{} python3 -c \"import ast,sys; ast.parse\\(open\\('{}'\\).read\\(\\)\\)\")",
+      "Bash(python3 -c 'import ast; ast.parse\\(open\\('\\\\''__TRACKED_VAR__'\\\\''\\).read\\(\\)\\)')",
+      "Bash(pip install *)",
+      "Bash(python3 -m pip install pyyaml --quiet)",
+      "Bash(which uvx *)",
+      "Read(//opt/homebrew/bin/**)",
+      "Bash(uvx --quiet --from pyyaml python3 -c 'import yaml,sys; yaml.safe_load\\(open\\('\\\\''__TRACKED_VAR__'\\\\''\\).read\\(\\)\\); print\\('\\\\''OK: __TRACKED_VAR__'\\\\''\\)')",
+      "Bash(python3 -c \"import tomllib; tomllib.load\\(open\\('tut01_setup/pyproject.toml','rb'\\)\\); print\\('toml ok'\\)\")",
+      "Bash(python3 -c ' *)",
+      "Bash(python3 -c \"import yaml; yaml.safe_load\\(open\\('tut11_compose/compose.yaml'\\)\\)\")",
+      "Bash(git mv *)",
+      "Bash(git rm *)"
     ]
   }
 }

@@ -1,0 +1,35 @@
+sast:
+  stage: test
+  image: python:3.12-slim
+  before_script:
+    - pip install bandit semgrep
+  script:
+    - |
+      CHANGED=$(git diff --name-only HEAD~1 | grep '\.py$' || true)  # || true: grep exits 1 when no match
+      if [ -z "$CHANGED" ]; then echo "No Python files changed."; exit 0; fi
+      echo "$CHANGED" | xargs bandit -f json -o bandit-results.json -l -ii
+      echo "$CHANGED" | xargs semgrep --config p/python --config p/owasp-top-ten \
+        --sarif --output semgrep-results.sarif
+  artifacts:
+    when: always
+    paths:
+      - bandit-results.json
+      - semgrep-results.sarif
+    expire_in: 7 days
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+      changes:
+        - "**/*.py"
+
+dependency-scan:
+  stage: test
+  image: python:3.12-slim
+  before_script:
+    - pip install pip-audit
+  script:
+    - pip-audit -r requirements.txt -f json -o pip-audit-results.json
+  artifacts:
+    when: always
+    paths:
+      - pip-audit-results.json
+    expire_in: 7 days

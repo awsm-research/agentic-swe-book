@@ -1,0 +1,27 @@
+name: Compliance Checks
+
+on:
+  pull_request:
+    paths:
+      - 'pyproject.toml'
+      - 'uv.lock'
+
+jobs:
+  licence-audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install pip-licenses
+        run: pip install pip-licenses
+
+      - name: Audit dependency licences
+        run: |
+          pip-licenses --format=json --output-file=licenses.json
+          pip-licenses --fail-on="GPL;AGPL" --format=table
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: licence-report
+          path: licenses.json

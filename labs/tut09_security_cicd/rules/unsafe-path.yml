@@ -1,0 +1,12 @@
+rules:
+  - id: flask-unsafe-path-join
+    patterns:
+      - pattern: os.path.join(..., request.$ATTR, ...)
+    message: >
+      Path constructed from request data without sanitisation (CWE-22: Path Traversal).
+      Resolve and validate the path against an allowed base directory before use.
+    languages: [python]
+    severity: ERROR
+    metadata:
+      cwe: CWE-22
+      owasp: A01:2021

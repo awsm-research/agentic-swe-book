@@ -109,13 +109,14 @@ If your team is adopting AI tools and you want to use this as a shared reference
 
 | Need | Chapter |
 |---|---|
-| Software security and threat modelling foundations | 5 |
+| Automated code review, quality, and CI/CD | 5 |
 | Adopting an agentic engineering paradigm | 6 |
-| Hands-on agentic SDLC practices | 7 |
-| Security risks in agentic workflows | 8 |
-| Configuring agents with context, skills, and tools | 9 |
-| AI use policies and ethics | 10 |
-| Measuring team productivity | 11 |
+| Configuring agents with context, skills, and tools | 7 |
+| Security of AI-generated code | 8 |
+| Security concerns of agentic AI coding tools | 9 |
+| Software maintenance and technical debt | 10 |
+| Software packaging, versioning, and deployment | 11 |
+| Licences, ethics, and responsible AI | 12 |
 
 ---
 

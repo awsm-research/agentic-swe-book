@@ -1,0 +1,56 @@
+name: bookshop
+
+services:
+  db:
+    image: postgres:16.4-alpine@sha256:1fe1a99ed9fa2c46f37c5f5d22e75c84cf76f17e5eb1cf2d066eedca50f7c3f4
+    environment:
+      POSTGRES_USER: bookshop
+      POSTGRES_DB: bookshop
+      POSTGRES_PASSWORD_FILE: /run/secrets/db_password
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    secrets:
+      - db_password
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U bookshop -d bookshop"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+    restart: unless-stopped
+
+  api:
+    build:
+      context: ./api
+      dockerfile: Dockerfile
+    image: bookshop-api:${APP_VERSION:-dev}
+    environment:
+      DB_HOST: db
+      DB_USER: bookshop
+      DB_NAME: bookshop
+      DB_PASSWORD_FILE: /run/secrets/db_password
+      APP_VERSION: ${APP_VERSION:-dev}
+    secrets:
+      - db_password
+    depends_on:
+      db:
+        condition: service_healthy
+    restart: unless-stopped
+
+  web:
+    build:
+      context: ./web
+      dockerfile: Dockerfile
+    image: bookshop-web:${APP_VERSION:-dev}
+    ports:
+      - "8080:80"
+    depends_on:
+      api:
+        condition: service_healthy
+    restart: unless-stopped
+
+volumes:
+  db-data:
+
+secrets:
+  db_password:
+    file: ./secrets/db_password.txt

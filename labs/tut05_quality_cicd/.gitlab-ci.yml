@@ -1,0 +1,31 @@
+# .gitlab-ci.yml
+stages:
+  - lint
+  - typecheck
+  - test
+
+default:
+  image: python:3.12-slim
+  before_script:
+    - pip install uv --quiet
+    - uv sync --frozen
+
+ruff-check:
+  stage: lint
+  script:
+    - uv run ruff check src/ tests/
+
+ruff-format:
+  stage: lint
+  script:
+    - uv run ruff format --check src/ tests/
+
+mypy:
+  stage: typecheck
+  script:
+    - uv run mypy src/
+
+pytest:
+  stage: test
+  script:
+    - uv run pytest tests/ --cov=src --cov-branch --cov-report=term-missing -q

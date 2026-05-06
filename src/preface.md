@@ -14,13 +14,13 @@ That bottleneck is moving — fast.
 
 AI agents can now write syntactically correct, contextually relevant code from a natural language description. They can scaffold entire systems, generate test suites, refactor legacy code, and explain unfamiliar codebases in seconds. The implementation layer — once the core of the engineer's craft — is increasingly automated.
 
-What remains irreducibly human is everything that surrounds implementation: **understanding the problem deeply, specifying intent precisely, verifying that what was produced is actually correct, and refining until it is truly right.**
+What remains irreducibly human is everything that surrounds implementation: **understanding the problem, specifying intent precisely, verifying what was produced, and refining it until it is right.**
 
 This is the new loop of software engineering in the agentic era:
 
-```
-SPECIFY → GENERATE → VERIFY → REFINE
-```
+<div align="center">
+  <img src="images/banner.png" alt="Agentic Software Engineering: A Practical Guide for the AI-Native Engineer" />
+</div>
 
 **Specify** — Define the problem with precision. Decompose ambiguous requirements into clear, agent-sized tasks. Write specifications that leave no room for misinterpretation.
 
@@ -35,9 +35,7 @@ This loop replaces the old SDLC — not by discarding its principles, but by red
 This book teaches that move. It is not a book about which AI tools to use or how to write clever prompts. It is a book about the new skills that matter when coding is automated: problem decomposition, system thinking, critical verification, and judgment under uncertainty. Skills that compound. Skills that do not expire when the next model is released.
 
 
-<div align="center">
-  <img src="images/banner.png" alt="Agentic Software Engineering: A Practical Guide for the AI-Native Engineer" />
-</div>
+
 
 
 ---
@@ -55,6 +53,40 @@ This book is an attempt to close that gap. It emerged from teaching software eng
 The book is the primary learning material for two courses at Monash University: **FIT5136**, a twelve-week on-campus unit within the Master of Information Technology, and **ITO5136**, a six-week online unit within the Master of Computer Science. Both courses target students who arrive with programming foundations but limited exposure to the full software engineering lifecycle — and zero reason to assume that lifecycle looks the same as it did five years ago.
 
 The goal is not to produce students who are good at using today's AI tools. It is to produce engineers who understand *why* the new loop works, so that when the tools change — and they will — the underlying mental model transfers.
+
+---
+
+## On Prior Work and How This Book Differs
+
+The term *agentic software engineering* is not mine, and I do not claim to have coined it. It has been used and developed by several researchers and practitioners ahead of this book, and any reader familiar with the literature will recognise the lineage. I want to acknowledge that work directly, and then be honest about where this book sits in relation to it.
+
+In popular discourse, the broader idea is most commonly credited to **Andrej Karpathy** (OpenAI cofounder and former Tesla AI lead), who from around February 2025 onward articulated a vision in which AI coding tools autonomously plan, write, test, and iterate on software under human oversight, rather than developers writing every line themselves. That framing — humans setting intent and reviewing outcomes while agents do the implementation — is the cultural starting point for much of what followed.
+
+The academic and industry community has since developed the idea into a more concrete research and engineering agenda. The most directly relevant prior works are:
+
+- **Takerngsaksiri, Pasuksmit, Thongtanunam, Tantithamthavorn et al. (November 2024), *Human-In-the-Loop Software Development Agents (HULA)*** — introduces a framework that integrates human oversight into LLM-based software development agents, deployed and evaluated with real engineers inside Atlassian JIRA; an early industrial case study of Agentic Software Engineering in practice. [arXiv:2411.12924](https://arxiv.org/abs/2411.12924).
+- **Hassan (2025), *Agentic Software Engineering: The Future of Code*** — a book-length treatment focused on architectural thinking, intent, and risk management in AI-assisted teams. [agenticse-book.github.io](https://agenticse-book.github.io/).
+- **Roychoudhury, Pasareanu, Pradel, and Ray (February 2025), *Agentic AI Software Engineers: Programming with Trust* (Communications of the ACM, 2026)** — reframes the central question of agentic SE from speed to trust, arguing that coupling LLMs with program analysis is the path to deployable AI engineers. [arXiv:2502.13767](https://arxiv.org/abs/2502.13767).
+- **Li, Zhang, and Hassan (July 2025), *The Rise of AI Teammates in Software Engineering (SE 3.0)*** — provides large-scale empirical evidence (the AIDev dataset) of how autonomous coding agents actually behave on real repositories, surfacing a measurable trust-and-utility gap. [arXiv:2507.15003](https://arxiv.org/abs/2507.15003).
+- **Roychoudhury (2025), *Agentic AI for Software: thoughts from the Software Engineering community*** — positions agents as autonomous team members across both code-level and design-level tasks, with specification inference as the core unsolved problem. [arXiv:2508.17343](https://arxiv.org/abs/2508.17343).
+- **Rajbahadur, Hassan, and Izadi (2025), *AIware Bootcamp*** — a community bootcamp on engineering AI-powered software and the transition from passive copilots to autonomous AI teammates ("Agentware"), shaped by leaders from Google, GitHub, Microsoft, Carnegie Mellon, and others. [aiwarebootcamp.io](https://www.aiwarebootcamp.io/).
+- **Charoenwet, Tantithamthavorn, Thongtanunam, Lin, Jeong, and Wu (2026), *AgenticSCR: An Autonomous Agentic Secure Code Review for Immature Vulnerabilities Detection*** — applies the agentic paradigm to a concrete SE task, combining LLMs with autonomous tool use, code navigation, and security-focused semantic memory to detect pre-commit vulnerabilities; an example of agentic SE realised end-to-end on a single, well-scoped problem. [arXiv:2601.19138](https://arxiv.org/abs/2601.19138).
+- **Hoda (2026), *Toward Agentic Software Engineering Beyond Code: Framing Vision, Values, and Vocabulary*** — argues for a "whole of process" view of agentic SE and proposes shared values and vocabulary for the field. [arXiv:2510.19692](https://arxiv.org/abs/2510.19692).
+
+These works define the research and conceptual frontier of the field. They ask: *What is agentic SE? What should it mean? How do we measure trust? What vocabulary should we share? What does the process look like at the level of the whole organisation?* They are written primarily for the software engineering research community and for senior practitioners shaping team strategy.
+
+This book is a different artefact, with a different audience and a different goal.
+
+It is a **course textbook**, not a research vision. It is written for students and early-career engineers who need to learn how to *do* agentic software engineering this semester — not to debate its boundaries, but to develop working competence in it. Where the prior works above describe the destination and the open problems, this book is concerned with the day-to-day practice required to operate inside the new loop: how to write a specification an agent can act on, how to verify what comes back, how to recognise when to override the agent, and how to do all of this on a realistic, growing system.
+
+Concretely, this book differs from the prior literature in four ways:
+
+1. **Pedagogical first.** Each chapter has learning objectives, a worked example, exercises, and a milestone in a running project. It is designed to be taught, not only read.
+2. **A single explicit loop.** The book is organised around one loop — *Specify → Generate → Verify → Refine* — applied repeatedly across the full lifecycle, so that students leave with a transferable mental model rather than a catalogue of techniques.
+3. **Practice-facing, not research-facing.** The emphasis is on judgment under uncertainty, verification habits, and engineering responsibility, rather than on defining or measuring the field.
+4. **A running project.** A Task Management API grows from a scope statement to a deployed, audited system across twelve chapters, so every concept is anchored to code the reader has actually written and shipped.
+
+In short: the prior works ask what agentic software engineering *is*. This book is an attempt to teach someone how to *practise* it well enough to be useful on Monday morning. Both are needed, and this one is built on the shoulders of the other.
 
 ---
 
@@ -81,7 +113,7 @@ The goal is not to produce students who are good at using today's AI tools. It i
 
 ---
 
-## How to Use This Book
+<!-- ## How to Use This Book
 
 This book is written for a 12-week university course at Monash University, but it is structured so that it can be used in several ways.
 
@@ -118,10 +150,17 @@ If your team is adopting AI tools and you want to use this as a shared reference
 | Software packaging, versioning, and deployment | 11 |
 | Licences, ethics, and responsible AI | 12 |
 
----
+--- -->
 
-## On the Use of AI in Writing This Book
-Parts of this book were developed in active collaboration with AI agents. Claude served as an intellectual sparring partner throughout — used to stress-test arguments, surface counterexamples, sharpen explanations, and pressure-check the framing of new ideas. Several figures and conceptual illustrations were produced with the assistance of AI image generation tools (ChatGPT and Gemini). This is intentional, not incidental: a book about working alongside AI agents should, in practice, reflect that collaboration honestly. Every claim, conclusion, and piece of code has been reviewed, verified, and is the author's own responsibility. AI acted as a rigorous interlocutor and creative collaborator — not a ghostwriter. 
+## A Note to the Reader
+
+I want to be transparent about how this book was made, because I know readers have a range of views on the role of AI in writing — and those concerns deserve a direct answer rather than a polished one.
+
+The intellectual content of this book is mine. I designed the structure, defined the chapter outlines, chose the arguments, selected the examples, and decided what belonged on the page and what did not. The perspective, the framing, and the engineering judgment throughout are the product of my own research and experience as the author.
+
+For some chapters, I used AI tools to assist with the writing process — drafting passages from my outlines, suggesting wording, and helping render a small number of conceptual diagrams. In every case, the output was reviewed, edited, fact-checked, and rewritten as needed by me before it became part of the manuscript. Nothing was published unread. Nothing was accepted on faith. The author remains fully responsible for every claim, every conclusion, and every line of code.
+
+I chose to disclose this rather than leave it unsaid. A book about software engineering alongside AI should be honest about its own process — and readers should be able to judge the work knowing exactly how it was made.
 
 ## Disclaimers
 

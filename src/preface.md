@@ -132,6 +132,27 @@ All code examples in this book use Python. This choice is deliberate and transpa
 **This book does not represent the views of Monash University.** It is written in a personal capacity and is not endorsed by, affiliated with, or produced on behalf of Monash University or any other institution. Readers are responsible for applying the concepts and techniques described here thoughtfully and at their own discretion. The author accepts no liability for decisions or outcomes arising from the use of this material.
 
 ---
+## Cite this book
+
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.20053968.svg)](https://doi.org/10.5281/zenodo.20053968)
+
+**IEEE**
+
+> K. Tantithamthavorn, *Agentic Software Engineering: A Practical Guide for the AI-Native Engineer*, 2026. [Online]. Available: https://book.agentic-swe.dev/
+
+**BibTeX**
+
+```bibtex
+@book{tantithamthavorn2026agentic,
+  author       = {Tantithamthavorn, Kla},
+  title        = {Agentic Software Engineering: A Practical Guide for the {AI}-Native Engineer},
+  year         = {2026},
+  howpublished = {Open access},
+  url          = {https://book.agentic-swe.dev/},
+}
+```
+
+---
 
 ## Contributions and Feedback
 

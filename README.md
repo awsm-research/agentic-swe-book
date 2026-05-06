@@ -13,6 +13,10 @@
   <a href="http://book.agentic-swe.dev/"><strong>Read the Book →</strong></a>
 </p>
 
+<p align="center">
+  <a href="https://doi.org/10.5281/zenodo.20053968"><img src="https://zenodo.org/badge/DOI/10.5281/zenodo.20053968.svg" alt="DOI"></a>
+</p>
+
 ---
 
 ## About

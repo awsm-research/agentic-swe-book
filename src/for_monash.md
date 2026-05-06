@@ -54,6 +54,6 @@ This book serves as the primary text for two Monash University software engineer
 | 7 | Configuring the Agent's World — Context, Skills, and Tools | ULO 3, 5 | [Chapter 7: Configuring the Agent's World — Context, Skills, and Tools](./chapter_7.md) | [Tutorial 7: The AI-Assisted SDLC: From Code to Well-Tested App](./tutorial_7.md) |
 | 8 | Security of AI-Generated Code | ULO 6 | [Chapter 8: Security of AI-Generated Code](./chapter_8.md) | [Tutorial 8: SAST, AI, and Human on Vulnerability Detection](./tutorial_8.md) |
 | 9 | Security Concerns of Agentic AI Coding Tools | ULO 6 | [Chapter 9: Security Concerns of Agentic AI Coding Tools](./chapter_9.md) | [Tutorial 9: Security Review in CI/CD Pipeline](./tutorial_9.md) |
-| 10 | Software Maintenance and Technical Debt | ULO 1, 3 | [Chapter 10: Software Maintenance and Technical Debt](./chapter_10.md) | [Tutorial 10: Pay Down Debt on a Real Hotspot](./tutorial_10.md) |
-| 11 | Software Packaging and Production | ULO 1, 5 | [Chapter 11: Software Packaging and Production](./chapter_11.md) | [Tutorial 11: Containerise and Ship a Three-Tier Application](./tutorial_11.md) |
+| 10 | Software Maintenance and Technical Debt | ULO 1, 3 | [Chapter 10: Software Maintenance and Technical Debts](./chapter_10.md) | [Tutorial 10: Pay Down Debt on a Real Hotspot](./tutorial_10.md) |
+| 11 | Software Packaging and Production | ULO 1, 5 | [Chapter 11: Software Versioning, Packaging, and Deployment](./chapter_11.md) | [Tutorial 11: Containerise and Ship a Three-Tier Application](./tutorial_11.md) |
 | 12 | Licences, Ethics, and Responsible AI | ULO 6 | [Chapter 12: Licenses, Ethics, and Responsible AI](./chapter_12.md) | [Tutorial 12: Licences, Privacy, and Responsible AI in Practice](./tutorial_12.md) |

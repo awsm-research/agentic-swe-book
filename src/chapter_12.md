@@ -1,6 +1,10 @@
-# Chapter 12: The Future of AI-Native Engineering
+# Chapter 12: Licenses, Ethics, and Responsible AI
 
-<!-- > *"We cannot predict the future of software engineering, but we can observe which skills are becoming more valuable and which are becoming less — and act accordingly."*
+> *"The question is not whether AI systems can do things. The question is who is responsible when they do them badly."*
+
+---
+
+In March 2023, three Samsung engineers independently used ChatGPT to help with their work. One pasted proprietary source code from a semiconductor yield measurement tool and asked for debugging help. A second pasted meeting notes and asked for a summary. A third submitted internal test data to generate test scenarios. In each case, the data entered as a prompt was potentially retained for model training by OpenAI under the terms of service active at the time. When Samsung's security team discovered the incidents, the company banned external generative AI tools on company devices within weeks ([The Register, 2023](https://www.theregister.com/2023/05/02/samsung_bans_chatgpt/)). None of the engineers had acted maliciously. They used a tool the way it was designed to be used. The problem was the absence of any policy telling them not to — and the absence of any understanding of what IP obligations and privacy regulations that tool use triggered. That gap — between using AI tools and understanding the legal and ethical obligations they create — is what this chapter addresses.
 
 ---
 
@@ -8,362 +12,491 @@
 
 By the end of this chapter, you will be able to:
 
-1. Describe emerging paradigms in AI software engineering: autonomous agents, self-healing systems, and AI-driven design.
-2. Distinguish between skills that endure and skills that are being automated away.
-3. Articulate open research problems in AI software engineering.
-4. Identify a personal learning roadmap for a career in AI-native engineering.
-5. Reflect on the course project as a complete illustration of the AI-native SDLC.
+1. Explain the major categories of software licences and their obligations.
+2. Navigate the copyright ambiguity around AI-generated code.
+3. Apply a responsible AI framework to evaluate an AI-enabled system.
+4. Identify sources of bias in AI coding assistants and their practical consequences.
+5. Describe key governance frameworks for responsible AI development.
+6. Conduct a basic license and responsible AI audit of a software project.
 
 ---
 
-## 12.1 Where We Are Now
+## 12.1 Intellectual Property and Code Ownership
 
-Over the past eleven chapters, we have traced software engineering from its 1968 origins through structured programming, object-oriented design, Agile, DevOps, and into the AI-native era. We have examined:
+Intellectual property (IP) law governs who owns creative works, including software.
 
-- How requirements, design, testing, and CI/CD form the foundation of quality software (Chapters 1–4)
-- How the AI-native SDLC restructures development around specification and evaluation (Chapter 5)
-- How to write specifications that produce reliable AI-generated code (Chapter 6)
-- How to evaluate AI outputs with the same rigour applied to human-written code (Chapter 7)
-- How agentic systems can autonomously plan, execute, and iterate on multi-step tasks (Chapter 8)
-- How AI introduces new security threats alongside traditional vulnerabilities (Chapter 9)
-- How IP, ethics, and responsible AI governance apply to AI-generated code (Chapter 10)
-- How to measure and manage productivity in AI-native teams (Chapter 11)
+### 12.1.1 Copyright
 
-The picture that emerges is not one of AI replacing software engineers, but of AI fundamentally changing what software engineers spend their time on — and demanding new skills in areas that traditional engineering education has underemphasised.
+Copyright is the primary form of IP protection for software. In most jurisdictions, copyright in software belongs to its author (or the author's employer if created in the course of employment) automatically upon creation — no registration required.
 
----
+Copyright grants the owner exclusive rights to:
+- Copy the software
+- Distribute the software
+- Create derivative works
+- Display or perform the software publicly
 
-## 12.2 Emerging Paradigms
+For software, this means that you cannot legally copy, distribute, or build upon someone else's code without either a licence from the copyright holder or an applicable exception (such as fair use/fair dealing).
 
-The trajectory of AI capabilities points toward several developments that will further reshape software engineering over the next 5–10 years.
+**Work for hire**: In most employment relationships, software created by an employee in the course of their duties is owned by the employer, not the employee. Contractors may retain ownership depending on the contract.
 
-### 12.2.1 Fully Autonomous Coding Agents
+### 12.1.2 Patents
 
-Current AI coding agents handle well-scoped tasks with human oversight. The emerging frontier is agents that operate for extended periods — hours or days — on complex, multi-file features with minimal human intervention.
+Software patents protect specific technical implementations or processes. They are controversial in the software industry — critics argue they stifle innovation by allowing trivial ideas to be patented. Their relevance varies significantly by jurisdiction (more significant in the US than in Europe).
 
-SWE-bench ([Jimenez et al., 2023](https://arxiv.org/abs/2310.06770)) is a benchmark that measures AI systems' ability to resolve real GitHub issues from popular open-source repositories. As of mid-2024, the best systems resolved ~20% of issues autonomously. The trajectory suggests this number will increase significantly.
+### 12.1.3 Trade Secrets
 
-The implication: engineers will increasingly act as task definers and output reviewers rather than implementers. The specification and evaluation skills developed in this course will be the primary human contribution.
-
-### 12.2.2 Self-Healing Systems
-
-Self-healing systems use AI to detect, diagnose, and automatically remediate production issues without human intervention. Early examples include:
-
-- **Auto-remediation**: Systems that detect anomalous metrics and automatically roll back deployments, scale resources, or restart services
-- **AI-assisted incident response**: Systems that analyse logs, metrics, and traces during an incident and suggest root causes and remediations
-- **Automated dependency updates**: Tools that automatically update vulnerable dependencies, run tests, and create pull requests for human review
-
-Netflix's Chaos Engineering practice ([Basiri et al., 2016](https://arxiv.org/abs/1702.05843)) pioneered the idea of deliberately introducing failures to build resilient systems. AI-enhanced chaos engineering can generate and execute more sophisticated failure scenarios and automatically identify the weakest points in a system's resilience.
-
-### 12.2.3 AI-Driven Architecture and Design
-
-Current AI tools are effective at implementing architectural decisions made by humans. The frontier is AI that participates in architectural decision-making: analysing requirements, proposing architectures, and evaluating trade-offs.
-
-Research on AI-driven software design is emerging ([Ahmed et al., 2024](https://arxiv.org/abs/2404.09488)), but the consensus is that architectural decisions — which involve long-term organisational, technical, and economic trade-offs — remain deeply human judgments. AI can surface options and evidence; the decision requires human wisdom.
-
-### 12.2.4 Specification Languages and Formal Verification
-
-As AI becomes the primary implementer, the specification becomes the primary artefact. This is driving renewed interest in formal specification languages — precise mathematical descriptions of software behaviour that can be automatically verified ([Newcombe et al., 2015](https://cacm.acm.org/magazines/2015/4/184701-how-amazon-web-services-uses-formal-methods/fulltext)).
-
-Tools like TLA+ (used by Amazon Web Services for verifying distributed systems protocols) and Lean (a formal proof assistant) represent one direction: formal methods that can be used to verify that AI-generated implementations are correct with mathematical certainty. This remains a research frontier for most software, but the growing importance of specifications makes it increasingly relevant.
+Some software (particularly proprietary algorithms and training data) is protected as a trade secret rather than through copyright or patents. Trade secret protection requires the owner to take reasonable measures to keep the information confidential.
 
 ---
 
-## 12.3 Open Research Problems
+## 12.2 Software Licenses
 
-AI-native engineering is a young field with significant open research problems. Engineers who engage with these problems will shape the field's direction.
+A software licence is a legal instrument through which a copyright holder grants others permission to use, copy, modify, and/or distribute their software under specified conditions.
 
-### 12.3.1 Automated Evaluation
+### 12.2.1 Proprietary Licenses
 
-**The problem**: How do we know whether an AI-generated program is correct? Running tests is necessary but not sufficient — a program can pass all tests and still be subtly wrong. Current automated evaluation (Chapter 7) relies on human-written test suites, which may themselves be incomplete.
+Proprietary licences retain all rights for the copyright holder. Users may run the software but cannot view the source code, modify it, or redistribute it. Examples: Microsoft Windows, Adobe Photoshop, most commercial SaaS products.
 
-**Why it matters in practice**: As AI generates more code faster, the test-writing bottleneck shifts from "who writes the code?" to "who writes the tests?" If tests are also AI-generated, we need evaluation methods that do not rely on human-written oracle code.
+### 12.2.2 Open Source Licenses
 
-**Active research directions**:
-- **Property-based testing** ([Hypothesis library](https://hypothesis.readthedocs.io/)): automatically generate test inputs from formal properties of the specification, without writing individual test cases
-- **Formal verification**: tools like [Dafny](https://dafny.org/) allow writing code alongside mathematical proofs of correctness that can be machine-checked
-- **Mutation testing**: evaluate test suite quality by introducing artificial bugs; if tests don't catch the mutations, they're insufficient ([Papadakis et al., 2019](https://dl.acm.org/doi/10.1145/3361149))
-- **Differential testing**: run two implementations of the same spec and compare outputs to detect divergence
+Open source licences grant users the freedom to use, study, modify, and distribute the software. The [Open Source Initiative](https://opensource.org/osd) (OSI) maintains the definitive list of approved open source licences.
 
-**Promising direction for practitioners**: Combining LLM-generated tests with property-based testing harnesses. The LLM generates the test structure and edge-case categories; the property-based framework generates the concrete inputs. This hybrid approach has shown promise in early research ([Schafer et al., 2023](https://arxiv.org/abs/2302.04664)).
+Open source licences fall broadly into two categories:
 
-### 12.3.2 Long-Horizon Task Reliability
+**Permissive licences** allow the software to be used in almost any way, including incorporation into proprietary software:
 
-**The problem**: Current AI agents are reliable for tasks spanning 5–20 steps. For longer tasks — hundreds of steps over hours or days — reliability degrades due to context accumulation, error compounding, and planning failures. SWE-bench results improve on self-contained issues but plateau on tasks requiring codebase-wide understanding.
-
-**Why it matters in practice**: Real software features routinely require touching dozens of files, understanding months of commit history, and coordinating with external systems. Until agents handle this reliably, human oversight remains essential at each planning stage.
-
-**Key open questions**:
-- How should agents summarise and compress prior context without losing critical information? (Related to the "lost in the middle" problem from Chapter 6)
-- How should agents detect that they've made an irrecoverable error and roll back to a checkpoint?
-- What is the right granularity for human checkpoints in long-horizon tasks?
-
-**Research benchmark to watch**: [SWE-bench Verified](https://www.swebench.com/) tracks agent performance on real GitHub issues. Performance on the full benchmark (not the sampled subset) gives a realistic picture of long-horizon capability.
-
-### 12.3.3 Multi-Agent Coordination
-
-**The problem**: When multiple agents work on the same codebase simultaneously, they can produce conflicting changes. Designing multi-agent systems that collaborate correctly — with proper locking, communication, and conflict resolution — is an active research area ([Hong et al., 2023](https://arxiv.org/abs/2308.00352)).
-
-**Why it matters in practice**: The productivity argument for multi-agent systems assumes agents can work in parallel. But git merge conflicts, shared database schema changes, and API contract evolution create coordination challenges that human developers solve through communication — communication that agent frameworks are only beginning to model.
-
-**Research directions**:
-- Role-specialised agents (planner, implementer, reviewer, security auditor) with explicit handoff protocols
-- Shared working memory systems where agents can read each other's progress and decisions
-- Conflict detection before code generation, not just at merge time
-
-### 12.3.4 Specification Quality Measurement
-
-**The problem**: We do not yet have a reliable way to measure the quality of a specification before generating code from it. A specification that seems complete may turn out to be ambiguous or under-constrained only after generation reveals the gap.
-
-**Why it matters in practice**: Chapter 6 offered heuristics for good specifications. But heuristics are subjective and require experienced engineers to apply. A quantitative specification quality metric would allow automated checking before generation — catching "will produce ambiguous output" specifications the way a linter catches "will not compile" code.
-
-**Research directions**:
-- Formal specification quality metrics (completeness, unambiguity, consistency, testability)
-- Automatic ambiguity detection: generate multiple implementations from the same spec and measure their divergence — high divergence indicates an under-specified spec
-- Adversarial specification testing: generate a correct-but-wrong implementation that satisfies the spec's letter but violates its intent
-
-### 12.3.5 AI-Assisted Debugging
-
-**The problem**: Debugging is one of the most time-consuming activities in software engineering. AI can suggest hypotheses, but current tools struggle with complex, multi-component failures where the root cause is several steps removed from the observable symptom.
-
-**Why it matters in practice**: The debugging workflow in Chapter 7 (Section 7.7) relies on a human to reproduce the failure, isolate the component, and categorise the bug. As systems grow more complex and AI generates more of the code, the debugging surface area expands while human familiarity with the code decreases.
-
-**Research directions**:
-- Automated fault localisation: given a failing test, identify the most likely location of the bug in the codebase ([Kochhar et al., 2016](https://ieeexplore.ieee.org/document/7476629))
-- AI-assisted root cause analysis for distributed system incidents: correlate logs, metrics, and traces across services to identify cascading failure root causes
-- Specification-driven debugging: use the original AI spec to reason about whether observed behaviour was intended or a hallucination
-
-### 12.3.6 Trust Calibration
-
-**The problem**: How much should an engineer trust AI-generated code? Current practice is highly variable — some engineers accept AI output with minimal review; others review every line with the same scrutiny as human-written code. Neither extreme is optimal.
-
-**Why it matters in practice**: Over-trust leads to unreviewed vulnerabilities reaching production. Under-trust negates AI's productivity benefits and introduces review fatigue. Calibrated trust — accepting low-risk, well-specified outputs quickly while scrutinising high-risk or ambiguous outputs carefully — requires a model of AI failure modes that we do not yet have.
-
-**Research directions**:
-- Confidence estimation for AI code generation: can the model signal when it is unsure?
-- Failure mode taxonomies: systematic catalogues of the types of errors AI coding tools make in specific contexts
-- Human-AI collaboration models that adapt review intensity to estimated risk
-
----
-
-## 12.4 Skills That Endure vs. Skills That Automate Away
-
-A common anxiety among software engineers is: "Will AI automate my job?" A more productive framing is: "Which aspects of my work are being automated, and what does that free me to do?"
-
-### 12.4.1 Skills Likely to Be Heavily Automated
-
-- **Boilerplate and CRUD code generation**: Already heavily AI-assisted; will become nearly fully automated
-- **Routine test writing**: AI-generated tests for well-specified functions will become standard
-- **Documentation generation**: Docstrings, README files, changelog entries are already largely automatable
-- **Syntax and style enforcement**: Already fully automated by linters and formatters
-- **Dependency version management**: AI tools that automatically update, test, and create PRs are maturing
-
-### 12.4.2 Skills That Endure
-
-| Skill | Why it endures |
-|---|---|
-| **Problem decomposition** | Breaking complex problems into AI-tractable sub-tasks requires domain knowledge and system understanding that AI does not have |
-| **Requirements judgment** | Resolving conflicting stakeholder needs requires social intelligence and organisational context |
-| **Architectural decision-making** | Long-term structural trade-offs involve organisational, economic, and technical factors AI cannot fully evaluate |
-| **Security and privacy judgment** | Context-specific security decisions require domain and legal knowledge |
-| **Evaluation and critique** | Determining whether AI outputs are correct, secure, and appropriate requires the same skills as any code review — and more |
-| **Stakeholder communication** | Building trust, managing expectations, and translating between business and technical concerns are irreducibly human |
-| **Novel algorithm design** | Creating new algorithms for new problem types remains a human intellectual activity |
-| **Ethical judgment** | Deciding what to build, for whom, and with what safeguards requires human moral reasoning |
-
-### 12.4.3 The "T-shaped" Engineer
-
-The AI-native era is producing a new model of the effective engineer: a "T-shaped" professional with:
-
-- **Broad understanding** of the AI-native toolchain (what tools exist, how they work, their failure modes)
-- **Deep expertise** in at least one of: system design, security, domain knowledge, evaluation methods, or stakeholder communication
-
-The breadth allows the engineer to work effectively across the AI-native workflow; the depth provides the judgment that AI cannot replace.
-
----
-
-## 12.5 Building a Career in AI-Native Engineering
-
-### 12.5.1 Role Trajectories
-
-The AI-native era is not eliminating software engineering roles — it is differentiating them. Understanding which roles are expanding versus contracting helps engineers make deliberate career choices.
-
-**Roles expanding in demand:**
-
-| Role | Why it is growing |
-|---|---|
-| **AI Integration Engineer** | Organisations need engineers who can integrate AI APIs, evaluate model outputs, and build reliable AI-augmented products |
-| **Evaluation/Quality Engineer** | As AI generates more code, systematic evaluation expertise becomes a specialisation, not a shared responsibility |
-| **AI Security Engineer** | New attack surfaces (prompt injection, model inversion, training data poisoning) require specialised security expertise |
-| **Platform/Infrastructure Engineer** | AI inference, vector databases, embedding pipelines, and fine-tuning infrastructure require engineers who understand both ML and distributed systems |
-| **Technical Product Manager** | Writing AI-native specifications is a product skill as much as an engineering skill; PMs who can write precise specifications are increasingly valuable |
-
-**Roles contracting in scope (not eliminating, but narrowing):**
-
-| Role | What is contracting |
-|---|---|
-| **Junior/entry-level developer** | Boilerplate, CRUD, and routine feature work are becoming AI-assisted; the entry-level onramp is shrinking |
-| **Manual QA** | Test execution is automating; test design and evaluation remain human |
-| **Technical writer** | Documentation generation is automating; high-level architecture documentation and decision records remain human |
-
-### 12.5.2 Learning Roadmap
-
-For engineers who want to remain valuable as the field evolves:
-
-**Immediate (0–6 months) — Build the foundation**:
-- Master the AI-native SDLC workflow: Spec → Generate → Evaluate → Refine
-- Write specifications for every non-trivial task, even when not using AI generation — the discipline of precise specification improves thinking
-- Practise evaluating AI outputs rigorously; maintain a personal log of AI failure modes you encounter
-- Complete at least one end-to-end project using the Anthropic (or equivalent) API directly — not just through a GUI
-
-**Medium-term (6–24 months) — Develop depth**:
-- Choose one deep specialisation: security, evaluation methodology, distributed systems, or domain expertise (healthcare, finance, legal, climate)
-- Learn the internals of at least one AI framework (LangChain, LlamaIndex, smolagents, or AutoGen) by reading the source code, not just the tutorials
-- Take on mentoring — teaching AI-native practices forces you to articulate tacit knowledge and builds your reputation as an expert
-- Engage with primary research: read one AI engineering paper per week from arXiv cs.SE or cs.AI
-
-**Long-term (2–5 years) — Build impact**:
-- Contribute to the research conversation: run internal experiments on AI productivity, evaluation quality, or specification design and publish results (internal reports, blog posts, conference papers)
-- Build organisational change experience — implementing AI-native practices at scale is a social and political challenge as much as a technical one; this experience becomes valuable leadership currency
-- Position at the intersection — the highest-leverage roles will be held by engineers who understand AI capabilities AND a domain that organisations care about (security, compliance, reliability, cost)
-
-### 12.5.3 Self-Assessment: Where Are You Now?
-
-Rate yourself honestly on these AI-native engineering competencies (1 = beginner, 5 = expert):
-
-| Competency | 1 | 2 | 3 | 4 | 5 |
-|---|---|---|---|---|---|
-| Writing precise functional specifications | | | | | |
-| Evaluating AI output for correctness | | | | | |
-| Evaluating AI output for security | | | | | |
-| Debugging AI-generated failures | | | | | |
-| Designing multi-step AI agents | | | | | |
-| Measuring and communicating AI productivity impact | | | | | |
-| Understanding AI copyright and licensing obligations | | | | | |
-| Applying STRIDE threat modelling to AI systems | | | | | |
-
-Competencies where you score 1–2 are learning priorities. Competencies where you score 4–5 are your differentiation — invest in making them visible.
-
-### 12.5.4 Communities and Resources
-
-**Research**:
-- Follow [arXiv cs.SE](https://arxiv.org/list/cs.SE/recent) and [cs.AI](https://arxiv.org/list/cs.AI/recent) for new research
-- Key conference venues: ICSE, FSE, ISSTA, ASE (software engineering); NeurIPS, ICLR, ICML (ML)
-- [Papers With Code](https://paperswithcode.com/) tracks code implementations alongside research
-
-**Benchmarks** (track these to understand the frontier):
-- [SWE-bench](https://www.swebench.com/): AI performance on real GitHub issues
-- [HumanEval](https://github.com/openai/human-eval): function-level code generation
-- [BigCodeBench](https://bigcode-bench.github.io/): complex programming tasks
-
-**Tooling** (engage with source code, not just documentation):
-- [smolagents](https://github.com/huggingface/smolagents): Hugging Face's minimal agent framework — under 1000 lines of core code, ideal for learning
-- [LangGraph](https://github.com/langchain-ai/langgraph): graph-based multi-agent orchestration
-- [Inspect](https://inspect.ai/): Anthropic/UK AI Safety Institute's evaluation framework
-
-**Model providers**:
-- [Anthropic Research](https://www.anthropic.com/research): blog posts from the team behind Claude
-- [OpenAI Research](https://openai.com/research): GPT-4 and o-series model research
-- [Google DeepMind](https://deepmind.google/research/): Gemini model family research
-
----
-
-## 12.6 Capstone: Course Project Presentations
-
-### Final Project Requirements
-
-Your course project — the Task Management API — has grown over 12 weeks from a scope statement to a complete AI-native software system. The final capstone should demonstrate the full AI-native SDLC as practiced in this course.
-
-### Presentation Structure (15–20 minutes)
-
-**1. System Overview (3 min)**
-- What does your Task Management API do?
-- Architecture diagram and key design decisions
-- Technology stack and major dependencies
-
-**2. Requirements to Implementation (4 min)**
-- Walk through one complete user story: from initial requirement → AI-native specification → generated implementation → evaluation → final code
-- Show the specification document, the evaluation results, and the final accepted code
-- What surprised you about the AI's output?
-
-**3. Evaluation and Quality (3 min)**
-- Test coverage report
-- CI/CD pipeline: what checks run on every commit?
-- Security review findings (Bandit, GitLeaks) and how you addressed them
-
-**4. Agentic Development (3 min)**
-- Demonstrate (or describe) the agentic workflow you built in Week 8
-- How many steps did it take? What failure modes did you encounter?
-
-**5. Reflection (3 min)**
-- What was most surprising about AI-native development?
-- What did you have to learn to do differently?
-- What foundational SE skill mattered more than you expected?
-
-### Peer Review
-
-Each team will review one other team's presentation using the following rubric:
-
-| Criterion | Weight | Description |
+| Licence | Key Conditions | Common Use Cases |
 |---|---|---|
-| Requirements quality | 15% | Are requirements precise, measurable, and traceable? |
-| Specification quality | 20% | Are AI specifications unambiguous and complete? |
-| Evaluation rigour | 20% | Are evaluation criteria defined before generation? |
-| Code quality | 20% | Does the code pass all automated quality checks? |
-| Security | 10% | Have security risks been identified and addressed? |
-| Reflection depth | 15% | Does the reflection show genuine learning and insight? |
+| MIT | Include copyright notice | Most popular for libraries |
+| Apache 2.0 | Include copyright notice; patent grant | Corporate-friendly projects |
+| BSD (2/3-clause) | Include copyright notice | BSD-origin software |
+
+**Copyleft licences** require that derivative works be distributed under the same licence:
+
+| Licence | Key Conditions | Common Use Cases |
+|---|---|---|
+| GPL v2/v3 | Derivative works must be GPL | Linux kernel, GNU tools |
+| LGPL | Weaker copyleft; allows linking without GPL obligation | Libraries intended for wide use |
+| AGPL | GPL + network use triggers copyleft | SaaS applications |
+
+**The copyleft risk**: If your proprietary application incorporates AGPL-licensed code, the AGPL requires you to release your application's source code. Mixing GPL-licensed libraries into a proprietary codebase creates licence compatibility problems.
+
+### 12.2.3 Creative Commons
+
+Creative Commons licences are primarily for non-software creative works (documentation, datasets, design assets). They are not appropriate for software source code — use an OSI-approved licence instead.
+
+### 12.2.4 Choosing a License
+
+For open source projects:
+- **MIT or Apache 2.0**: Maximise adoption; allow use in proprietary software
+- **GPL**: Ensure all derivatives remain open source
+- **AGPL**: Ensure even SaaS deployments that use the software release modifications
+
+For internal/proprietary projects: use a proprietary licence (explicitly state no licence is granted if you want to be clear).
+
+**No licence = all rights reserved**: If you publish code without a licence, copyright law gives no-one the right to use it, even if it is publicly visible.
+
+### 12.2.5 Real-World Licensing Case Studies
+
+**Case 1: The AGPL Trap — MongoDB and Elastic**
+
+MongoDB originally used the AGPL licence for its core database. When MongoDB's commercial competitiveness was threatened by cloud providers offering MongoDB-as-a-service without contributing back, MongoDB switched to the Server Side Public License (SSPL), which extends the AGPL copyleft to *all* software used to offer the database as a service. Elastic made a similar move with Elasticsearch in 2021.
+
+*Lesson for engineers*: If your SaaS product depends on an AGPL or SSPL component, the copyleft may require you to release your entire application's source code. Check licences before adopting new dependencies.
+
+**Case 2: The GPL Enforcement — BusyBox and Android**
+
+The Software Freedom Conservancy has pursued numerous enforcement actions against device manufacturers shipping Linux (GPL v2) and BusyBox (GPL v2) without distributing corresponding source code, as required by the GPL. High-profile cases include actions against Best Buy, Samsung, and several router manufacturers.
+
+*Lesson for engineers*: GPL compliance for embedded or distributed software (firmware, IoT devices) requires distributing the source code or making it available on written request. Many organisations fail this requirement and only discover the problem during acquisition due diligence.
+
+**Case 3: The GitHub Copilot Class Action**
+
+In 2022, a class action lawsuit was filed against GitHub, Microsoft, and OpenAI alleging that Copilot reproduces copyrighted code from training data — including code under licences that require attribution and source disclosure — without attribution ([Doe v. GitHub, 2022](https://githubcopilotlitigation.com/)). As of 2024–2025, this litigation is ongoing.
+
+*Lesson for engineers*: AI tools trained on copyrighted code may reproduce that code verbatim. Several organisations (Samsung, Apple, JPMorgan) have restricted or banned external AI coding tools to mitigate this risk. Understand your organisation's policy before using AI tools with proprietary code.
+
+**Case 4: The Copyleft Compatibility Matrix**
+
+Not all open source licences are compatible with each other. The following matrix summarises common compatibility issues:
+
+| Combining | With GPL v3 | With Apache 2.0 | With MIT |
+|---|---|---|---|
+| **GPL v3** | Compatible | Compatible (Apache can be relicensed under GPL v3) | Compatible |
+| **Apache 2.0** | Compatible | Compatible | Compatible |
+| **GPL v2 only** | **Incompatible** | **Incompatible** | Compatible |
+| **AGPL v3** | Compatible | Compatible | Compatible |
+
+The GPL v2 / GPL v3 incompatibility matters because the Linux kernel (GPL v2 only) cannot legally incorporate code from GPL v3 projects. This has practical consequences for kernel modules and embedded Linux distributions.
+
+*Lesson for engineers*: Before incorporating a library, check that its licence is compatible with your project's licence and all other dependencies. Tools like [FOSSA](https://fossa.com/) and [TLDR Legal](https://tldrlegal.com/) can help.
 
 ---
 
-## 12.7 What It Means to Engineer in the Age of Agents
+## 12.3 AI-Generated Code and Copyright
 
-This book began with a claim: that the bottleneck in software engineering has shifted from writing code to defining problems, specifying intent, and evaluating outcomes.
+The copyright status of AI-generated code is one of the most actively litigated and debated questions in technology law as of 2024–2025.
 
-Over twelve chapters, we have examined what this shift means in practice:
+### 12.3.1 The Current Legal Landscape
 
-- **Specifications are the primary engineering artefact** — the quality of what you tell the AI determines the quality of what the AI produces
-- **Evaluation is the primary engineering skill** — determining whether AI outputs are correct, secure, and appropriate requires everything traditional code review requires, plus an understanding of AI failure modes
-- **Foundational skills are the foundation** — requirements, design, testing, security, and communication are the substrate on which AI-native engineering is built, not something to be replaced by it
-- **Accountability does not transfer** — you are responsible for the code you ship, regardless of how it was generated
+**Human authorship requirement**: In most jurisdictions, copyright requires human authorship. The United States Copyright Office has repeatedly held that works produced autonomously by AI without human creative input are not copyrightable ([US Copyright Office, 2024](https://www.copyright.gov/ai/)). This means purely AI-generated code may have no copyright holder — it may be in the public domain.
 
-The engineers who thrive in this era will not be those who generate the most code with AI, but those who exercise the most rigorous judgment about whether that code is right. That judgment — precise, skeptical, domain-aware, security-conscious, and ethically grounded — is what this course has aimed to develop.
+**Human-AI collaboration**: Where a human makes meaningful creative choices in directing, selecting, and refining AI output, the resulting work may be copyrightable as a human-authored work. The threshold for "meaningful creative contribution" is not yet clearly defined.
 
-Software engineering began as a response to a crisis: the recognition that building large software systems is harder than it looks, and that rigour, process, and discipline are necessary to do it reliably. The AI era does not diminish that lesson. It makes it more important.
+**Training data and copyright**: Several lawsuits have been filed alleging that AI models trained on copyrighted code without permission infringe copyright ([GitHub Copilot class action, 2022](https://githubcopilotlitigation.com/)). These cases are unresolved as of this writing.
+
+### 12.3.2 Practical Guidance
+
+In the absence of settled law, the pragmatic guidance is:
+
+1. **For critical proprietary systems**: Treat AI-generated code with the same IP review you would apply to any third-party code. Understand what training data the model was trained on, and whether it may reproduce copyrighted code verbatim.
+
+2. **For licence compliance**: AI coding assistants trained on copyleft code could theoretically reproduce that code in their outputs, creating a hidden licence obligation. Some organisations have adopted policies requiring a human review of AI-generated code before incorporating it.
+
+3. **For attribution**: If an AI assistant produces code that is substantially similar to an existing open source project, treat it as if it were copied from that project and apply the appropriate licence obligations.
+
+4. **Keep documentation**: Record which parts of your codebase are AI-generated, which tools were used, and which specifications were provided. This documentation supports IP claims and audits.
 
 ---
 
-## Summary
+## 12.4 Responsible AI Principles
 
-This final chapter surveyed the emerging frontier of AI-native engineering and looked ahead to where the field is heading. Key takeaways:
+Responsible AI has moved from academic concern to regulatory requirement: the EU AI Act ([European Parliament, 2024](https://www.europarl.europa.eu/news/en/press-room/20240308IPR19015/artificial-intelligence-act-meps-adopt-landmark-law)), the US Executive Order on Safe, Secure, and Trustworthy AI ([White House, 2023](https://www.whitehouse.gov/briefing-room/presidential-actions/2023/10/30/executive-order-on-the-safe-secure-and-trustworthy-development-and-use-of-artificial-intelligence/)), and the Australian Government's AI Ethics Framework ([DISER, 2019](https://www.industry.gov.au/publications/australias-artificial-intelligence-ethics-framework)) all impose obligations on organisations developing or deploying AI.
 
-- Autonomous agents, self-healing systems, and AI-assisted architecture are emerging paradigms that will further change what engineers do.
-- Open research problems — automated evaluation, long-horizon task reliability, multi-agent coordination, specification quality measurement — represent high-value opportunities for engineers who engage with them.
-- Skills that endure: problem decomposition, architectural decision-making, evaluation, security judgment, stakeholder communication. Skills being automated: boilerplate generation, routine testing, documentation, style enforcement.
-- The AI-native era favours "T-shaped" engineers with broad AI toolchain understanding and deep expertise in at least one domain.
-- Accountability does not transfer to AI tools — the engineer who ships AI-generated code is responsible for it.
+Key responsible AI principles ([Jobin et al., 2019](https://www.nature.com/articles/s42256-019-0088-2)):
+
+| Principle | Description |
+|---|---|
+| **Fairness** | AI systems should not discriminate unfairly against individuals or groups |
+| **Transparency** | The behaviour and decision-making of AI systems should be explainable |
+| **Accountability** | There must be clear human responsibility for AI system outcomes |
+| **Privacy** | AI systems should respect individuals' privacy rights |
+| **Safety** | AI systems should not cause harm |
+| **Beneficence** | AI systems should benefit individuals and society |
+
+### 12.4.1 Fairness and Bias in AI Coding Assistants
+
+AI coding assistants can exhibit bias in several ways:
+
+**Code quality disparity**: Research has found that AI coding tools perform better on code written in widely-used languages and paradigms. Code in less common languages, frameworks, or domains receives lower quality suggestions — creating a "rich get richer" dynamic where well-resourced projects benefit more from AI assistance ([Dakhel et al., 2023](https://arxiv.org/abs/2304.10778)).
+
+**Representation in training data**: AI models trained on public code repositories inherit the demographics and conventions of those repositories. If the training data overrepresents certain coding styles, conventions, or languages, the model's suggestions will reflect those biases.
+
+**Accessibility**: AI coding tools require reliable internet access, modern hardware, and often paid subscriptions. This creates barriers for developers in lower-income countries or those working in resource-constrained environments.
+
+### 12.4.2 Transparency and Explainability
+
+When AI systems make decisions or generate outputs that affect people, those affected often have a right to understand how the decision was made. For AI coding assistants, relevant questions include:
+
+- What training data was used?
+- How does the model decide what code to generate?
+- When the model generates insecure code, can this be detected and explained?
+
+Current AI coding assistants offer limited explainability. This is an active research area, and engineers should be cautious about deploying AI decision-making in contexts where explainability is legally or ethically required.
+
+### 12.4.3 Accountability
+
+The "accountability gap" in AI systems refers to the challenge of assigning responsibility when an AI system causes harm. For software engineers, the practical principle is:
+
+**You are accountable for AI-generated code you ship.** The fact that an AI assistant generated a vulnerable function does not transfer responsibility to the AI vendor. The engineer who reviewed, accepted, and deployed the code is responsible.
+
+This accountability principle reinforces the evaluation-driven approach of Chapter 7: you cannot disclaim responsibility for code you did not evaluate.
+
+---
+
+## 12.5 Organisational AI Governance
+
+### 12.5.1 AI Use Policies
+
+An AI use policy defines:
+- Which AI tools are approved for use (and for what purposes)
+- What data may and may not be sent to AI services
+- How AI-generated code must be reviewed before production use
+- How AI tool usage should be documented
+
+**Example policy clauses:**
+
+> "Engineers may use approved AI coding assistants (see the approved tools list) for code generation. All AI-generated code must be reviewed by a human engineer before merging to the main branch."
+
+> "No customer PII, authentication credentials, or proprietary algorithm details may be included in prompts to external AI services."
+
+> "Engineers must disclose AI tool usage in pull request descriptions when AI-generated code constitutes more than 20% of the change."
+
+### 12.5.2 Risk Tiering
+
+The EU AI Act introduced a risk-tiered framework for AI systems ([European Parliament, 2024](https://www.europarl.europa.eu/news/en/press-room/20240308IPR19015/artificial-intelligence-act-meps-adopt-landmark-law)):
+
+| Risk Tier | Examples | Requirements |
+|---|---|---|
+| **Unacceptable risk** | Social scoring, real-time biometric surveillance | Prohibited |
+| **High risk** | Medical devices, hiring decisions, credit scoring | Conformity assessment, transparency, human oversight |
+| **Limited risk** | Chatbots, deepfakes | Transparency obligations |
+| **Minimal risk** | AI coding assistants, spam filters | Voluntary codes of conduct |
+
+For most software development use cases, AI coding assistants fall in the "minimal risk" tier. However, if you are *building* a high-risk AI system (medical diagnosis, credit scoring, automated hiring), significantly stricter requirements apply.
+
+### 12.5.3 Documentation and Audit Trails
+
+Responsible AI deployment requires documentation:
+- **Model cards** ([Mitchell et al., 2019](https://arxiv.org/abs/1812.03993)): Structured documents describing an AI model's intended use, limitations, evaluation results, and ethical considerations
+- **Datasheets for datasets** ([Gebru et al., 2018](https://arxiv.org/abs/1803.09010)): Structured documents describing a dataset's composition, collection process, and known limitations
+- **System cards**: Documentation of a deployed AI system, including the models used, their risk assessments, and mitigation measures
+
+---
+
+## 12.6 Privacy Regulation and AI-Generated Code
+
+A governance policy controls what engineers do with AI tools. Privacy regulation controls what the code those tools produce does with user data. The two obligations are independent — an organisation can have a perfect AI use policy and still ship GDPR-non-compliant code.
+
+### 12.6.1 Key Regulations
+
+**GDPR (General Data Protection Regulation)** — applies to any organisation that processes personal data of EU residents, regardless of where the organisation is located ([EU Regulation 2016/679](https://gdpr.eu/)).
+
+Key obligations relevant to AI-generated code:
+- **Data minimisation**: Collect only the data you need. AI-generated code that logs request bodies may inadvertently collect PII.
+- **Purpose limitation**: Use data only for the purpose collected. AI-generated analytics code may aggregate data in ways that exceed the original purpose.
+- **Right to erasure ("right to be forgotten")**: Code must support deleting a user's personal data on request. AI-generated CRUD code frequently omits this.
+- **Data portability**: Code must support exporting a user's personal data in a structured format.
+- **Lawful basis**: You need a lawful basis (consent, contract, legitimate interest) to process personal data. AI-generated signup flows may not implement consent collection correctly.
+
+**CCPA (California Consumer Privacy Act)** — similar to GDPR in scope, applies to businesses collecting personal information of California residents ([California Attorney General](https://oag.ca.gov/privacy/ccpa)).
+
+**Australian Privacy Act 1988** — applies to Australian Government agencies and organisations with annual turnover over $3 million ([OAIC](https://www.oaic.gov.au/privacy/the-privacy-act)).
+
+### 12.6.2 Worked Scenario: AI-Generated User Deletion Endpoint
+
+**Prompt to AI assistant:**
+```
+Add a DELETE /users/{user_id} endpoint to our FastAPI application that removes 
+a user from the database.
+```
+
+**AI-generated code (non-compliant):**
+```python
+@app.delete("/users/{user_id}")
+async def delete_user(user_id: int, db: Session = Depends(get_db)):
+    user = db.query(User).filter(User.id == user_id).first()
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
+    db.delete(user)
+    db.commit()
+    return {"message": "User deleted"}
+```
+
+This deletes the `User` row but fails GDPR requirements in several ways:
+
+| GDPR Requirement | Gap in Generated Code |
+|---|---|
+| Cascade deletion | User's tasks, comments, audit logs may retain PII |
+| Audit trail | No record that deletion was requested and completed |
+| Third-party notification | External services (email, analytics) may still hold the user's data |
+| Verification | No check that the requester is authorised to delete this account |
+| Confirmation | No confirmation email to document the right-to-erasure request |
+
+**Improved specification for AI:**
+```
+Add a GDPR-compliant DELETE /users/{user_id} endpoint:
+- Verify the caller is the user themselves (JWT claim) or an admin
+- Cascade delete: remove all tasks, comments, and audit logs owned by the user
+- Anonymise rather than delete activity that is required for financial records (replace 
+  user name/email with "Deleted User [id]" in order history)
+- Create a DeletionRequest audit record with: user_id, requester_id, timestamp, 
+  cascaded_tables
+- Return 204 No Content on success
+- Send a confirmation email to the user's address before deleting it
+Assume: User, Task, Comment, AuditLog, DeletionRequest SQLAlchemy models; 
+        send_email(to, subject, body) utility function available
+```
+
+The difference between the two prompts is one sentence of context per GDPR requirement. That is the engineering cost of compliance — not implementing deletion differently, but specifying it precisely enough that the generated code actually does it.
+
+### 12.6.3 PII in AI Prompts
+
+GDPR Article 28 requires a Data Processing Agreement (DPA) with any third party that processes personal data on your behalf. Most major AI providers offer DPAs, but these must be executed before sending personal data.
+
+**Do not send to external AI APIs (without a DPA and privacy review):**
+- Names, email addresses, phone numbers
+- IP addresses (considered personal data under GDPR)
+- User-generated content that may contain PII
+- Authentication tokens or session identifiers
+
+**Automated PII detection before AI prompts:**
+
+```bash
+uv add --dev presidio-analyzer presidio-anonymizer
+```
+
+```python
+# pii_guard.py
+import anthropic
+from presidio_analyzer import AnalyzerEngine
+
+analyzer = AnalyzerEngine()
+client = anthropic.Anthropic()
+
+
+def safe_ai_request(prompt: str, model: str = "claude-haiku-4-5-20251001") -> str:
+    """Reject prompts that contain detectable PII."""
+    results = analyzer.analyze(text=prompt, language="en")
+    
+    pii_found = [r.entity_type for r in results if r.score > 0.7]
+    if pii_found:
+        raise ValueError(
+            f"Prompt contains potential PII ({pii_found}). "
+            "Remove PII before sending to external AI services."
+        )
+    
+    response = client.messages.create(
+        model=model,
+        max_tokens=1024,
+        messages=[{"role": "user", "content": prompt}],
+    )
+    return response.content[0].text
+
+
+# Usage
+try:
+    result = safe_ai_request(
+        "Fix the bug in this function. The user john.doe@example.com reported it."
+    )
+except ValueError as e:
+    print(f"PII guard blocked request: {e}")
+    # Sanitise the prompt: remove the email address before retrying
+```
+
+---
+
+## 12.7 License Compliance Audit and Responsible AI Checklist
+
+### 12.7.1 License Compliance Audit with pip-licenses
+
+```bash
+uv add --dev pip-licenses
+
+# List all dependencies and their licenses
+uv run pip-licenses --format=table
+
+# Export to CSV for review
+uv run pip-licenses --format=csv --output-file=licenses.csv
+
+# Check for copyleft licenses that may require disclosure
+uv run pip-licenses --fail-on="GPL;AGPL" --format=table
+```
+
+Sample output:
+```
+Name              Version  License
+anthropic         0.28.0   MIT License
+fastapi           0.111.0  MIT License
+pytest            8.2.0    MIT License
+sqlalchemy        2.0.30   MIT License
+```
+
+If any dependency has a GPL or AGPL licence, review whether your use triggers copyleft obligations.
+
+### 12.7.2 Responsible AI Checklist for the Course Project
+
+**Step 1: Generate a risk assessment with an AI assistant**
+
+Paste the following prompt into any AI assistant (Claude, ChatGPT, Gemini), replacing the project block with your own project description:
+
+**System prompt:**
+
+<div class="admonish-prompt">
+
+You are a responsible AI auditor with expertise in software engineering and AI ethics
+frameworks. You provide concise, actionable risk assessments grounded in established
+responsible AI principles (Fairness, Transparency, Accountability, Privacy, Safety,
+Beneficence). Be specific to the technology stack and deployment context described.
+
+</div>
+
+**User:**
+
+<div class="admonish-prompt">
+
+Based on the project description below, provide a brief responsible AI risk assessment.
+For each of the six principles — Fairness, Transparency, Accountability, Privacy,
+Safety, and Beneficence — identify:
+
+1. The primary risk for this project
+2. A specific mitigation recommendation
+
+Project:
+Task Management API for software development teams.
+- Built with Python and FastAPI
+- Uses AI coding assistants for feature development
+- Stores user data including email addresses and work activity
+- Will be deployed as a SaaS product to paying customers
+
+</div>
+
+**Step 2: Complete the self-audit checklist**
+
+Work through the checklist below for your own project. Each unchecked item is a gap to address before the project is considered responsible-AI-compliant.
+
+<div class="admonish-prompt">
+
+### Responsible AI Self-Audit
+
+### Fairness
+- [ ] Have we considered who may be disadvantaged by AI-generated code quality disparities?
+- [ ] Have we tested the system with diverse inputs, not just the "happy path"?
+
+### Transparency
+- [ ] Is it documented which parts of the codebase are AI-generated?
+- [ ] Are AI tools used in this project disclosed in project documentation?
+
+### Accountability
+- [ ] Has all AI-generated code been reviewed by a human engineer?
+- [ ] Is there clear ownership of each component, including AI-generated ones?
+
+### Privacy
+- [ ] Have we verified that no PII or credentials were included in AI prompts?
+- [ ] Does the system comply with applicable privacy regulations (GDPR, Privacy Act)?
+
+### Security
+- [ ] Has AI-generated code undergone security review (Bandit, manual review)?
+- [ ] Have we run GitLeaks to ensure no credentials are in the repository?
+
+### Licensing
+- [ ] Have all dependencies been audited for licence compatibility?
+- [ ] Is it clear that AI-generated code does not reproduce copylefted code?
+</div>
+
+---
+
+## 12.8 Key Takeaways
+
+The legal and ethical landscape for AI-generated code is unsettled and changing quickly. The key ideas from this chapter:
+
+1. **Copyright, patents, and trade secrets are the three main IP protection mechanisms for software.** For most software, copyright is the operative form — it attaches automatically on creation, without registration, and it governs whether anyone can copy, distribute, or build on your code.
+
+2. **Open source licences are not interchangeable.** Permissive licences (MIT, Apache 2.0) allow incorporation into proprietary software; copyleft licences (GPL, AGPL) require derivative works to remain open source. Mixing incompatible licences creates hidden legal obligations. Check compatibility before adopting a dependency.
+
+3. **AI-generated code exists in a copyright grey zone.** Purely AI-generated output may have no copyright holder — it may effectively be in the public domain. Where a human makes meaningful creative choices in directing and refining AI output, the work may be copyrightable as human-authored; the legal threshold for this is not yet settled.
+
+4. **You are accountable for AI-generated code you ship.** Responsibility does not transfer to the AI vendor. The engineer who reviews, accepts, and deploys the code is the responsible party — regardless of which tool produced the first draft.
+
+5. **Privacy regulations impose concrete obligations on the code you write.** GDPR's right to erasure, data minimisation, and lawful basis requirements are not satisfied by default by AI-generated code — they must be specified in the prompt. The same applies to CCPA and the Australian Privacy Act for their respective jurisdictions.
+
+6. **Do not send personal data to external AI APIs without a Data Processing Agreement.** Names, email addresses, and IP addresses are personal data under GDPR. Executing a DPA with the AI provider is a legal requirement before sending them, not an optional precaution.
+
+7. **Organisational AI governance starts with a use policy that is actually enforced.** The policy must specify which tools are approved, what data may be sent, and how AI-generated code is reviewed before production use. The Samsung incident illustrates what happens in the absence of one.
+
+8. **The EU AI Act classifies AI coding assistants as minimal risk.** If you are *building* a high-risk AI system — for medical diagnosis, hiring, or credit decisions — significantly stricter requirements apply, including conformity assessments, transparency obligations, and mandated human oversight.
 
 ---
 
 ## Review Questions
 
-1. What is SWE-bench, and what does progress on it tell us about the trajectory of AI software engineering?
-2. Describe one open research problem in AI-native engineering and explain why it matters for practitioners.
-3. "Software engineers who use AI well will not be replaced by AI. Software engineers who refuse to adapt will be replaced by software engineers who use AI well." Do you agree? What assumptions does this claim depend on?
-4. You are advising a computer science student who is one year from graduating. What three skills would you recommend they focus on developing for an AI-native engineering career? Justify each.
-5. A colleague claims: "Since AI writes the code now, I don't need to be able to debug without AI assistance." Evaluate this claim. What risks does this attitude create?
-6. Looking back at the 12 chapters of this course: which concept or technique has most changed how you think about software engineering? Why?
+1. Your team wants to add an AGPL-licensed library to your SaaS product's backend. The product charges a monthly subscription fee and does not distribute compiled binaries. A colleague argues: "AGPL only applies when you distribute software — since we're SaaS, we don't distribute anything, so we're fine." Evaluate this argument. What obligation, if any, does the AGPL create for a network-accessible service, and what would you recommend?
 
----
+2. A developer uses GitHub Copilot to generate approximately 40% of a new fintech product's codebase. The CTO wants to register the codebase as a company copyright and is confident this is straightforward. What are the obstacles to this, and what documentation practices — starting today — would strengthen the company's legal position?
 
-## References
+3. You are implementing a user data export feature in a FastAPI application. You submit the following prompt: *"Add a GET /users/{user_id}/export endpoint that returns all user data as JSON."* The AI returns a function that serialises the `User` SQLAlchemy model directly. Identify at least two GDPR compliance gaps in the generated code, then write the revised prompt that addresses them.
 
-- Ahmed, I., et al. (2024). Towards AI-Driven Architecture Decision Making. *arXiv*. [https://arxiv.org/abs/2404.09488](https://arxiv.org/abs/2404.09488)
-- Anthropic. (2024). Research. [https://www.anthropic.com/research](https://www.anthropic.com/research)
-- Basiri, A., et al. (2016). Chaos Engineering. *IEEE Software*. [https://arxiv.org/abs/1702.05843](https://arxiv.org/abs/1702.05843)
-- Hong, S., et al. (2023). MetaGPT: Meta Programming for a Multi-Agent Collaborative Framework. *arXiv*. [https://arxiv.org/abs/2308.00352](https://arxiv.org/abs/2308.00352)
-- Jimenez, C., et al. (2023). SWE-bench: Can Language Models Resolve Real-World GitHub Issues? *arXiv*. [https://arxiv.org/abs/2310.06770](https://arxiv.org/abs/2310.06770)
-- Newcombe, C., et al. (2015). How Amazon Web Services Uses Formal Methods. *Communications of the ACM*. [https://cacm.acm.org/magazines/2015/4/184701-how-amazon-web-services-uses-formal-methods/fulltext](https://cacm.acm.org/magazines/2015/4/184701-how-amazon-web-services-uses-formal-methods/fulltext)
-- SWE-bench Leaderboard. [https://www.swebench.com/](https://www.swebench.com/)
-- OpenAI. HumanEval benchmark. [https://github.com/openai/human-eval](https://github.com/openai/human-eval)
-- Chen, M., et al. (2021). Evaluating Large Language Models Trained on Code. *arXiv*. [https://arxiv.org/abs/2107.03374](https://arxiv.org/abs/2107.03374)
-- Hypothesis. Property-based testing for Python. [https://hypothesis.readthedocs.io/](https://hypothesis.readthedocs.io/) -->
+4. A junior developer generates a user authentication module using an AI assistant and merges it without a security review. The module contains a timing vulnerability in the password comparison function that leaks whether a username exists. When the issue is reported, the developer says: "The AI wrote it — that's on the tool, not me." As tech lead, how do you respond, and what specific changes would you make to the team's AI code review process to prevent this class of issue?
+
+5. Your organisation has no AI use policy. You have been asked to draft three policy clauses before next week's sprint. Using the example clauses in Section 12.5.1 as a model, write three clauses specific to a team that builds healthcare data management software, uses external AI coding assistants daily, and is subject to GDPR. For each clause, explain the specific risk it mitigates.
+

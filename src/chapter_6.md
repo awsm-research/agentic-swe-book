@@ -32,14 +32,6 @@ This shift has been underway since at least 2024, when tools like Devin ([Cognit
 
 *Agentic software engineering*, properly understood, is the discipline of working with these agents in a way that captures the productivity gains while enforcing the engineering standards that prevent the gaps from being amplified.
 
-| Term | Definition |
-|---|---|
-| **AI-assisted development** | Using AI tools to accelerate individual steps within an otherwise unchanged engineering workflow |
-| **AI-native engineering** | Restructuring the engineering workflow itself around AI capabilities and failure modes |
-| **Agentic software engineering** | Directing AI agents — autonomous, tool-using, multi-step systems — as a primary mode of software development |
-| **AI coding agent** | An LLM connected to tools (file access, code execution, APIs) that can pursue multi-step development goals autonomously |
-| **Vibe coding** | The practice, named by Karpathy (2025), of accepting AI-generated changes without reading them — appropriate for throwaway projects, a liability in production |
-
 ---
 
 ## 6.2 What Is an AI Coding Agent?
@@ -50,7 +42,7 @@ An *AI coding agent* is a system in which a large language model is connected to
 
 The critical phrase is *multi-step goal with adaptation*. A chatbot answers a question. An AI coding agent implements a feature — reading the codebase to understand the context, writing code, running the tests, reading the test output, fixing failures, and producing a pull request. It does not wait for the engineer to mediate between each step.
 
-### LLMs vs. Agentic AI
+### 6.2.1 LLMs vs. Agentic AI
 
 Understanding the difference between a *large language model* and an *AI coding agent* is not just a technical distinction — it determines what the tool can and cannot be asked to do.
 
@@ -70,7 +62,7 @@ An *AI coding agent* wraps an LLM with infrastructure that gives it state and ag
 
 The last row matters most for engineering practice. An LLM cannot delete a file or push a commit. An agent can. This is why the judgment and verification skills covered throughout this book become *more* important in agentic workflows, not less — the agent's mistakes have real consequences.
 
-### AI Coding Agents in the Terminal
+### 6.2.2 AI Coding Agents in the Terminal
 
 The first category of AI coding agent operates directly in the terminal, treating the file system and shell as its primary environment. Two widely used examples are *Claude Code* (Anthropic, 2024) and *Gemini CLI* (Google, 2024).
 
@@ -80,7 +72,7 @@ The first category of AI coding agent operates directly in the terminal, treatin
 
 Terminal agents suit engineers who prefer full control over their toolchain, work on complex or unfamiliar codebases where reading source is the primary activity, or operate in environments (remote servers, CI pipelines) where a graphical IDE is unavailable.
 
-### AI-Native IDEs
+### 6.2.3 AI-Native IDEs
 
 The second category integrates agentic AI directly into the editing experience. *Cursor* and *Windsurf* are the most widely adopted examples as of 2025.
 
@@ -90,7 +82,7 @@ The second category integrates agentic AI directly into the editing experience. 
 
 AI-native IDEs suit engineers doing sustained feature work in a single codebase, working on tasks where visual context (seeing the code alongside the AI conversation) speeds up verification, or transitioning to agentic workflows from an IDE-centric background.
 
-Neither category is universally superior. Terminal agents offer more flexibility and composability; AI-native IDEs offer more context and a lower friction floor for getting started. Many engineers use both, depending on the task.
+For engineers new to agentic workflows, an AI-native IDE is the lower-friction starting point — the visual context alongside the conversation speeds up verification. Terminal agents earn their place when shell flexibility, composability, or remote access matters more than IDE integration. Many engineers use both, choosing by task.
 
 ---
 
@@ -98,7 +90,7 @@ Neither category is universally superior. Terminal agents offer more flexibility
 
 Regardless of whether the agent runs in a terminal or an IDE, its architecture consists of four components: tools, skills, connectors, and memory. Understanding these components allows you to reason about what the agent can and cannot do, and where it is likely to fail.
 
-### Tools
+### 6.3.1 Tools
 
 *Tools* are the primitive actions an agent can take in the world — atomic, executable operations with defined inputs and outputs. They are the agent's hands.
 
@@ -118,7 +110,7 @@ Tools are powerful because they allow the agent to *observe* the results of its 
 
 Tools are also the primary source of risk. A `write_file` call on a production configuration file, a `run_command` that drops a database table, a `submit_pr` that opens a request to the wrong repository — these are irreversible actions that the engineer must prevent through careful permissions, sandboxing, and oversight postures.
 
-### Skills
+### 6.3.2 Skills
 
 *Skills* are reusable, higher-order capabilities composed from multiple tool calls — the agent's learned repertoire. Where a tool answers "what can the agent do in one step?", a skill answers "what can the agent accomplish as a unit of work?"
 
@@ -131,7 +123,7 @@ Examples of skills:
 
 Skills are typically defined as reusable prompts or prompt templates stored alongside the project. Claude Code calls these *slash commands* (e.g., `/review`, `/test`). They allow teams to encode their engineering standards into the agent — "when we do a security review, we always check these ten things" — rather than relying on the engineer to prompt correctly every time.
 
-### Connectors
+### 6.3.3 Connectors
 
 *Connectors* are integrations that give the agent access to external systems beyond the file system — databases, issue trackers, CI pipelines, documentation repositories, and APIs.
 
@@ -144,7 +136,7 @@ Agent ←→ MCP Client ←→ MCP Server ←→ External System
 
 The practical consequence is that an agent connected to a GitHub MCP server can read issues, create branches, and open pull requests using the same mechanism it uses to read files. The engineer configures the connection once; the agent handles the rest.
 
-### Memory
+### 6.3.4 Memory
 
 *Memory* determines what information persists across steps, sessions, and agents. It is the most architecturally subtle of the four components.
 
@@ -163,7 +155,7 @@ The practical implication for engineering teams: place the information the agent
 
 ## 6.4 AI as the New Teammate
 
-Hassan's second major argument is that the correct mental model for AI coding tools is not *tool* but *teammate* — a collaborator with specific capabilities, blind spots, and tendencies that an effective engineer must learn to work with ([Hassan, 2025](https://agenticse-book.github.io/pdf/AgenticSE_Book.pdf)).
+Hassan's central argument is that the correct mental model for AI coding tools is not *tool* but *teammate* — a collaborator with specific capabilities, blind spots, and tendencies that an effective engineer must learn to work with ([Hassan, 2025](https://agenticse-book.github.io/pdf/AgenticSE_Book.pdf)).
 
 The tool metaphor leads engineers to treat AI as passive: you invoke it, it does a thing, you evaluate the output. The teammate metaphor leads engineers to think about communication, context, delegation, and feedback loops. A good teammate is not one who executes instructions blindly; it is one who understands the goal, flags when the instructions conflict with the goal, and asks for clarification before going wrong.
 
@@ -275,7 +267,7 @@ Agentic software engineering has accumulated a short but instructive body of pra
 
 **Prompt-and-pray.** The engineer submits a vague prompt, receives output, ships it without systematic verification, and hopes the tests catch any issues. Tests catch syntactic and logical errors; they rarely catch specification mismatches, security weaknesses, or architectural violations.
 
-**Confidence by plausibility.** AI-generated code looks correct because it is well-formatted, uses familiar patterns, and contains no obvious syntax errors. Plausibility is not correctness. The Stanford Copilot study is the controlled-trial version of this anti-pattern.
+**Confidence by plausibility.** AI-generated code looks correct because it is well-formatted, uses familiar patterns, and contains no obvious syntax errors. Plausibility is not correctness. The Stanford Copilot study is the controlled-trial version of this anti-pattern ([Perry et al., 2022](https://arxiv.org/abs/2211.03622)).
 
 **Ownership transfer.** The engineer treats AI-generated code as the AI's code — "the agent wrote this, not me" — and applies less rigorous review than they would to their own work. This is both epistemically wrong (the engineer directed and accepted the output) and professionally dangerous (the engineer is responsible for what they commit, regardless of how it was generated).
 
@@ -285,7 +277,7 @@ Agentic software engineering has accumulated a short but instructive body of pra
 
 ---
 
-## 6.7 The Future of Work with an AI Teammate
+## 6.7 Working with an AI Teammate: Productivity and Risk
 
 Hoda (2025) argues that the field risks making a categorical error: treating agentic software engineering as an acceleration of *coding* when it is actually a transformation of *the entire software process* ([Hoda, 2025](https://arxiv.org/abs/2510.19692)). Teams that adopt AI agents to write code faster while leaving their requirements practices, design processes, review cultures, and testing disciplines unchanged are, in Hoda's framing, using a paradigm-shifting tool within a paradigm that has not shifted. The efficiency gains are real but bounded. The deeper opportunity — and the deeper risk — lies in what happens when AI agents are applied across the full socio-technical process, not just the coding step.
 
@@ -297,11 +289,11 @@ Studies consistently find productivity gains for *specific task types*: routine 
 
 The 10x claim typically comes from productivity profiles that are heavily skewed toward tasks AI handles well. A developer whose work is 80% boilerplate and routine CRUD implementation may see near 10x on that work. A developer whose work is 80% novel domain logic, architectural decisions, and stakeholder negotiation will see modest gains.
 
-The honest framing: AI coding agents can make a developer dramatically more productive at the tasks AI handles well, while leaving the tasks that require judgment, domain knowledge, and interpersonal communication essentially unchanged. The proportion of work that falls into each category varies widely by role, seniority, and domain.
+AI coding agents make a developer dramatically more productive at the tasks AI handles well, while leaving the tasks that require judgment, domain knowledge, and interpersonal communication essentially unchanged. The proportion of work that falls into each category varies widely by role, seniority, and domain.
 
 ### Risks and Concerns
 
-The productivity data is real. So are the failures. In 2025, reports of *agentic incidents* — cases where AI coding agents took destructive, irreversible actions — proliferated across developer communities. Engineers reported agents with broad shell access interpreting "clean up temporary files" as a mandate to delete untracked directories, wiping configuration that was not in version control. Others reported agents generating and executing database migration scripts against production instances after staging tests passed — dropping columns used by features not covered by the test suite. A widely circulated case involved an agent connected to an AWS environment that, acting on a refactoring task, deleted S3 buckets it identified as unused — with no backup, no confirmation step, and no rollback path. In each case the agent had done exactly what it understood its instructions to mean. The gap was between what the engineer intended and what the agent inferred, and there was no checkpoint in between.
+The productivity gains are real, but so are the incident reports. In 2025, reports of *agentic incidents* — cases where AI coding agents took destructive, irreversible actions — proliferated across developer communities. Engineers reported agents with broad shell access interpreting "clean up temporary files" as a mandate to delete untracked directories, wiping configuration that was not in version control. Others reported agents generating and executing database migration scripts against production instances after staging tests passed — dropping columns used by features not covered by the test suite. A widely circulated case involved an agent connected to an AWS environment that, acting on a refactoring task, deleted S3 buckets it identified as unused — with no backup, no confirmation step, and no rollback path. In each case the agent had done exactly what it understood its instructions to mean. The gap was between what the engineer intended and what the agent inferred, and there was no checkpoint in between.
 
 Liu et al. (2023) document the baseline problem: 32.2% of ChatGPT-generated code samples produced incorrect outputs, and nearly half had maintainability issues detectable by standard static analysis ([Liu et al., 2023](https://arxiv.org/abs/2307.12596)). ChatGPT could self-repair some defects when shown the errors — but only when the engineer knew to ask. An engineer who accepted the output without verification shipped the failure.
 
@@ -319,7 +311,7 @@ Liu et al. (2023) document the baseline problem: 32.2% of ChatGPT-generated code
 
 ## 6.8 Human Responsibility in the Agentic Era
 
-The most important idea in this chapter is also the simplest: the human engineer retains full responsibility for everything that is committed, deployed, or shipped — regardless of how it was produced.
+The human engineer retains full responsibility for everything that is committed, deployed, or shipped — regardless of how it was produced.
 
 This is not a philosophical position. It is the practical reality of how accountability works in engineering organisations and in law. When a software defect causes harm, the investigation asks who designed, built, tested, and deployed the system. The answer is the humans and the organisation — not the tools they used. This was true when the tool was a compiler, a framework, or a cloud provider. It remains true when the tool is an AI agent.
 

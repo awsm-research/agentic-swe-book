@@ -23,7 +23,7 @@
 # Part III: Engineering Complex Software Systems
 
 - [Chapter 10: Software Maintainance and Technical Debts](./chapter_10.md)
-- [Chapter 11: Software Production](./chapter_11.md)
+- [Chapter 11: Software Packaging and Production](./chapter_11.md)
 - [Chapter 12: Licenses, Ethics, and Responsible AI](./chapter_12.md)
 
 <!-- # Part IV: Advanced Topics in Software Testing -->
@@ -46,6 +46,7 @@
 - [Tutorial 8: SAST, AI, and Human on Vulnerability Detection](./tutorial_8.md)
 - [Tutorial 9: Security Review in CI/CD Pipeline](./tutorial_9.md)
 - [Tutorial 10: Pay Down Debt on a Real Hotspot](./tutorial_10.md)
+- [Tutorial 11: Containerise and Ship a Three-Tier Application](./tutorial_11.md)
 - [Tutorial 12: Licences, Privacy, and Responsible AI in Practice](./tutorial_12.md)
 
 # Appendices

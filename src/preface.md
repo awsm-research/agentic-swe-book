@@ -113,45 +113,6 @@ In short: the prior works ask what agentic software engineering *is*. This book 
 
 ---
 
-<!-- ## How to Use This Book
-
-This book is written for a 12-week university course at Monash University, but it is structured so that it can be used in several ways.
-
-### Path A: 12-Week Course (Recommended)
-
-Follow the chapters in order, one per week. Each chapter builds on the previous and contributes one milestone to the running course project — a Task Management API that grows from a scope statement (Week 1) to a complete AI-native system (Week 12).
-
-```
-Weeks 1–5:  SE Fundamentals (Chapters 1–5)
-Weeks 6–9:  Agentic Software Engineering (Chapters 6–9)
-Weeks 10–12: Engineering with Responsibility (Chapters 10–12)
-```
-
-The project milestones at the end of each chapter are the primary assessment vehicle. Submit them on a weekly cadence and use peer review to compare approaches.
-
-### Path B: Practitioner Self-Study
-
-If you are an experienced engineer who wants to develop AI-native skills specifically, start with Chapter 6 (Agentic Software Engineering: A New Paradigm) to calibrate where you are, then read Chapters 7–9 in order. Use Chapters 1–5 as reference when the foundations feel shaky, and Chapters 10–12 for the governance and strategy dimensions.
-
-Recommended reading order: 6 → 7 → 8 → 9 → 10 → 1–5 (reference) → 11 → 12
-
-### Path C: Team Reference
-
-If your team is adopting AI tools and you want to use this as a shared reference, the most immediately useful chapters are:
-
-| Need | Chapter |
-|---|---|
-| Automated code review, quality, and CI/CD | 5 |
-| Adopting an agentic engineering paradigm | 6 |
-| Configuring agents with context, skills, and tools | 7 |
-| Security of AI-generated code | 8 |
-| Security concerns of agentic AI coding tools | 9 |
-| Software maintenance and technical debt | 10 |
-| Software packaging, versioning, and deployment | 11 |
-| Licences, ethics, and responsible AI | 12 |
-
---- -->
-
 ## A Note to the Reader
 
 I want to be transparent about how this book was made, because I know readers have a range of views on the role of AI in writing — and those concerns deserve a direct answer rather than a polished one.
@@ -169,43 +130,6 @@ All code examples in this book use Python. This choice is deliberate and transpa
 **This is not a sponsored book.** No commercial relationship exists between the author or any other AI provider mentioned.
 
 **This book does not represent the views of Monash University.** It is written in a personal capacity and is not endorsed by, affiliated with, or produced on behalf of Monash University or any other institution. Readers are responsible for applying the concepts and techniques described here thoughtfully and at their own discretion. The author accepts no liability for decisions or outcomes arising from the use of this material.
-
-<!-- **These principles apply to any LLM provider.** Every concept in this book — the AI-native SDLC, specification design, evaluation-driven development, agentic orchestration — applies equally to OpenAI GPT models, Google Gemini, Meta Llama, Mistral, and future models not yet released. The Anthropic API is the *implementation vehicle*, not the *subject*. Where examples use Anthropic-specific classes (`anthropic.Anthropic()`, `client.messages.create()`), the equivalent calls for other providers are:
-
-| Concept | Anthropic (this book) | OpenAI equivalent | Generic pattern |
-|---|---|---|---|
-| Client init | `anthropic.Anthropic()` | `openai.OpenAI()` | Provider client |
-| Completion | `client.messages.create(model=..., messages=[...])` | `client.chat.completions.create(model=..., messages=[...])` | Call with model + messages |
-| System prompt | `system="..."` parameter | `{"role": "system", "content": "..."}` in messages | First message or system param |
-| Tool definition | `tools=[{name, description, input_schema}]` | `tools=[{type, function: {name, description, parameters}}]` | JSON schema per tool |
-
-See [Appendix C](./appendix_c.md) for provider-agnostic wrappers and guidance on applying these examples to other languages.
-
-**Models change.** The specific model IDs used in examples (`claude-opus-4-7`, `claude-haiku-4-5-20251001`) are current as of writing. New model versions are released regularly. Always check [https://docs.anthropic.com/en/docs/about-claude/models](https://docs.anthropic.com/en/docs/about-claude/models) for the current model list. The principles in this book are model-version-independent; only the model ID strings need updating.
-
----
-
-## The Running Project
-
-Starting in Chapter 1, you will build a **Task Management API** — a backend system for software development teams to create projects, manage tasks, assign work, and track progress. This is a deliberately familiar problem domain. The focus is not on inventing a novel application but on applying AI-native engineering practices to a realistic, growing system.
-
-By the end of Chapter 12, you will have:
-- A requirements specification and design document
-- A Python REST API with full test coverage
-- A CI/CD pipeline with automated quality gates
-- AI-generated features developed using the Specify → Generate → Verify → Refine cycle
-- An agentic workflow that automates a development task
-- Security review, licence audit, and responsible AI assessment
-
-The project is intentionally modest in scope so that the *process* — not the product — can be the focus of each week.
-
----
-
-## Companion Resources
-
-All code examples are available at: [github.com/awsm-research/agentic-swe-book](https://github.com/awsm-research/agentic-swe-book)
-
-For updates on regulatory changes (EU AI Act, etc.) and new tool guidance, check the repository's `UPDATES.md` file. The landscape changes faster than print allows. -->
 
 ---
 

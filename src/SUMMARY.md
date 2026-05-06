@@ -49,11 +49,3 @@
 - [Tutorial 11: Containerise and Ship a Three-Tier Application](./tutorial_11.md)
 - [Tutorial 12: Licences, Privacy, and Responsible AI in Practice](./tutorial_12.md)
 
-# Appendices
- 
-- [Appendix A: Recommended Tools and Environments](./appendix_a.md)
-- [Appendix B: Design Pattern Reference](./appendix_b.md)
-- [Appendix C: Applying These Practices in Other Languages](./appendix_c.md)
-- [Appendix D: Prompt Pattern Reference](./appendix_d.md)
-<!-- - [Project Milestones](./project_milestones.md) -->
-

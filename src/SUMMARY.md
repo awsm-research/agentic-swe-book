@@ -34,7 +34,7 @@
 
 ---
 
-# Tutorials
+# Part IV: Tutorials
 
 - [Tutorial 1: Setting Up Your Python and GitLab for Code and Project Management](./tutorial_1.md)
 - [Tutorial 2: Eliciting Requirements from AI As Your Client](./tutorial_2.md)
@@ -49,6 +49,6 @@
 - [Tutorial 11: Containerise and Ship a Three-Tier Application](./tutorial_11.md)
 - [Tutorial 12: Licences, Privacy, and Responsible AI in Practice](./tutorial_12.md)
 
-# For Monash University
+# Part V: For Monash University
 - [Using This Book at Monash University](./for_monash.md)
 - [Generative AI Policy and Responsible Use](./monash_genai_policy.md)

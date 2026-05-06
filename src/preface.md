@@ -119,7 +119,7 @@ I want to be transparent about how this book was made, because I know readers ha
 
 The intellectual content of this book is mine. I designed the structure, defined the chapter outlines, chose the arguments, selected the examples, and decided what belonged on the page and what did not. The perspective, the framing, and the engineering judgment throughout are the product of my own research and experience as the author.
 
-For some chapters, I used AI tools to assist with the writing process — drafting passages from my outlines, suggesting wording, and helping render a small number of conceptual diagrams. In every case, the output was reviewed, edited, fact-checked, and rewritten as needed by me before it became part of the manuscript. Nothing was published unread. Nothing was accepted on faith. The author remains fully responsible for every claim, every conclusion, and every line of code.
+For some chapters, I used AI tools to assist with the writing process — drafting passages from my outlines, suggesting wording, and helping render a small number of conceptual diagrams. In every case, the output was reviewed, edited, fact-checked, and rewritten as needed by me before it became part of the book. Nothing was published unread. Nothing was accepted on faith. The author remains fully responsible for every claim, every conclusion, and every line of code.
 
 I chose to disclose this rather than leave it unsaid. A book about software engineering alongside AI should be honest about its own process — and readers should be able to judge the work knowing exactly how it was made.
 

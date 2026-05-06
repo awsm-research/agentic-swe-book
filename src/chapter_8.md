@@ -335,8 +335,3 @@ The tools covered in Section 8.3 — GitLeaks, Semgrep, Bandit — catch many of
 The practical implication: AI-generated code requires review rigour at least equal to code produced by an engineer unfamiliar with your security requirements. SAST tools establish a floor — they catch the patterns they were trained to recognise. Human review is the second line, responsible for the design-level issues that pattern matching cannot reach. The Perry et al. finding makes the stakes explicit: developers trusted AI-generated code *more* than warranted. Trusting it less — specifically, applying systematic verification to every AI-generated security-relevant function — is the correct calibration.
 
 ---
-
-## Tutorial Activity
-
-[Tutorial 8: SAST Triage — True Positives vs False Positives](./tutorial_8.md) applies the concepts from this chapter hands-on. Working against a deliberately vulnerable Flask application (`labs/ch08_vulnerable_app.py`), you will run Bandit and Semgrep, triage every finding as a true or false positive, fix the confirmed vulnerabilities, and identify what both tools missed.
-

@@ -1,6 +1,6 @@
 # Chapter 10: Licenses, Ethics, and Responsible AI
 
-<!-- > *"The question is not whether AI systems can do things. The question is who is responsible when they do them badly."*
+> *"The question is not whether AI systems can do things. The question is who is responsible when they do them badly."*
 
 ---
 
@@ -467,4 +467,4 @@ if __name__ == "__main__":
     print("=" * 60)
     print(RESPONSIBLE_AI_CHECKLIST)
 ```
- -->
+

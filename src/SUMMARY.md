@@ -43,7 +43,7 @@
 - [Tutorial 5: Code Quality and CI/CD](./tutorial_5.md)
 - [Tutorial 6: The AI-Assisted SDLC: From Spec to Code](./tutorial_6.md)
 - [Tutorial 7: The AI-Assisted SDLC: From Code to Well-Tested App](./tutorial_7.md)
-- [Tutorial 8: SAST Triage — True Positives vs False Positives](./tutorial_8.md)
+- [Tutorial 8: SAST, AI, and Human on Vulnerability Detection](./tutorial_8.md)
 
 # Appendices
  

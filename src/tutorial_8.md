@@ -1,20 +1,21 @@
-# Tutorial 8: SAST Triage — True Positives vs False Positives
+# Tutorial 8: SAST, AI, and Human on Vulnerability Detection
 
-A junior developer built a task-management REST API over the weekend. The code compiles and all unit tests pass. Your job is to run two static analysis tools against the file, collect every finding, and determine which are genuine vulnerabilities and which are tool noise — then fix the real ones.
+A junior developer built a task-management REST API over the weekend. The code compiles and all unit tests pass. Three reviewers are about to look at it: a static analysis tool, an AI assistant, and you. Your job is to run both automated approaches, record what each finds, and apply your own judgement to determine what is real — then compare how well each approach did.
 
-**Concepts covered:** SAST tools (Bandit, Semgrep), true positives vs false positives, OWASP Top 10 mapping, CWE identifiers, AI-generated vulnerability patterns
+**Concepts covered:** SAST tools (Bandit, Semgrep), AI-assisted code review, true positives vs false positives, OWASP Top 10 mapping, CWE identifiers, cross-tool consistency
 
-**Format:** Pairs or small groups | **Duration:** 2 hours | **Tool:** Python, Bandit, Semgrep
+**Format:** Pairs or small groups | **Duration:** 2 hours | **Tool:** Python, Bandit, Semgrep, AI assistant (your choice)
 
 ---
 
 ## Outline
 
-- [Phase 1: Setup](#phase-1--setup-15-min)
-- [Phase 2: Run the Tools](#phase-2--run-the-tools-20-min)
-- [Phase 3: Triage Worksheet](#phase-3--triage-worksheet-50-min)
-- [Phase 4: Fix the True Positives](#phase-4--fix-the-true-positives-20-min)
-- [Phase 5: Group Discussion](#phase-5--group-discussion-15-min)
+- [Phase 1: Setup](#phase-1--setup-10-min)
+- [Phase 2: SAST Analysis](#phase-2--sast-analysis-15-min)
+- [Phase 3: AI Analysis](#phase-3--ai-analysis-20-min)
+- [Phase 4: Comparison Worksheet](#phase-4--comparison-worksheet-35-min)
+- [Phase 5: Fix the True Positives](#phase-5--fix-the-true-positives-20-min)
+- [Phase 6: Group Discussion](#phase-6--group-discussion-20-min)
 - [Reference: Bandit Rule Codes](#reference-bandit-rule-codes)
 - [References](#references)
 
@@ -25,130 +26,204 @@ A junior developer built a task-management REST API over the weekend. The code c
 By the end of this tutorial you will be able to:
 
 1. Run Bandit and Semgrep against a Python codebase and interpret their output.
-2. Distinguish between true positives (real vulnerabilities) and false positives (acceptable patterns the tool over-flags).
-3. Map findings to OWASP Top 10 categories and CWE identifiers.
-4. Propose a minimal, correct fix for each confirmed vulnerability.
-5. Identify vulnerabilities that SAST tools miss entirely (false negatives).
+2. Query an AI assistant to identify security vulnerabilities and record its findings systematically.
+3. Apply human judgement to classify each finding as a true positive or false positive.
+4. Compare what SAST tools, AI assistants, and human review each find — and what each misses.
+5. Explain why consistency between tools does not guarantee correctness.
 
 ---
 
-## Phase 1 — Setup *(~15 min)*
+## Phase 1 — Setup *(~10 min)*
 
-The lab file is at `labs/ch08_vulnerable_app.py`. Install the two SAST tools into a virtual environment:
+### Step 1: Install the SAST tools
+
+The lab file is at `labs/ch08_vulnerable_app.py`. Install Bandit and Semgrep into a virtual environment:
 
 ```bash
 python -m venv .venv && source .venv/bin/activate
 pip install flask bandit semgrep
 ```
 
-Verify they are installed:
+Verify:
 
 ```bash
 bandit --version
 semgrep --version
 ```
 
+### Step 2: Declare your AI tool
+
+Before running any analysis, record which AI assistant your group will use for Phase 3. Write it down — you will need it for the comparison worksheet.
+
+| | Your entry |
+|---|---|
+| **AI tool used** | e.g., Claude, ChatGPT, GitHub Copilot Chat, Gemini |
+| **Model / version (if shown)** | e.g., Claude Sonnet 4.6, GPT-4o |
+| **Access method** | e.g., web interface, IDE extension, API |
+
+You will use the same tool for all AI analysis in this tutorial. Do not switch mid-exercise.
+
 ---
 
-## Phase 2 — Run the Tools *(~20 min)*
+## Phase 2 — SAST Analysis *(~15 min)*
 
-Run each tool against the lab file and save the output so you can refer back to it during triage.
+Run each tool against the lab file and save the output so you can refer back to it.
 
-**Bandit** — a Python-specific SAST tool that maps findings to CWE and reports severity and confidence levels:
+**Bandit:**
 
 ```bash
-# -r  recursive  -ll  medium-and-above severity  -f json  machine-readable output
+# Medium-and-above severity, JSON output
 bandit -r labs/ch08_vulnerable_app.py -ll -f json -o bandit_results.json
 
-# Human-readable version for review
+# Human-readable
 bandit -r labs/ch08_vulnerable_app.py -ll
 ```
 
-**Semgrep** — a multi-language SAST tool that uses rule sets from the community registry:
+**Semgrep:**
 
 ```bash
 semgrep --config=auto labs/ch08_vulnerable_app.py --json -o semgrep_results.json
 
-# Human-readable version
+# Human-readable
 semgrep --config=auto labs/ch08_vulnerable_app.py
 ```
 
-> **Tip:** Bandit and Semgrep flag different subsets of issues. Some findings appear in both tools; some in only one. Note which tool produced each finding — this matters during triage.
+For each finding, note:
+- Which tool reported it
+- The rule ID (e.g., `B608`, `python.lang.security.audit.eval-detected`)
+- The line number
+- The reported severity
+
+> **Tip:** Some findings appear in both tools; some in only one. Track which tool produced each finding — this matters in Phase 4.
+
+### Step 3: Activity — List every SAST finding
+
+Write out every finding from both tools before moving to Phase 3. You will add columns for AI and Human in Phase 4.
 
 ---
 
-## Phase 3 — Triage Worksheet *(~50 min)*
+## Phase 3 — AI Analysis *(~20 min)*
 
-For every finding reported by either tool, complete one row of the triage table below. Work through findings in order of reported severity (Critical → High → Medium → Low).
+Query your chosen AI assistant to independently review the same file. Do this **before** looking at the SAST output in detail — you want an independent assessment.
 
-For each finding, ask:
+### Step 4: Prepare the AI prompt
 
-1. **Is the flagged code reachable with attacker-controlled input?** If not, it may be a false positive.
-2. **Does the context change the risk?** (e.g., MD5 for a password vs. MD5 for an HTTP cache key)
-3. **What is the worst-case impact if the vulnerability is exploited?**
-
-Copy this table into a text file or spreadsheet and fill it in:
+Paste the full contents of `labs/ch08_vulnerable_app.py` into your AI tool with the following prompt:
 
 ```
-| # | Tool    | Rule / Check       | Line | Description                        | TP / FP | Reason                                           | OWASP | CWE   | Proposed Fix                        |
-|---|---------|--------------------|----|-------------------------------------|---------|--------------------------------------------------|-------|-------|-------------------------------------|
-| 1 |         |                    |    |                                     |         |                                                  |       |       |                                     |
-| 2 |         |                    |    |                                     |         |                                                  |       |       |                                     |
-| … |         |                    |    |                                     |         |                                                  |       |       |                                     |
+You are a security engineer reviewing a Python Flask application for vulnerabilities.
+For each security vulnerability you identify, provide:
+1. The function name and line number (approximate is fine)
+2. The vulnerability type (e.g., SQL injection, path traversal, command injection)
+3. The CWE identifier if applicable (e.g., CWE-89)
+4. One sentence explaining why it is vulnerable
+5. One sentence describing the fix
+
+Review the entire file systematically. Include both obvious vulnerabilities and subtle ones.
+Do not skip findings because they look like they might be intentional.
+
+[paste file contents here]
 ```
 
-**Column guide**
+### Step 5: Activity — Record the AI findings
+
+For each vulnerability the AI reports, write down:
+- The function/location it identified
+- The vulnerability type and CWE it named
+- Whether it gave a rationale or just named the type
+
+Also note anything the AI flagged that does not appear in the SAST output, and anything it explicitly said was safe.
+
+---
+
+## Phase 4 — Comparison Worksheet *(~35 min)*
+
+Now bring together what SAST found, what AI found, and your own judgement. For every distinct finding reported by **any** source, complete one row of the comparison table.
+
+### Step 6: Activity — Complete the three-way comparison table
+
+Copy this table into a text file or spreadsheet:
+
+```
+| # | Location (fn / line) | Vulnerability Type | CWE | SAST? (tool) | AI? | Human Verdict | SAST Correct? | AI Correct? | Notes |
+|---|----------------------|--------------------|-----|--------------|-----|---------------|---------------|-------------|-------|
+| 1 |                      |                    |     |              |     | TP / FP       | Y / N         | Y / N       |       |
+| 2 |                      |                    |     |              |     |               |               |             |       |
+```
+
+**Column guide:**
 
 | Column | What to write |
 |---|---|
-| Tool | `bandit`, `semgrep`, or `both` |
-| Rule / Check | The rule ID (e.g. `B608`, `python.lang.security.audit.eval-detected`) |
-| Line | Line number in the source file |
-| Description | One sentence — what the tool thinks is wrong |
-| TP / FP | Your verdict: **TP** (genuine vulnerability) or **FP** (acceptable pattern) |
-| Reason | Why you made that call — cite code context, not just the rule description |
-| OWASP | Relevant OWASP Top 10 category (e.g. A03 — Injection) |
-| CWE | Relevant CWE ID (e.g. CWE-89) |
-| Proposed Fix | For TPs only: one sentence or a code sketch of the fix |
+| Location | Function name and approximate line number |
+| Vulnerability Type | e.g., SQL Injection, Path Traversal, Hardcoded Credential |
+| CWE | CWE identifier (e.g., CWE-89) — look it up if neither tool provided it |
+| SAST? | Which SAST tool(s) flagged it: `bandit`, `semgrep`, `both`, or `—` (missed) |
+| AI? | Did your AI tool flag this? `Y` or `N` |
+| Human Verdict | **TP** — genuine vulnerability, or **FP** — acceptable pattern flagged in error |
+| SAST Correct? | Does the SAST result match your Human Verdict? `Y` (agreed) or `N` (disagreed) |
+| AI Correct? | Does the AI result match your Human Verdict? `Y` (agreed) or `N` (disagreed) |
+| Notes | Any context that affected your verdict — e.g., "ETag, not a security control" |
 
-### Step 1: Activity — Complete the Triage Worksheet
+**When making your Human Verdict, ask:**
 
-Work through every finding. When you have finished, count your totals: how many TPs, how many FPs, how many did both tools catch vs only one?
+1. Is the flagged code reachable with attacker-controlled input?
+2. Does the context change the risk? (MD5 for a password vs. MD5 for a cache key are different risks)
+3. What is the worst-case impact if an attacker exploits this?
+
+### Step 7: Activity — Fill in the summary scorecard
+
+After completing the comparison table, tally your results:
+
+| Metric | SAST | AI | Human (reference) |
+|---|---|---|---|
+| Total findings reported | | | — |
+| True positives identified | | | 13 |
+| False positives reported | | | 5 |
+| False negatives (missed entirely) | | | 3 |
+| Precision (TP / total reported) | | | — |
+| Findings consistent with Human verdict | | | — |
+
+> **Precision** = true positives ÷ total findings reported. A tool that flags 30 issues and 10 are real has precision of 0.33. A tool that flags 5 issues and 5 are real has precision of 1.0 — but may have missed others.
 
 ---
 
-## Phase 4 — Fix the True Positives *(~20 min)*
+## Phase 5 — Fix the True Positives *(~20 min)*
 
-Choose **three** of the confirmed true positives from your worksheet. For each one:
+Choose **three** confirmed true positives from your worksheet where both SAST and AI agreed with your verdict. For each:
 
-1. Write the corrected version of the function directly in the file (create a new function with a `_safe` suffix).
-2. Add a one-line comment explaining what was wrong and how the fix addresses it.
-3. Re-run Bandit on your fixed version to confirm the finding is gone.
+1. Write the corrected version in the file (new function with a `_safe` suffix).
+2. Add a one-line comment explaining the flaw and the fix.
+3. Re-run Bandit to confirm the finding is gone.
 
-> **Constraint:** Do not fix the false positives. If your fix causes Bandit to stop flagging a true false positive, add a `# nosec BXX` annotation with a comment explaining why it is safe, rather than restructuring the code.
+> **Constraint:** Do not fix false positives. If your fix suppresses a false positive, add a `# nosec BXX` annotation explaining why the pattern is safe, rather than restructuring the code around the tool's limitations.
 
-### Step 2: Activity — Verify Your Fixes
-
-After fixing your three chosen vulnerabilities, run both tools again and confirm the findings are resolved:
+### Step 8: Activity — Verify your fixes
 
 ```bash
 bandit -r labs/ch08_vulnerable_app.py -ll
 semgrep --config=auto labs/ch08_vulnerable_app.py
 ```
 
-Check that no new findings were introduced by your fixes.
+Confirm the three findings are gone and no new ones were introduced.
 
 ---
 
-## Phase 5 — Group Discussion *(~15 min)*
+## Phase 6 — Group Discussion *(~20 min)*
 
-Compare your triage worksheets across groups and discuss:
+Compare your completed worksheets across groups and discuss:
 
-1. **Did every group agree on which findings were TP vs FP?** Where did groups disagree, and why?
-2. **Which vulnerabilities did BOTH tools catch?** Which did only one tool catch? Which did neither catch?
-3. **What did the tools miss entirely?** Look at the login route (`/login`) and the admin route (`/admin/users`) — are there security problems there that neither tool reported?
-4. **AI-generated code risk:** If a junior developer used an AI coding assistant to write this file, which of these vulnerabilities might the assistant have introduced? Which are more likely to be human mistakes?
-5. **Severity triage:** If you had only 30 minutes to fix the most critical issues before deploying, which three vulnerabilities would you prioritise and why?
+1. **SAST vs AI coverage**: Which findings did SAST catch that AI missed? Which did AI catch that SAST missed? Were there findings only a human spotted?
+
+2. **Consistency without correctness**: Did SAST and AI agree on any findings that your human verdict classified as false positives? What does agreement between tools tell you — and not tell you?
+
+3. **AI tool variation**: If different groups used different AI tools, compare their finding lists. Did the same tool produce consistent results across groups? Did different tools produce different findings for the same code?
+
+4. **False positive rates**: Compare precision scores from your scorecards. Which approach had the highest precision? Which had the lowest? What is the cost of a high false-positive rate in a real security review?
+
+5. **Design-level gaps**: Look at the login route (`/login`) and admin route (`/admin/users`). Did SAST find anything? Did AI? Did either identify the missing access-control check on `/admin/users`? What does this tell you about the limits of automated tooling?
+
+6. **If a developer used AI to write this code**: Which vulnerabilities are most likely AI-generated? Which are patterns that both AI assistants and AI-written code share — and why?
 
 ---
 
@@ -171,57 +246,67 @@ Compare your triage worksheets across groups and discuss:
 ### Instructor Answer Key
 
 <details>
-<summary><strong>Reveal answer key</strong> — attempt the triage worksheet before expanding</summary>
+<summary><strong>Reveal answer key</strong> — attempt the worksheet before expanding</summary>
 
-> *This section should be distributed only after groups have completed their worksheets.*
+> *Distribute only after groups have completed their worksheets.*
 
-The table below lists every intentional finding in `labs/ch08_vulnerable_app.py` and the expected verdict. **Bold** rows are findings that SAST tools flag but that require human context to classify correctly — these are the false positives.
-
-Run Bandit without any severity filter to see all findings including Low:
+Run Bandit without severity filter to see all findings including Low:
 
 ```bash
 bandit -r labs/ch08_vulnerable_app.py   # no -ll flag
 ```
 
-| Finding | Line | Bandit Rule | Verdict | Key Reasoning |
-|---------|------|-------------|---------|---------------|
-| Hardcoded `app.secret_key` | 43 | B105 | **TP** | Flask session signing key in source code and git history |
-| `STRIPE_API_KEY` — *missed by Bandit* | 49 | — (false negative) | **TP** | Bandit B105 matched `secret_key` but not `STRIPE_API_KEY`; use Semgrep or GitLeaks for broad secrets scanning |
-| **`CACHE_SALT` string** | **50** | **B105 (if flagged)** | **FP** | Not a credential — a static, non-secret cache namespace prefix |
-| SQL injection in `find_task` | 64 | B608 | **TP** | `task_id` is user-controlled and interpolated directly into the query string |
-| SQL injection in `search_tasks` | 78 | B608 | **TP** | `keyword` is user-controlled; `LIKE` with wildcards does not prevent injection |
-| MD5 in `hash_password` | 88 | B324 | **TP** | MD5 is cryptographically broken for password storage; use bcrypt or Argon2 |
-| **MD5 in `compute_etag`** | **93** | **B324** | **FP** | An ETag is a cache identifier, not a security control; MD5 is acceptable for non-cryptographic checksums |
-| `random.randint` in `generate_session_token` | 98 | B311 | **TP** | `random` is seeded and predictable; session tokens must use `secrets.token_urlsafe` |
-| `random.randint` in `generate_reset_code` | 103 | B311 | **TP** | Same issue; a 6-digit code from `random` is brute-forceable |
-| Path traversal in `read_report` | 112 | Semgrep (CWE-22) | **TP** | `filename` comes from the URL with no validation; `../../etc/passwd` escapes `REPORTS_DIR` |
-| **Allowlist-guarded `read_template`** | **119–122** | **Semgrep (CWE-22)** | **FP** | The `allowed` set check before path construction prevents traversal entirely |
-| Command injection in `run_report_generator` | 133–135 | B602 | **TP** | `report_id` is user-supplied and interpolated into a shell command string |
-| **Static `hostname` command** | **144–146** | **B602** | **FP** | Bandit itself notes "seems safe" — the shell string is a hardcoded literal with no user input |
-| `pickle.loads` on cookie data | 159 | B301 | **TP** | `session_data` arrives from an HTTP cookie; arbitrary code execution on deserialization |
-| **`pickle.load` on internal ML model** | **165–166** | **B301** | **FP** | The model file is written by a trusted internal pipeline, not by users; the file path is not user-controlled |
-| **`eval` on constant `"1 + 1"`** | **173** | **B307** | **FP** | The argument is a hardcoded string literal; no user input can reach this call |
-| `eval` on `request.args` in `/calculate` | 200–201 | B307 | **TP** | `expr` is taken directly from the query string; enables arbitrary Python execution |
-| Insecure `mktemp` in `/upload` | 208 | B306 | **TP** | `mktemp` returns a name before creating the file — TOCTOU race condition; use `tempfile.NamedTemporaryFile` |
-| Logging password in `/login` — *missed by both* | 219 | — (false negative) | **TP** | Credentials written to stdout in plaintext; requires manual code review |
-| No auth on `/admin/users` — *missed by both* | 229 | — (false negative) | **TP** | Any unauthenticated caller can list all users; SAST cannot detect design-level access-control gaps |
-| Flask `debug=True` and `host="0.0.0.0"` | 238 | B201, B104 | **TP** | Exposes the Werkzeug interactive debugger on all interfaces; enables remote code execution |
+#### Full finding list with expected verdicts
 
-**Summary counts**
+**Bold** rows are findings that tools flag but human context classifies as false positives.
 
-| Category | Count |
-|----------|-------|
-| True positives (genuine vulnerabilities) | 13 |
-| False positives (tool noise — acceptable patterns) | 5 |
-| False negatives (missed entirely by both tools) | 3 |
+| # | Location | Type | CWE | SAST (Bandit/Semgrep) | Expected AI | Human Verdict | Notes |
+|---|----------|------|-----|----------------------|-------------|---------------|-------|
+| 1 | `app.secret_key` (L43) | Hardcoded credential | CWE-798 | Bandit B105 | Likely Y | **TP** | Flask session signing key — in source and git history |
+| 2 | `STRIPE_API_KEY` (L49) | Hardcoded credential | CWE-798 | **Missed by Bandit**; Semgrep may catch | Likely Y | **TP** | B105 matched `secret_key` but not `STRIPE_API_KEY` — Bandit false negative |
+| 3 | **`CACHE_SALT` (L50)** | **Hardcoded string** | **—** | **B105 (if flagged)** | **May flag** | **FP** | Static, non-secret cache namespace prefix — not a credential |
+| 4 | `find_task` (L64) | SQL injection | CWE-89 | Bandit B608 | Likely Y | **TP** | `task_id` is user-controlled; interpolated directly into query string |
+| 5 | `search_tasks` (L78) | SQL injection | CWE-89 | Bandit B608 | Likely Y | **TP** | `keyword` is user-controlled; `LIKE` does not prevent injection |
+| 6 | `hash_password` (L88) | Broken cryptography | CWE-327 | Bandit B324 | Likely Y | **TP** | MD5 broken for password storage; use bcrypt or Argon2 |
+| 7 | **`compute_etag` (L93)** | **MD5 usage** | **—** | **Bandit B324** | **May flag** | **FP** | ETag is a cache identifier, not a security control; MD5 is acceptable here |
+| 8 | `generate_session_token` (L98) | Weak PRNG | CWE-338 | Bandit B311 | Likely Y | **TP** | `random` is predictable; use `secrets.token_urlsafe` |
+| 9 | `generate_reset_code` (L103) | Weak PRNG | CWE-338 | Bandit B311 | Likely Y | **TP** | 6-digit `random` code is brute-forceable |
+| 10 | `read_report` (L112) | Path traversal | CWE-22 | Semgrep | Likely Y | **TP** | `filename` from URL with no validation; `../../etc/passwd` escapes `REPORTS_DIR` |
+| 11 | **`read_template` (L119–122)** | **Path traversal** | **CWE-22** | **Semgrep** | **May flag** | **FP** | Allowlist check before path construction prevents traversal entirely |
+| 12 | `run_report_generator` (L133–135) | Command injection | CWE-78 | Bandit B602 | Likely Y | **TP** | `report_id` user-supplied and interpolated into shell string |
+| 13 | **`hostname` command (L144–146)** | **`shell=True`** | **—** | **Bandit B602** | **May flag** | **FP** | Hardcoded literal — no user input reachable; Bandit itself notes "seems safe" |
+| 14 | `pickle.loads` on cookie (L159) | Insecure deserialization | CWE-502 | Bandit B301 | Likely Y | **TP** | `session_data` from HTTP cookie; arbitrary code execution on deserialization |
+| 15 | **`pickle.load` on ML model (L165–166)** | **Pickle usage** | **CWE-502** | **Bandit B301** | **May flag** | **FP** | Internal pipeline writes the file; path is not user-controlled |
+| 16 | **`eval("1 + 1")` (L173)** | **`eval` usage** | **—** | **Bandit B307** | **May flag** | **FP** | Hardcoded literal argument; no user input can reach this call |
+| 17 | `eval` on `request.args` (L200–201) | Code injection | CWE-94 | Bandit B307 | Likely Y | **TP** | `expr` from query string; enables arbitrary Python execution |
+| 18 | `mktemp` in `/upload` (L208) | TOCTOU race | CWE-377 | Bandit B306 | Variable | **TP** | `mktemp` returns a name before creating the file; use `tempfile.NamedTemporaryFile` |
+| 19 | Logged password in `/login` (L219) | Sensitive data exposure | CWE-532 | **Missed by both** | Likely Y | **TP** | Credentials written to stdout in plaintext; requires manual or AI review |
+| 20 | No auth on `/admin/users` (L229) | Broken access control | CWE-284 | **Missed by both** | Variable | **TP** | Any unauthenticated caller lists all users; design-level gap invisible to pattern matchers |
+| 21 | `debug=True` + `host="0.0.0.0"` (L238) | Security misconfiguration | CWE-94 | Bandit B201, B104 | Likely Y | **TP** | Werkzeug debugger on all interfaces; remote code execution |
 
-**Key teaching points**
+#### Expected summary scorecard
 
-- Bandit flags *patterns* (any use of MD5, any pickle, any `shell=True`), not *intent*. Context determines whether the pattern is actually exploitable — that is the human's job.
-- B105 matched `app.secret_key` but not `STRIPE_API_KEY`. No SAST tool has perfect pattern coverage; complement Bandit with Semgrep and GitLeaks for secrets.
-- Three findings — the hardcoded Stripe key, the logged password, and the unauthenticated admin route — require manual reasoning and are invisible to at least one or both tools. SAST is a floor, not a ceiling.
-- The false positive rate in this file (~28%) is representative of real-world SAST deployments. Teams that dismiss all FPs start ignoring true positives too.
-- AI coding assistants commonly reproduce all the patterns in this file: SQL concatenation, `debug=True`, hardcoded credentials, and `shell=True` are among the most frequent AI-generated vulnerabilities. Running SAST on every commit catches them before they reach production.
+| Metric | SAST (Bandit+Semgrep) | Notes |
+|---|---|---|
+| Total findings reported | ~18–20 | Varies by Semgrep ruleset version |
+| True positives | 13 | |
+| False positives | 5–7 | Tool version and config dependent |
+| False negatives | 3 | Stripe key, logged password, missing auth |
+| Precision | ~0.65–0.72 | |
+
+**AI tool expectations (approximate — varies by model and prompt):**
+- Strong models (Claude Opus, GPT-4o) typically catch findings 1–18 with low false-positive rates
+- Weaker models may miss the TOCTOU race (finding 18) and the `CACHE_SALT` FP distinction
+- All models tested as of 2025 miss or inconsistently catch finding 20 (missing access control) without explicit prompting about authorisation requirements
+- AI findings 19 and 20 (logged password, missing auth) are the clearest test of whether AI reason about *intent* rather than just *pattern*
+
+#### Key teaching points
+
+- **Consistency ≠ correctness.** If SAST and AI both flag `compute_etag` for MD5, both are wrong. Agreement amplifies confidence, not accuracy.
+- **AI catches what SAST misses — sometimes.** The logged password (finding 19) is typically invisible to Bandit and Semgrep but flagged by most AI assistants. Design-level gaps (finding 20) are harder for all automated tools.
+- **AI has its own false positives.** AI assistants frequently flag `CACHE_SALT`, `pickle` on internal ML models, and `eval("1+1")` — the same patterns SAST over-flags — because they are trained on security advice that says "never use pickle/eval."
+- **Different AI tools produce different results.** The same code produces different finding lists across Claude, ChatGPT, and Copilot Chat. No AI tool has a stable, reproducible output the way Bandit does.
+- **Human review closes gaps all tools share.** Finding 20 — no authentication on `/admin/users` — requires knowing what the access-control requirements *should have been*, which neither SAST nor AI can infer without being told.
 
 </details>
 
@@ -233,4 +318,5 @@ bandit -r labs/ch08_vulnerable_app.py   # no -ll flag
 - [Semgrep documentation](https://semgrep.dev/docs/)
 - [OWASP Top 10 (2021)](https://owasp.org/www-project-top-ten/)
 - [MITRE CWE catalogue](https://cwe.mitre.org/)
-- [GitLeaks](https://github.com/gitleaks/gitleaks)
+- [Perry et al. (2022) — Do Users Write More Insecure Code with AI Assistants?](https://arxiv.org/abs/2211.03622)
+- [Liu et al. (2023) — Refining ChatGPT-Generated Code: Characterizing and Mitigating Code Quality Issues](https://arxiv.org/abs/2307.12596)

@@ -1,0 +1,2234 @@
+This is pdfTeX, Version 3.141592653-2.6-1.40.29 (TeX Live 2026) (preloaded format=pdflatex)
+ restricted \write18 enabled.
+entering extended mode
+(./main.tex
+LaTeX2e <2025-11-01>
+L3 programming layer <2026-01-19>
+(/usr/local/texlive/2026/texmf-dist/tex/latex/base/book.cls
+Document Class: book 2025/01/22 v1.4n Standard LaTeX document class
+(/usr/local/texlive/2026/texmf-dist/tex/latex/base/bk11.clo))
+(/usr/local/texlive/2026/texmf-dist/tex/latex/base/fontenc.sty)
+(/usr/local/texlive/2026/texmf-dist/tex/latex/base/inputenc.sty)
+(/usr/local/texlive/2026/texmf-dist/tex/latex/lm/lmodern.sty)
+(/usr/local/texlive/2026/texmf-dist/tex/latex/geometry/geometry.sty
+(/usr/local/texlive/2026/texmf-dist/tex/latex/graphics/keyval.sty)
+(/usr/local/texlive/2026/texmf-dist/tex/generic/iftex/ifvtex.sty
+(/usr/local/texlive/2026/texmf-dist/tex/generic/iftex/iftex.sty)))
+(/usr/local/texlive/2026/texmf-dist/tex/latex/hyperref/hyperref.sty
+(/usr/local/texlive/2026/texmf-dist/tex/latex/kvsetkeys/kvsetkeys.sty)
+(/usr/local/texlive/2026/texmf-dist/tex/generic/kvdefinekeys/kvdefinekeys.sty)
+(/usr/local/texlive/2026/texmf-dist/tex/generic/pdfescape/pdfescape.sty
+(/usr/local/texlive/2026/texmf-dist/tex/generic/ltxcmds/ltxcmds.sty)
+(/usr/local/texlive/2026/texmf-dist/tex/generic/pdftexcmds/pdftexcmds.sty
+(/usr/local/texlive/2026/texmf-dist/tex/generic/infwarerr/infwarerr.sty)))
+(/usr/local/texlive/2026/texmf-dist/tex/latex/hycolor/hycolor.sty)
+(/usr/local/texlive/2026/texmf-dist/tex/latex/hyperref/nameref.sty
+(/usr/local/texlive/2026/texmf-dist/tex/latex/refcount/refcount.sty)
+(/usr/local/texlive/2026/texmf-dist/tex/generic/gettitlestring/gettitlestring.s
+ty (/usr/local/texlive/2026/texmf-dist/tex/latex/kvoptions/kvoptions.sty)))
+(/usr/local/texlive/2026/texmf-dist/tex/latex/etoolbox/etoolbox.sty)
+(/usr/local/texlive/2026/texmf-dist/tex/generic/stringenc/stringenc.sty)
+(/usr/local/texlive/2026/texmf-dist/tex/latex/hyperref/pd1enc.def)
+(/usr/local/texlive/2026/texmf-dist/tex/generic/intcalc/intcalc.sty)
+(/usr/local/texlive/2026/texmf-dist/tex/latex/hyperref/puenc.def)
+(/usr/local/texlive/2026/texmf-dist/tex/latex/url/url.sty)
+(/usr/local/texlive/2026/texmf-dist/tex/generic/bitset/bitset.sty
+(/usr/local/texlive/2026/texmf-dist/tex/generic/bigintcalc/bigintcalc.sty)))
+(/usr/local/texlive/2026/texmf-dist/tex/latex/hyperref/hpdftex.def
+(/usr/local/texlive/2026/texmf-dist/tex/latex/rerunfilecheck/rerunfilecheck.sty
+
+(/usr/local/texlive/2026/texmf-dist/tex/generic/uniquecounter/uniquecounter.sty
+))) (/usr/local/texlive/2026/texmf-dist/tex/latex/listings/listings.sty
+(/usr/local/texlive/2026/texmf-dist/tex/latex/listings/lstpatch.sty)
+(/usr/local/texlive/2026/texmf-dist/tex/latex/listings/lstmisc.sty)
+(/usr/local/texlive/2026/texmf-dist/tex/latex/listings/listings.cfg))
+==> First Aid for listings.sty no longer applied!
+    Expected:
+        2024/09/23 1.10c (Carsten Heinz)
+    but found:
+        2025/11/14 1.11b (Carsten Heinz)
+    so I'm assuming it got fixed.
+(/usr/local/texlive/2026/texmf-dist/tex/latex/xcolor/xcolor.sty
+(/usr/local/texlive/2026/texmf-dist/tex/latex/graphics-cfg/color.cfg)
+(/usr/local/texlive/2026/texmf-dist/tex/latex/graphics-def/pdftex.def)
+(/usr/local/texlive/2026/texmf-dist/tex/latex/graphics/mathcolor.ltx))
+(/usr/local/texlive/2026/texmf-dist/tex/latex/booktabs/booktabs.sty)
+(/usr/local/texlive/2026/texmf-dist/tex/latex/tools/longtable.sty)
+(/usr/local/texlive/2026/texmf-dist/tex/latex/tools/array.sty)
+(/usr/local/texlive/2026/texmf-dist/tex/latex/graphics/graphicx.sty
+(/usr/local/texlive/2026/texmf-dist/tex/latex/graphics/graphics.sty
+(/usr/local/texlive/2026/texmf-dist/tex/latex/graphics/trig.sty)
+(/usr/local/texlive/2026/texmf-dist/tex/latex/graphics-cfg/graphics.cfg)))
+(/usr/local/texlive/2026/texmf-dist/tex/latex/parskip/parskip.sty)
+(/usr/local/texlive/2026/texmf-dist/tex/latex/microtype/microtype.sty
+(/usr/local/texlive/2026/texmf-dist/tex/latex/microtype/microtype-pdftex.def)
+(/usr/local/texlive/2026/texmf-dist/tex/latex/microtype/microtype.cfg))
+(/usr/local/texlive/2026/texmf-dist/tex/latex/amsmath/amsmath.sty
+For additional information on amsmath, use the `?' option.
+(/usr/local/texlive/2026/texmf-dist/tex/latex/amsmath/amstext.sty
+(/usr/local/texlive/2026/texmf-dist/tex/latex/amsmath/amsgen.sty))
+(/usr/local/texlive/2026/texmf-dist/tex/latex/amsmath/amsbsy.sty)
+(/usr/local/texlive/2026/texmf-dist/tex/latex/amsmath/amsopn.sty))
+(/usr/local/texlive/2026/texmf-dist/tex/latex/amsfonts/amssymb.sty
+(/usr/local/texlive/2026/texmf-dist/tex/latex/amsfonts/amsfonts.sty))
+(/usr/local/texlive/2026/texmf-dist/tex/latex/titlesec/titlesec.sty)
+(/usr/local/texlive/2026/texmf-dist/tex/latex/lm/t1lmr.fd)
+(/usr/local/texlive/2026/texmf-dist/tex/latex/l3backend/l3backend-pdftex.def)
+No file main.aux.
+*geometry* driver: auto-detecting
+*geometry* detected driver: pdftex
+(/usr/local/texlive/2026/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
+[Loading MPS to PDF converter (version 2006.09.02).]
+) (/usr/local/texlive/2026/texmf-dist/tex/latex/epstopdf-pkg/epstopdf-base.sty
+(/usr/local/texlive/2026/texmf-dist/tex/latex/latexconfig/epstopdf-sys.cfg))
+(/usr/local/texlive/2026/texmf-dist/tex/latex/microtype/mt-cmr.cfg)
+(/usr/local/texlive/2026/texmf-dist/tex/latex/lm/ot1lmr.fd)
+(/usr/local/texlive/2026/texmf-dist/tex/latex/lm/omllmm.fd)
+(/usr/local/texlive/2026/texmf-dist/tex/latex/lm/omslmsy.fd)
+(/usr/local/texlive/2026/texmf-dist/tex/latex/lm/omxlmex.fd)
+(/usr/local/texlive/2026/texmf-dist/tex/latex/amsfonts/umsa.fd)
+(/usr/local/texlive/2026/texmf-dist/tex/latex/microtype/mt-msa.cfg)
+(/usr/local/texlive/2026/texmf-dist/tex/latex/amsfonts/umsb.fd)
+(/usr/local/texlive/2026/texmf-dist/tex/latex/microtype/mt-msb.cfg) [1{/usr/loc
+al/texlive/2026/texmf-var/fonts/map/pdftex/updmap/pdftex.map}{/usr/local/texliv
+e/2026/texmf-dist/fonts/enc/dvips/lm/lm-ec.enc}] [2]
+No file main.toc.
+[3] [4] [1] [2]
+Chapter 1.
+[3] (/usr/local/texlive/2026/texmf-dist/tex/latex/lm/ts1lmr.fd) [4] [5{/usr/loc
+al/texlive/2026/texmf-dist/fonts/enc/dvips/lm/lm-ts1.enc}] [6] [7] [8]
+Chapter 2.
+
+Overfull \hbox (5.61856pt too wide) in paragraph at lines 239--244
+\T1/lmr/m/n/10.95 (-20) <div style="display:flex; gap:2.5rem; align-items:flex-
+start; flex-wrap:wrap; margin-bottom:2rem;">
+[9]
+! Misplaced alignment tab character &.
+<argument> Agentic Q&
+                     A
+l.280 <!-- - \textbf{Agentic Q&A}
+                                  — agents that answer complex software en...
+
+!  ==> Fatal error occurred, no output PDF file produced!
+Transcript written on main.log.
+This is pdfTeX, Version 3.141592653-2.6-1.40.29 (TeX Live 2026) (preloaded format=pdflatex)
+ restricted \write18 enabled.
+entering extended mode
+(./main.tex
+LaTeX2e <2025-11-01>
+L3 programming layer <2026-01-19>
+(/usr/local/texlive/2026/texmf-dist/tex/latex/base/book.cls
+Document Class: book 2025/01/22 v1.4n Standard LaTeX document class
+(/usr/local/texlive/2026/texmf-dist/tex/latex/base/bk11.clo))
+(/usr/local/texlive/2026/texmf-dist/tex/latex/base/fontenc.sty)
+(/usr/local/texlive/2026/texmf-dist/tex/latex/base/inputenc.sty)
+(/usr/local/texlive/2026/texmf-dist/tex/latex/lm/lmodern.sty)
+(/usr/local/texlive/2026/texmf-dist/tex/latex/geometry/geometry.sty
+(/usr/local/texlive/2026/texmf-dist/tex/latex/graphics/keyval.sty)
+(/usr/local/texlive/2026/texmf-dist/tex/generic/iftex/ifvtex.sty
+(/usr/local/texlive/2026/texmf-dist/tex/generic/iftex/iftex.sty)))
+(/usr/local/texlive/2026/texmf-dist/tex/latex/hyperref/hyperref.sty
+(/usr/local/texlive/2026/texmf-dist/tex/latex/kvsetkeys/kvsetkeys.sty)
+(/usr/local/texlive/2026/texmf-dist/tex/generic/kvdefinekeys/kvdefinekeys.sty)
+(/usr/local/texlive/2026/texmf-dist/tex/generic/pdfescape/pdfescape.sty
+(/usr/local/texlive/2026/texmf-dist/tex/generic/ltxcmds/ltxcmds.sty)
+(/usr/local/texlive/2026/texmf-dist/tex/generic/pdftexcmds/pdftexcmds.sty
+(/usr/local/texlive/2026/texmf-dist/tex/generic/infwarerr/infwarerr.sty)))
+(/usr/local/texlive/2026/texmf-dist/tex/latex/hycolor/hycolor.sty)
+(/usr/local/texlive/2026/texmf-dist/tex/latex/hyperref/nameref.sty
+(/usr/local/texlive/2026/texmf-dist/tex/latex/refcount/refcount.sty)
+(/usr/local/texlive/2026/texmf-dist/tex/generic/gettitlestring/gettitlestring.s
+ty (/usr/local/texlive/2026/texmf-dist/tex/latex/kvoptions/kvoptions.sty)))
+(/usr/local/texlive/2026/texmf-dist/tex/latex/etoolbox/etoolbox.sty)
+(/usr/local/texlive/2026/texmf-dist/tex/generic/stringenc/stringenc.sty)
+(/usr/local/texlive/2026/texmf-dist/tex/latex/hyperref/pd1enc.def)
+(/usr/local/texlive/2026/texmf-dist/tex/generic/intcalc/intcalc.sty)
+(/usr/local/texlive/2026/texmf-dist/tex/latex/hyperref/puenc.def)
+(/usr/local/texlive/2026/texmf-dist/tex/latex/url/url.sty)
+(/usr/local/texlive/2026/texmf-dist/tex/generic/bitset/bitset.sty
+(/usr/local/texlive/2026/texmf-dist/tex/generic/bigintcalc/bigintcalc.sty)))
+(/usr/local/texlive/2026/texmf-dist/tex/latex/hyperref/hpdftex.def
+(/usr/local/texlive/2026/texmf-dist/tex/latex/rerunfilecheck/rerunfilecheck.sty
+
+(/usr/local/texlive/2026/texmf-dist/tex/generic/uniquecounter/uniquecounter.sty
+))) (/usr/local/texlive/2026/texmf-dist/tex/latex/listings/listings.sty
+(/usr/local/texlive/2026/texmf-dist/tex/latex/listings/lstpatch.sty)
+(/usr/local/texlive/2026/texmf-dist/tex/latex/listings/lstmisc.sty)
+(/usr/local/texlive/2026/texmf-dist/tex/latex/listings/listings.cfg))
+==> First Aid for listings.sty no longer applied!
+    Expected:
+        2024/09/23 1.10c (Carsten Heinz)
+    but found:
+        2025/11/14 1.11b (Carsten Heinz)
+    so I'm assuming it got fixed.
+(/usr/local/texlive/2026/texmf-dist/tex/latex/xcolor/xcolor.sty
+(/usr/local/texlive/2026/texmf-dist/tex/latex/graphics-cfg/color.cfg)
+(/usr/local/texlive/2026/texmf-dist/tex/latex/graphics-def/pdftex.def)
+(/usr/local/texlive/2026/texmf-dist/tex/latex/graphics/mathcolor.ltx))
+(/usr/local/texlive/2026/texmf-dist/tex/latex/booktabs/booktabs.sty)
+(/usr/local/texlive/2026/texmf-dist/tex/latex/tools/longtable.sty)
+(/usr/local/texlive/2026/texmf-dist/tex/latex/tools/array.sty)
+(/usr/local/texlive/2026/texmf-dist/tex/latex/graphics/graphicx.sty
+(/usr/local/texlive/2026/texmf-dist/tex/latex/graphics/graphics.sty
+(/usr/local/texlive/2026/texmf-dist/tex/latex/graphics/trig.sty)
+(/usr/local/texlive/2026/texmf-dist/tex/latex/graphics-cfg/graphics.cfg)))
+(/usr/local/texlive/2026/texmf-dist/tex/latex/parskip/parskip.sty)
+(/usr/local/texlive/2026/texmf-dist/tex/latex/microtype/microtype.sty
+(/usr/local/texlive/2026/texmf-dist/tex/latex/microtype/microtype-pdftex.def)
+(/usr/local/texlive/2026/texmf-dist/tex/latex/microtype/microtype.cfg))
+(/usr/local/texlive/2026/texmf-dist/tex/latex/amsmath/amsmath.sty
+For additional information on amsmath, use the `?' option.
+(/usr/local/texlive/2026/texmf-dist/tex/latex/amsmath/amstext.sty
+(/usr/local/texlive/2026/texmf-dist/tex/latex/amsmath/amsgen.sty))
+(/usr/local/texlive/2026/texmf-dist/tex/latex/amsmath/amsbsy.sty)
+(/usr/local/texlive/2026/texmf-dist/tex/latex/amsmath/amsopn.sty))
+(/usr/local/texlive/2026/texmf-dist/tex/latex/amsfonts/amssymb.sty
+(/usr/local/texlive/2026/texmf-dist/tex/latex/amsfonts/amsfonts.sty))
+(/usr/local/texlive/2026/texmf-dist/tex/latex/titlesec/titlesec.sty)
+(/usr/local/texlive/2026/texmf-dist/tex/latex/lm/t1lmr.fd)
+(/usr/local/texlive/2026/texmf-dist/tex/latex/l3backend/l3backend-pdftex.def)
+(./main.aux)
+*geometry* driver: auto-detecting
+*geometry* detected driver: pdftex
+(./main.out) (./main.out)
+(/usr/local/texlive/2026/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
+[Loading MPS to PDF converter (version 2006.09.02).]
+) (/usr/local/texlive/2026/texmf-dist/tex/latex/epstopdf-pkg/epstopdf-base.sty
+(/usr/local/texlive/2026/texmf-dist/tex/latex/latexconfig/epstopdf-sys.cfg))
+(/usr/local/texlive/2026/texmf-dist/tex/latex/microtype/mt-cmr.cfg)
+(/usr/local/texlive/2026/texmf-dist/tex/latex/lm/ot1lmr.fd)
+(/usr/local/texlive/2026/texmf-dist/tex/latex/lm/omllmm.fd)
+(/usr/local/texlive/2026/texmf-dist/tex/latex/lm/omslmsy.fd)
+(/usr/local/texlive/2026/texmf-dist/tex/latex/lm/omxlmex.fd)
+(/usr/local/texlive/2026/texmf-dist/tex/latex/amsfonts/umsa.fd)
+(/usr/local/texlive/2026/texmf-dist/tex/latex/microtype/mt-msa.cfg)
+(/usr/local/texlive/2026/texmf-dist/tex/latex/amsfonts/umsb.fd)
+(/usr/local/texlive/2026/texmf-dist/tex/latex/microtype/mt-msb.cfg) [1{/usr/loc
+al/texlive/2026/texmf-var/fonts/map/pdftex/updmap/pdftex.map}{/usr/local/texliv
+e/2026/texmf-dist/fonts/enc/dvips/lm/lm-ec.enc}] [2] (./main.toc) [3] [4]
+[1] [2]
+Chapter 1.
+[3] (/usr/local/texlive/2026/texmf-dist/tex/latex/lm/ts1lmr.fd) [4] [5{/usr/loc
+al/texlive/2026/texmf-dist/fonts/enc/dvips/lm/lm-ts1.enc}] [6] [7] [8]
+Chapter 2.
+
+Overfull \hbox (5.61856pt too wide) in paragraph at lines 239--244
+\T1/lmr/m/n/10.95 (-20) <div style="display:flex; gap:2.5rem; align-items:flex-
+start; flex-wrap:wrap; margin-bottom:2rem;">
+[9]
+! Misplaced alignment tab character &.
+<argument> Agentic Q&
+                     A
+l.280 <!-- - \textbf{Agentic Q&A}
+                                  — agents that answer complex software en...
+
+!  ==> Fatal error occurred, no output PDF file produced!
+Transcript written on main.log.
+This is pdfTeX, Version 3.141592653-2.6-1.40.29 (TeX Live 2026) (preloaded format=pdflatex)
+ restricted \write18 enabled.
+entering extended mode
+(./main.tex
+LaTeX2e <2025-11-01>
+L3 programming layer <2026-01-19>
+(/usr/local/texlive/2026/texmf-dist/tex/latex/base/book.cls
+Document Class: book 2025/01/22 v1.4n Standard LaTeX document class
+(/usr/local/texlive/2026/texmf-dist/tex/latex/base/bk11.clo))
+(/usr/local/texlive/2026/texmf-dist/tex/latex/base/fontenc.sty)
+(/usr/local/texlive/2026/texmf-dist/tex/latex/base/inputenc.sty)
+(/usr/local/texlive/2026/texmf-dist/tex/latex/lm/lmodern.sty)
+(/usr/local/texlive/2026/texmf-dist/tex/latex/geometry/geometry.sty
+(/usr/local/texlive/2026/texmf-dist/tex/latex/graphics/keyval.sty)
+(/usr/local/texlive/2026/texmf-dist/tex/generic/iftex/ifvtex.sty
+(/usr/local/texlive/2026/texmf-dist/tex/generic/iftex/iftex.sty)))
+(/usr/local/texlive/2026/texmf-dist/tex/latex/hyperref/hyperref.sty
+(/usr/local/texlive/2026/texmf-dist/tex/latex/kvsetkeys/kvsetkeys.sty)
+(/usr/local/texlive/2026/texmf-dist/tex/generic/kvdefinekeys/kvdefinekeys.sty)
+(/usr/local/texlive/2026/texmf-dist/tex/generic/pdfescape/pdfescape.sty
+(/usr/local/texlive/2026/texmf-dist/tex/generic/ltxcmds/ltxcmds.sty)
+(/usr/local/texlive/2026/texmf-dist/tex/generic/pdftexcmds/pdftexcmds.sty
+(/usr/local/texlive/2026/texmf-dist/tex/generic/infwarerr/infwarerr.sty)))
+(/usr/local/texlive/2026/texmf-dist/tex/latex/hycolor/hycolor.sty)
+(/usr/local/texlive/2026/texmf-dist/tex/latex/hyperref/nameref.sty
+(/usr/local/texlive/2026/texmf-dist/tex/latex/refcount/refcount.sty)
+(/usr/local/texlive/2026/texmf-dist/tex/generic/gettitlestring/gettitlestring.s
+ty (/usr/local/texlive/2026/texmf-dist/tex/latex/kvoptions/kvoptions.sty)))
+(/usr/local/texlive/2026/texmf-dist/tex/latex/etoolbox/etoolbox.sty)
+(/usr/local/texlive/2026/texmf-dist/tex/generic/stringenc/stringenc.sty)
+(/usr/local/texlive/2026/texmf-dist/tex/latex/hyperref/pd1enc.def)
+(/usr/local/texlive/2026/texmf-dist/tex/generic/intcalc/intcalc.sty)
+(/usr/local/texlive/2026/texmf-dist/tex/latex/hyperref/puenc.def)
+(/usr/local/texlive/2026/texmf-dist/tex/latex/url/url.sty)
+(/usr/local/texlive/2026/texmf-dist/tex/generic/bitset/bitset.sty
+(/usr/local/texlive/2026/texmf-dist/tex/generic/bigintcalc/bigintcalc.sty)))
+(/usr/local/texlive/2026/texmf-dist/tex/latex/hyperref/hpdftex.def
+(/usr/local/texlive/2026/texmf-dist/tex/latex/rerunfilecheck/rerunfilecheck.sty
+
+(/usr/local/texlive/2026/texmf-dist/tex/generic/uniquecounter/uniquecounter.sty
+))) (/usr/local/texlive/2026/texmf-dist/tex/latex/listings/listings.sty
+(/usr/local/texlive/2026/texmf-dist/tex/latex/listings/lstpatch.sty)
+(/usr/local/texlive/2026/texmf-dist/tex/latex/listings/lstmisc.sty)
+(/usr/local/texlive/2026/texmf-dist/tex/latex/listings/listings.cfg))
+==> First Aid for listings.sty no longer applied!
+    Expected:
+        2024/09/23 1.10c (Carsten Heinz)
+    but found:
+        2025/11/14 1.11b (Carsten Heinz)
+    so I'm assuming it got fixed.
+(/usr/local/texlive/2026/texmf-dist/tex/latex/xcolor/xcolor.sty
+(/usr/local/texlive/2026/texmf-dist/tex/latex/graphics-cfg/color.cfg)
+(/usr/local/texlive/2026/texmf-dist/tex/latex/graphics-def/pdftex.def)
+(/usr/local/texlive/2026/texmf-dist/tex/latex/graphics/mathcolor.ltx))
+(/usr/local/texlive/2026/texmf-dist/tex/latex/booktabs/booktabs.sty)
+(/usr/local/texlive/2026/texmf-dist/tex/latex/tools/longtable.sty)
+(/usr/local/texlive/2026/texmf-dist/tex/latex/tools/array.sty)
+(/usr/local/texlive/2026/texmf-dist/tex/latex/graphics/graphicx.sty
+(/usr/local/texlive/2026/texmf-dist/tex/latex/graphics/graphics.sty
+(/usr/local/texlive/2026/texmf-dist/tex/latex/graphics/trig.sty)
+(/usr/local/texlive/2026/texmf-dist/tex/latex/graphics-cfg/graphics.cfg)))
+(/usr/local/texlive/2026/texmf-dist/tex/latex/parskip/parskip.sty)
+(/usr/local/texlive/2026/texmf-dist/tex/latex/microtype/microtype.sty
+(/usr/local/texlive/2026/texmf-dist/tex/latex/microtype/microtype-pdftex.def)
+(/usr/local/texlive/2026/texmf-dist/tex/latex/microtype/microtype.cfg))
+(/usr/local/texlive/2026/texmf-dist/tex/latex/amsmath/amsmath.sty
+For additional information on amsmath, use the `?' option.
+(/usr/local/texlive/2026/texmf-dist/tex/latex/amsmath/amstext.sty
+(/usr/local/texlive/2026/texmf-dist/tex/latex/amsmath/amsgen.sty))
+(/usr/local/texlive/2026/texmf-dist/tex/latex/amsmath/amsbsy.sty)
+(/usr/local/texlive/2026/texmf-dist/tex/latex/amsmath/amsopn.sty))
+(/usr/local/texlive/2026/texmf-dist/tex/latex/amsfonts/amssymb.sty
+(/usr/local/texlive/2026/texmf-dist/tex/latex/amsfonts/amsfonts.sty))
+(/usr/local/texlive/2026/texmf-dist/tex/latex/titlesec/titlesec.sty)
+(/usr/local/texlive/2026/texmf-dist/tex/latex/lm/t1lmr.fd)
+(/usr/local/texlive/2026/texmf-dist/tex/latex/l3backend/l3backend-pdftex.def)
+(./main.aux)
+*geometry* driver: auto-detecting
+*geometry* detected driver: pdftex
+(./main.out) (./main.out)
+(/usr/local/texlive/2026/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
+[Loading MPS to PDF converter (version 2006.09.02).]
+) (/usr/local/texlive/2026/texmf-dist/tex/latex/epstopdf-pkg/epstopdf-base.sty
+(/usr/local/texlive/2026/texmf-dist/tex/latex/latexconfig/epstopdf-sys.cfg))
+(/usr/local/texlive/2026/texmf-dist/tex/latex/microtype/mt-cmr.cfg)
+(/usr/local/texlive/2026/texmf-dist/tex/latex/lm/ot1lmr.fd)
+(/usr/local/texlive/2026/texmf-dist/tex/latex/lm/omllmm.fd)
+(/usr/local/texlive/2026/texmf-dist/tex/latex/lm/omslmsy.fd)
+(/usr/local/texlive/2026/texmf-dist/tex/latex/lm/omxlmex.fd)
+(/usr/local/texlive/2026/texmf-dist/tex/latex/amsfonts/umsa.fd)
+(/usr/local/texlive/2026/texmf-dist/tex/latex/microtype/mt-msa.cfg)
+(/usr/local/texlive/2026/texmf-dist/tex/latex/amsfonts/umsb.fd)
+(/usr/local/texlive/2026/texmf-dist/tex/latex/microtype/mt-msb.cfg) [1{/usr/loc
+al/texlive/2026/texmf-var/fonts/map/pdftex/updmap/pdftex.map}{/usr/local/texliv
+e/2026/texmf-dist/fonts/enc/dvips/lm/lm-ec.enc}] [2] (./main.toc [3] [4]
+[5]
+Overfull \hbox (2.51758pt too wide) in paragraph at lines 168--168
+ [][] [][][]\T1/lmr/m/n/10.95 (-20) 6.5 The Agen-tic SDLC: Spec $\rightar-row$ 
+Gen-er-ate $\rightar-row$ Ver-ify $\rightar- 
+[6] [7] [8] [9] [10] [11] [12] [13] [14] [15]) [16] [1] [2]
+Chapter 1.
+[3] (/usr/local/texlive/2026/texmf-dist/tex/latex/lm/ts1lmr.fd) [4] [5{/usr/loc
+al/texlive/2026/texmf-dist/fonts/enc/dvips/lm/lm-ts1.enc}] [6] [7] [8]
+Chapter 2.
+
+Overfull \hbox (5.61856pt too wide) in paragraph at lines 239--244
+\T1/lmr/m/n/10.95 (-20) <div style="display:flex; gap:2.5rem; align-items:flex-
+start; flex-wrap:wrap; margin-bottom:2rem;">
+[9] [10] [11] [12]
+Chapter 3.
+[13]
+Overfull \hbox (79.50342pt too wide) in paragraph at lines 345--355
+[][] 
+
+Overfull \hbox (35.72249pt too wide) has occurred while \output is active
+\T1/lmr/m/n/10.95 14 \T1/lmr/m/sl/10.95 CHAPTER 3.  CHAPTER 1: SOFTWARE ENGINEE
+RING FUNDAMENTALS AND PROCESSES
+[14]
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+
+Overfull \hbox (134.98941pt too wide) in paragraph at lines 420--429
+[] 
+[15]
+Overfull \hbox (35.72249pt too wide) has occurred while \output is active
+\T1/lmr/m/n/10.95 16 \T1/lmr/m/sl/10.95 CHAPTER 3.  CHAPTER 1: SOFTWARE ENGINEE
+RING FUNDAMENTALS AND PROCESSES
+[16 <./images/nato-conference-photo.png (PNG copy)>]
+Overfull \hbox (389.13882pt too wide) in paragraph at lines 474--483
+[][] 
+
+Underfull \vbox (badness 1248) has occurred while \output is active [17 <./imag
+es/chapter-1-ppt-model.png>]
+Overfull \hbox (35.72249pt too wide) has occurred while \output is active
+\T1/lmr/m/n/10.95 18 \T1/lmr/m/sl/10.95 CHAPTER 3.  CHAPTER 1: SOFTWARE ENGINEE
+RING FUNDAMENTALS AND PROCESSES
+[18]
+Overfull \hbox (198.64178pt too wide) in paragraph at lines 530--539
+[] 
+
+Overfull \hbox (361.81804pt too wide) in paragraph at lines 550--559
+[][] 
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+[19]
+Overfull \hbox (149.85933pt too wide) in paragraph at lines 580--589
+[][] 
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+
+Overfull \hbox (35.72249pt too wide) has occurred while \output is active
+\T1/lmr/m/n/10.95 20 \T1/lmr/m/sl/10.95 CHAPTER 3.  CHAPTER 1: SOFTWARE ENGINEE
+RING FUNDAMENTALS AND PROCESSES
+[20 <./images/chapter-1-cost-to-fix-bugs.png>] [21 <./images/waterfall.png (PNG
+ copy)>]
+Overfull \hbox (35.72249pt too wide) has occurred while \output is active
+\T1/lmr/m/n/10.95 22 \T1/lmr/m/sl/10.95 CHAPTER 3.  CHAPTER 1: SOFTWARE ENGINEE
+RING FUNDAMENTALS AND PROCESSES
+[22]
+Underfull \vbox (badness 1571) has occurred while \output is active [23 <./imag
+es/chapter-1-agile-manifesto.png>]
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+
+Overfull \hbox (35.72249pt too wide) has occurred while \output is active
+\T1/lmr/m/n/10.95 24 \T1/lmr/m/sl/10.95 CHAPTER 3.  CHAPTER 1: SOFTWARE ENGINEE
+RING FUNDAMENTALS AND PROCESSES
+[24 <./images/chapter-1-scrum.png>] [25 <./images/chapter-1-kanban.png>]
+Overfull \hbox (35.72249pt too wide) has occurred while \output is active
+\T1/lmr/m/n/10.95 26 \T1/lmr/m/sl/10.95 CHAPTER 3.  CHAPTER 1: SOFTWARE ENGINEE
+RING FUNDAMENTALS AND PROCESSES
+[26] [27]
+Overfull \hbox (35.72249pt too wide) has occurred while \output is active
+\T1/lmr/m/n/10.95 28 \T1/lmr/m/sl/10.95 CHAPTER 3.  CHAPTER 1: SOFTWARE ENGINEE
+RING FUNDAMENTALS AND PROCESSES
+[28]
+Chapter 4.
+[29] [30] [31]
+Overfull \hbox (313.78123pt too wide) in paragraph at lines 1010--1023
+[][] 
+
+Underfull \vbox (badness 2035) has occurred while \output is active [32]
+Overfull \hbox (604.1594pt too wide) in paragraph at lines 1045--1057
+[][] 
+(/usr/local/texlive/2026/texmf-dist/tex/latex/lm/t1lmtt.fd) [33]
+Overfull \hbox (128.97017pt too wide) in paragraph at lines 1090--1100
+[][] 
+[34]
+Overfull \hbox (20.61096pt too wide) in paragraph at lines 1131--1140
+[][] 
+[35] [36] [37] [38] [39] [40]
+Chapter 5.
+[41] (/usr/local/texlive/2026/texmf-dist/tex/latex/listings/lstlang1.sty)
+[42] [43] [44] [45] [46] [47] [48] [49] [50] [51]
+Underfull \vbox (badness 6842) has occurred while \output is active [52]
+[53] [54] [55] [56] [57] [58]
+Chapter 6.
+[59]
+Overfull \hbox (14.54335pt too wide) in paragraph at lines 2229--2237
+[][] 
+[60] [61] [62]
+Overfull \hbox (32.80066pt too wide) in paragraph at lines 2379--2380
+[]\T1/lmr/bx/n/10.95 (-20) Valid (non-zero)\T1/lmr/m/n/10.95 (-20) : any CODESP
+AN_0_END, e.g. CODESPAN_1_END, CODESPAN_2_END,
+[63] [64]
+Overfull \hbox (55.81683pt too wide) in paragraph at lines 2442--2443
+[]\T1/lmr/bx/n/10.95 (-20) Example\T1/lmr/m/n/10.95 (-20) : test-ing that CODES
+PAN_0_END re-turns CODESPAN_1_END, and that CODESPAN_2_END
+[65] [66] (/usr/local/texlive/2026/texmf-dist/tex/latex/listings/lstlang1.sty)
+(/usr/local/texlive/2026/texmf-dist/tex/latex/listings/lstlang1.sty) [67]
+[68]
+Chapter 7.
+
+Overfull \hbox (68.3156pt too wide) in paragraph at lines 2654--2667
+[][] 
+[69]
+Overfull \hbox (14.5835pt too wide) has occurred while \output is active
+\T1/lmr/m/n/10.95 70 \T1/lmr/m/sl/10.95 CHAPTER 7.  CHAPTER 5: AUTOMATED CODE R
+EVIEW, CODE QUALITY, AND CI/CD
+[70] [71]
+Overfull \hbox (14.5835pt too wide) has occurred while \output is active
+\T1/lmr/m/n/10.95 72 \T1/lmr/m/sl/10.95 CHAPTER 7.  CHAPTER 5: AUTOMATED CODE R
+EVIEW, CODE QUALITY, AND CI/CD
+[72] [73]
+Overfull \hbox (18.60484pt too wide) in paragraph at lines 2866--2867
+[]\T1/lmr/m/n/10.95 (-20) Fixing the an-no-ta-tion to CODESPAN_0_END forces ev-
+ery caller to han-dle the CODESPAN_1_END
+
+Overfull \hbox (14.5835pt too wide) has occurred while \output is active
+\T1/lmr/m/n/10.95 74 \T1/lmr/m/sl/10.95 CHAPTER 7.  CHAPTER 5: AUTOMATED CODE R
+EVIEW, CODE QUALITY, AND CI/CD
+[74]
+Overfull \hbox (41.27982pt too wide) in paragraph at lines 2904--2905
+[]\T1/lmr/m/n/10.95 (-20) The CODESPAN_0_END block runs be-fore ev-ery job, in-
+stalling de-pen-den-cies. The CODESPAN_1_END
+[75]
+Overfull \hbox (14.5835pt too wide) has occurred while \output is active
+\T1/lmr/m/n/10.95 76 \T1/lmr/m/sl/10.95 CHAPTER 7.  CHAPTER 5: AUTOMATED CODE R
+EVIEW, CODE QUALITY, AND CI/CD
+[76] [77] [78]
+Chapter 8.
+[79]
+Overfull \hbox (6.97801pt too wide) has occurred while \output is active
+\T1/lmr/m/n/10.95 80 \T1/lmr/m/sl/10.95 CHAPTER 8.  CHAPTER 6: AGENTIC SOFTWARE
+ ENGINEERING: A NEW PARADIGM
+[80]
+Overfull \hbox (637.99239pt too wide) in paragraph at lines 3030--3041
+[][] 
+[81]
+Overfull \hbox (6.97801pt too wide) has occurred while \output is active
+\T1/lmr/m/n/10.95 82 \T1/lmr/m/sl/10.95 CHAPTER 8.  CHAPTER 6: AGENTIC SOFTWARE
+ ENGINEERING: A NEW PARADIGM
+[82] [83]
+Overfull \hbox (68.77757pt too wide) in paragraph at lines 3133--3142
+[][] 
+
+Overfull \hbox (6.97801pt too wide) has occurred while \output is active
+\T1/lmr/m/n/10.95 84 \T1/lmr/m/sl/10.95 CHAPTER 8.  CHAPTER 6: AGENTIC SOFTWARE
+ ENGINEERING: A NEW PARADIGM
+[84]
+Overfull \hbox (12.85155pt too wide) in paragraph at lines 3175--3175
+|[]\T1/lmr/bx/n/14.4 (-20) 6.5 The Agen-tic SDLC: Spec $\rightar-row$ Gen-er-at
+e $\rightar-
+
+Overfull \hbox (189.55229pt too wide) has occurred while \output is active
+\T1/lmr/m/sl/10.95 8.6.  6.5 THE AGENTIC SDLC: SPEC $\RIGHTARROW$ GENERATE $\RI
+GHTARROW$ VERIFY $\RIGHTARROW$ REFINE \T1/lmr/m/n/10.95 85
+[85]
+Overfull \hbox (73.3703pt too wide) in paragraph at lines 3227--3240
+[][] 
+
+Overfull \hbox (6.97801pt too wide) has occurred while \output is active
+\T1/lmr/m/n/10.95 86 \T1/lmr/m/sl/10.95 CHAPTER 8.  CHAPTER 6: AGENTIC SOFTWARE
+ ENGINEERING: A NEW PARADIGM
+[86] [87]
+Overfull \hbox (54.38606pt too wide) in paragraph at lines 3283--3284
+[]\T1/lmr/bx/n/10.95 (-20) Context file dis-ci-pline. \T1/lmr/m/n/10.95 (-20) M
+ain-tain a project-level con-text file (CODESPAN_0_END, CODESPAN_1_END,
+
+Overfull \hbox (6.97801pt too wide) has occurred while \output is active
+\T1/lmr/m/n/10.95 88 \T1/lmr/m/sl/10.95 CHAPTER 8.  CHAPTER 6: AGENTIC SOFTWARE
+ ENGINEERING: A NEW PARADIGM
+[88] [89]
+Overfull \hbox (6.97801pt too wide) has occurred while \output is active
+\T1/lmr/m/n/10.95 90 \T1/lmr/m/sl/10.95 CHAPTER 8.  CHAPTER 6: AGENTIC SOFTWARE
+ ENGINEERING: A NEW PARADIGM
+[90] [91]
+Overfull \hbox (1.66814pt too wide) in paragraph at lines 3425--3426
+[]\T1/lmr/m/n/10.95 (-20) Anthropic. (2024). \T1/lmr/m/it/10.95 (-20) Model Con
+-text Pro-to-col Spec-i-fi-ca-tion\T1/lmr/m/n/10.95 (-20) . [][]$\T1/lmtt/m/n/1
+0.95 https : / / modelcontextprotocol .
+
+Overfull \hbox (156.60329pt too wide) in paragraph at lines 3426--3427
+[][]$\T1/lmtt/m/n/10.95 https : / / github . blog / 2022-[]09-[]07-[]research-[
+]quantifying-[]github-[]copilots-[]impact-[]on-[]developer-[]productivity/$[][]
+ 
+
+Overfull \hbox (6.97801pt too wide) has occurred while \output is active
+\T1/lmr/m/n/10.95 92 \T1/lmr/m/sl/10.95 CHAPTER 8.  CHAPTER 6: AGENTIC SOFTWARE
+ ENGINEERING: A NEW PARADIGM
+[92] [93]
+Overfull \hbox (6.97801pt too wide) has occurred while \output is active
+\T1/lmr/m/n/10.95 94 \T1/lmr/m/sl/10.95 CHAPTER 8.  CHAPTER 6: AGENTIC SOFTWARE
+ ENGINEERING: A NEW PARADIGM
+[94]
+Chapter 9.
+[95]
+Overfull \hbox (89.63422pt too wide) has occurred while \output is active
+\T1/lmr/m/n/10.95 96 \T1/lmr/m/sl/10.95 CHAPTER 9.  CHAPTER 7: CONFIGURING THE 
+AGENT'S WORLD --- CONTEXT, SKILLS, AND TOOLS
+[96] [97]
+Overfull \hbox (89.63422pt too wide) has occurred while \output is active
+\T1/lmr/m/n/10.95 98 \T1/lmr/m/sl/10.95 CHAPTER 9.  CHAPTER 7: CONFIGURING THE 
+AGENT'S WORLD --- CONTEXT, SKILLS, AND TOOLS
+[98]
+Overfull \hbox (5.46391pt too wide) in paragraph at lines 3643--3653
+[][] 
+[99]
+Overfull \hbox (95.1092pt too wide) has occurred while \output is active
+\T1/lmr/m/n/10.95 100 \T1/lmr/m/sl/10.95 CHAPTER 9.  CHAPTER 7: CONFIGURING THE
+ AGENT'S WORLD --- CONTEXT, SKILLS, AND TOOLS
+[100] [101]
+Overfull \hbox (95.1092pt too wide) has occurred while \output is active
+\T1/lmr/m/n/10.95 102 \T1/lmr/m/sl/10.95 CHAPTER 9.  CHAPTER 7: CONFIGURING THE
+ AGENT'S WORLD --- CONTEXT, SKILLS, AND TOOLS
+[102] [103]
+Overfull \hbox (95.1092pt too wide) has occurred while \output is active
+\T1/lmr/m/n/10.95 104 \T1/lmr/m/sl/10.95 CHAPTER 9.  CHAPTER 7: CONFIGURING THE
+ AGENT'S WORLD --- CONTEXT, SKILLS, AND TOOLS
+[104] [105]
+Overfull \hbox (44.2446pt too wide) in paragraph at lines 4006--4016
+[][] 
+
+Overfull \hbox (95.1092pt too wide) has occurred while \output is active
+\T1/lmr/m/n/10.95 106 \T1/lmr/m/sl/10.95 CHAPTER 9.  CHAPTER 7: CONFIGURING THE
+ AGENT'S WORLD --- CONTEXT, SKILLS, AND TOOLS
+[106] [107]
+Overfull \hbox (95.1092pt too wide) has occurred while \output is active
+\T1/lmr/m/n/10.95 108 \T1/lmr/m/sl/10.95 CHAPTER 9.  CHAPTER 7: CONFIGURING THE
+ AGENT'S WORLD --- CONTEXT, SKILLS, AND TOOLS
+[108]
+Chapter 10.
+[109]
+Overfull \hbox (132.15141pt too wide) in paragraph at lines 4153--4168
+[][] 
+[110]
+Overfull \hbox (36.89223pt too wide) in paragraph at lines 4233--4234
+\T1/lmr/m/n/10.95 (-20) Path traver-sal al-lows at-tack-ers to ac-cess files ou
+t-side the in-tended di-rec-tory by us-ing CODESPAN_0_END
+[111] [112] [113] [114] [115] [116]
+Chapter 11.
+[117]
+Overfull \hbox (8.03981pt too wide) has occurred while \output is active
+\T1/lmr/m/n/10.95 118 \T1/lmr/m/sl/10.95 CHAPTER 11.  CHAPTER 9: SECURITY CONCE
+RNS OF AGENTIC AI CODING TOOLS
+[118] [119]
+Overfull \hbox (8.03981pt too wide) has occurred while \output is active
+\T1/lmr/m/n/10.95 120 \T1/lmr/m/sl/10.95 CHAPTER 11.  CHAPTER 9: SECURITY CONCE
+RNS OF AGENTIC AI CODING TOOLS
+[120] [121]
+Overfull \hbox (8.03981pt too wide) has occurred while \output is active
+\T1/lmr/m/n/10.95 122 \T1/lmr/m/sl/10.95 CHAPTER 11.  CHAPTER 9: SECURITY CONCE
+RNS OF AGENTIC AI CODING TOOLS
+[122]
+Overfull \hbox (23.75145pt too wide) in paragraph at lines 4760--4761
+[]\T1/lmr/m/n/10.95 (-20) Pin MCP server ver-sions in your con-fig-u-ra-tion (C
+ODESPAN_0_END not CODESPAN_1_END) 
+[123]
+Overfull \hbox (8.03981pt too wide) has occurred while \output is active
+\T1/lmr/m/n/10.95 124 \T1/lmr/m/sl/10.95 CHAPTER 11.  CHAPTER 9: SECURITY CONCE
+RNS OF AGENTIC AI CODING TOOLS
+[124] [125]
+Overfull \hbox (8.03981pt too wide) has occurred while \output is active
+\T1/lmr/m/n/10.95 126 \T1/lmr/m/sl/10.95 CHAPTER 11.  CHAPTER 9: SECURITY CONCE
+RNS OF AGENTIC AI CODING TOOLS
+[126] [127]
+Overfull \hbox (203.10982pt too wide) in paragraph at lines 4949--4963
+[] 
+
+Overfull \hbox (8.03981pt too wide) has occurred while \output is active
+\T1/lmr/m/n/10.95 128 \T1/lmr/m/sl/10.95 CHAPTER 11.  CHAPTER 9: SECURITY CONCE
+RNS OF AGENTIC AI CODING TOOLS
+[128] [129]
+Overfull \hbox (48.99582pt too wide) in paragraph at lines 5031--5032
+[]\T1/lmr/bx/n/10.95 (-20) Supply chain at-tacks \T1/lmr/m/n/10.95 (-20) tar-ge
+t agent con-fig-u-ra-tion files (CODESPAN_0_END, CODESPAN_1_END)
+
+Overfull \hbox (8.03981pt too wide) has occurred while \output is active
+\T1/lmr/m/n/10.95 130 \T1/lmr/m/sl/10.95 CHAPTER 11.  CHAPTER 9: SECURITY CONCE
+RNS OF AGENTIC AI CODING TOOLS
+[130] [131]
+Overfull \hbox (8.03981pt too wide) has occurred while \output is active
+\T1/lmr/m/n/10.95 132 \T1/lmr/m/sl/10.95 CHAPTER 11.  CHAPTER 9: SECURITY CONCE
+RNS OF AGENTIC AI CODING TOOLS
+[132] [133] [134]
+Chapter 12.
+[135]
+Overfull \hbox (61.80386pt too wide) in paragraph at lines 5130--5139
+[][] 
+
+Overfull \hbox (3.48026pt too wide) has occurred while \output is active
+\T1/lmr/m/n/10.95 136 \T1/lmr/m/sl/10.95 CHAPTER 12.  CHAPTER 10: SOFTWARE MAIN
+TENANCE AND TECHNICAL DEBTS
+[136]
+Overfull \hbox (88.12947pt too wide) in paragraph at lines 5156--5163
+[][] 
+
+Overfull \hbox (341.33049pt too wide) in paragraph at lines 5174--5189
+[][] 
+
+Underfull \vbox (badness 1057) has occurred while \output is active [137]
+Overfull \hbox (31.43849pt too wide) in paragraph at lines 5216--5217
+\T1/lmr/m/n/10.95 (-20) mark it --- CODESPAN_1_END, CODESPAN_2_END, CODESPAN_3_
+END, CODESPAN_4_END.
+
+Overfull \hbox (3.48026pt too wide) has occurred while \output is active
+\T1/lmr/m/n/10.95 138 \T1/lmr/m/sl/10.95 CHAPTER 12.  CHAPTER 10: SOFTWARE MAIN
+TENANCE AND TECHNICAL DEBTS
+[138]
+Overfull \hbox (135.3111pt too wide) in paragraph at lines 5229--5240
+[][] 
+
+Overfull \hbox (39.77797pt too wide) in paragraph at lines 5251--5252
+[]\T1/lmr/m/n/10.95 (-20) The out-put is the list of files most worth in-ves-ti
+-gat-ing with CODESPAN_0_END or CODESPAN_1_END.
+[139]
+Overfull \hbox (599.74004pt too wide) in paragraph at lines 5296--5309
+[][] 
+
+Overfull \hbox (3.48026pt too wide) has occurred while \output is active
+\T1/lmr/m/n/10.95 140 \T1/lmr/m/sl/10.95 CHAPTER 12.  CHAPTER 10: SOFTWARE MAIN
+TENANCE AND TECHNICAL DEBTS
+[140] [141]
+Overfull \hbox (3.48026pt too wide) has occurred while \output is active
+\T1/lmr/m/n/10.95 142 \T1/lmr/m/sl/10.95 CHAPTER 12.  CHAPTER 10: SOFTWARE MAIN
+TENANCE AND TECHNICAL DEBTS
+[142] [143]
+Overfull \hbox (64.3527pt too wide) in paragraph at lines 5447--5457
+[][] 
+
+Overfull \hbox (3.48026pt too wide) has occurred while \output is active
+\T1/lmr/m/n/10.95 144 \T1/lmr/m/sl/10.95 CHAPTER 12.  CHAPTER 10: SOFTWARE MAIN
+TENANCE AND TECHNICAL DEBTS
+[144] [145]
+Overfull \hbox (3.48026pt too wide) has occurred while \output is active
+\T1/lmr/m/n/10.95 146 \T1/lmr/m/sl/10.95 CHAPTER 12.  CHAPTER 10: SOFTWARE MAIN
+TENANCE AND TECHNICAL DEBTS
+[146]
+Chapter 13.
+
+Overfull \hbox (6.63626pt too wide) in paragraph at lines 5544--5544
+|\T1/lmr/bx/n/24.88 (-20) Chapter 11: Soft-ware Ver-sion-ing, Pack-
+[147]
+Overfull \hbox (475.6593pt too wide) in paragraph at lines 5599--5608
+[][] 
+
+Overfull \hbox (39.14703pt too wide) has occurred while \output is active
+\T1/lmr/m/n/10.95 148 \T1/lmr/m/sl/10.95 CHAPTER 13.  CHAPTER 11: SOFTWARE VERS
+IONING, PACKAGING, AND DEPLOYMENT
+[148] [149]
+Overfull \hbox (14.84912pt too wide) in paragraph at lines 5642--5643
+\T1/lmr/m/n/10.95 (-20) dered be-fore the un-suf-fixed ver-sion (CODESPAN_3_END
+ is older than CODESPAN_4_END). 
+
+Overfull \hbox (0.2884pt too wide) in paragraph at lines 5646--5647
+[]\T1/lmr/m/n/10.95 (-20) Pin pre-release suf-fixes in lock-files --- CODESPAN_
+0_END does not match CODESPAN_1_END
+
+Overfull \hbox (12.98497pt too wide) in paragraph at lines 5655--5656
+[]\T1/lmr/bx/n/10.95 (-20) Floating tags in pro-duc-tion \T1/lmr/m/n/10.95 (-20
+) --- de-pend-ing on CODESPAN_0_END, CODESPAN_1_END,
+
+Overfull \hbox (0.94832pt too wide) in paragraph at lines 5662--5663
+[]\T1/lmr/m/n/10.95 (-20) The les-son did not stick for ev-ery-one. In Jan-uary
+ 2022, the main-tainer of the CODESPAN_0_END
+
+Overfull \hbox (219.6937pt too wide) in paragraph at lines 5672--5680
+[][] 
+
+Overfull \hbox (39.14703pt too wide) has occurred while \output is active
+\T1/lmr/m/n/10.95 150 \T1/lmr/m/sl/10.95 CHAPTER 13.  CHAPTER 11: SOFTWARE VERS
+IONING, PACKAGING, AND DEPLOYMENT
+[150]
+Overfull \hbox (261.72359pt too wide) in paragraph at lines 5718--5728
+[][] 
+[151]
+Overfull \hbox (49.39531pt too wide) in paragraph at lines 5729--5730
+[]\T1/lmr/m/n/10.95 (-20) Lockfiles must be com-mit-ted to source con-trol. A C
+ODESPAN_0_END that ex-cludes CODESPAN_1_END
+
+Overfull \hbox (39.14703pt too wide) has occurred while \output is active
+\T1/lmr/m/n/10.95 152 \T1/lmr/m/sl/10.95 CHAPTER 13.  CHAPTER 11: SOFTWARE VERS
+IONING, PACKAGING, AND DEPLOYMENT
+[152]
+Overfull \hbox (327.74391pt too wide) in paragraph at lines 5757--5767
+[][] 
+[153]
+Overfull \hbox (39.14703pt too wide) has occurred while \output is active
+\T1/lmr/m/n/10.95 154 \T1/lmr/m/sl/10.95 CHAPTER 13.  CHAPTER 11: SOFTWARE VERS
+IONING, PACKAGING, AND DEPLOYMENT
+[154]
+Overfull \hbox (17.60297pt too wide) in paragraph at lines 5845--5846
+[]\T1/lmr/m/n/10.95 (-20) Secrets in build args --- any-one who pulls the im-ag
+e can ex-tract them with CODESPAN_0_END. 
+[155]
+Overfull \hbox (39.14703pt too wide) has occurred while \output is active
+\T1/lmr/m/n/10.95 156 \T1/lmr/m/sl/10.95 CHAPTER 13.  CHAPTER 11: SOFTWARE VERS
+IONING, PACKAGING, AND DEPLOYMENT
+[156]
+Underfull \vbox (badness 1436) has occurred while \output is active [157]
+Overfull \hbox (355.75348pt too wide) in paragraph at lines 6004--6014
+[][] 
+
+Overfull \hbox (39.14703pt too wide) has occurred while \output is active
+\T1/lmr/m/n/10.95 158 \T1/lmr/m/sl/10.95 CHAPTER 13.  CHAPTER 11: SOFTWARE VERS
+IONING, PACKAGING, AND DEPLOYMENT
+[158]
+Overfull \hbox (309.34616pt too wide) in paragraph at lines 6029--6041
+[][] 
+[159]
+Overfull \hbox (39.14703pt too wide) has occurred while \output is active
+\T1/lmr/m/n/10.95 160 \T1/lmr/m/sl/10.95 CHAPTER 13.  CHAPTER 11: SOFTWARE VERS
+IONING, PACKAGING, AND DEPLOYMENT
+[160] [161]
+Overfull \hbox (39.14703pt too wide) has occurred while \output is active
+\T1/lmr/m/n/10.95 162 \T1/lmr/m/sl/10.95 CHAPTER 13.  CHAPTER 11: SOFTWARE VERS
+IONING, PACKAGING, AND DEPLOYMENT
+[162] [163]
+Overfull \hbox (39.14703pt too wide) has occurred while \output is active
+\T1/lmr/m/n/10.95 164 \T1/lmr/m/sl/10.95 CHAPTER 13.  CHAPTER 11: SOFTWARE VERS
+IONING, PACKAGING, AND DEPLOYMENT
+[164]
+Chapter 14.
+[165] [166]
+Overfull \hbox (50.0844pt too wide) in paragraph at lines 6269--6277
+[][] 
+[167]
+Overfull \hbox (51.17343pt too wide) in paragraph at lines 6321--6330
+[][] 
+[168]
+Overfull \hbox (0.9916pt too wide) in paragraph at lines 6377--6388
+[][] 
+[169]
+Overfull \hbox (169.0017pt too wide) in paragraph at lines 6451--6460
+[][] 
+[170] [171] [172] [173] [174] [175] [176] [177] [178] [179] [180]
+Chapter 15.
+[181]
+Overfull \hbox (112.37822pt too wide) in paragraph at lines 6847--6858
+[][] 
+
+Overfull \hbox (42.46805pt too wide) in paragraph at lines 6859--6860
+[]\T1/lmr/m/n/10.95 (-20) For a new project in 2025, CODESPAN_0_END is the rec-
+om-mended start-ing point. CODESPAN_1_END
+
+Overfull \hbox (171.29695pt too wide) has occurred while \output is active
+\T1/lmr/m/n/10.95 182 \T1/lmr/m/sl/10.95 CHAPTER 15.  TUTORIAL 1: SETTING UP YO
+UR PYTHON AND GITLAB FOR CODE AND PROJECT MANAGEMENT
+[182]
+Overfull \hbox (11.25336pt too wide) in paragraph at lines 6887--6888
+\T1/lmr/m/n/10.95 (-20) CODESPAN_3_END (which pins the Python ver-sion for the 
+project). Delete CODESPAN_4_END
+
+Overfull \hbox (2.22682pt too wide) in paragraph at lines 6904--6905
+[]\T1/lmr/m/n/10.95 (-20) As you add dev de-pen-den-cies in Step 3, CODESPAN_0_
+END will ap-pend a CODESPAN_1_END
+
+Overfull \hbox (23.43636pt too wide) has occurred while \output is active
+\T1/lmr/m/sl/10.95 15.3.  PART A: SETTING UP YOUR PYTHON DEVELOPMENT ENVIRONMEN
+T \T1/lmr/m/it/10.95 (~60 MIN) \T1/lmr/m/n/10.95 183
+[183]
+Overfull \hbox (171.29695pt too wide) has occurred while \output is active
+\T1/lmr/m/n/10.95 184 \T1/lmr/m/sl/10.95 CHAPTER 15.  TUTORIAL 1: SETTING UP YO
+UR PYTHON AND GITLAB FOR CODE AND PROJECT MANAGEMENT
+[184]
+Overfull \hbox (19.54593pt too wide) in paragraph at lines 7044--7056
+[][] 
+
+Overfull \hbox (23.43636pt too wide) has occurred while \output is active
+\T1/lmr/m/sl/10.95 15.3.  PART A: SETTING UP YOUR PYTHON DEVELOPMENT ENVIRONMEN
+T \T1/lmr/m/it/10.95 (~60 MIN) \T1/lmr/m/n/10.95 185
+[185]
+Overfull \hbox (93.71643pt too wide) in paragraph at lines 7078--7087
+[] 
+
+Overfull \hbox (43.77895pt too wide) in paragraph at lines 7110--7111
+[]\T1/lmr/m/n/10.95 (-20) Add a CODESPAN_0_END func-tion and a CODESPAN_1_END f
+unc-tion to CODESPAN_2_END. 
+
+Overfull \hbox (1.06201pt too wide) in paragraph at lines 7139--7140
+\T1/lmr/m/n/10.95 (-20) When a team col-lab-o-rates on a shared repos-i-tory, u
+n-con-trolled pushes to the CODESPAN_0_END
+
+Overfull \hbox (171.29695pt too wide) has occurred while \output is active
+\T1/lmr/m/n/10.95 186 \T1/lmr/m/sl/10.95 CHAPTER 15.  TUTORIAL 1: SETTING UP YO
+UR PYTHON AND GITLAB FOR CODE AND PROJECT MANAGEMENT
+[186]
+Overfull \hbox (74.15977pt too wide) in paragraph at lines 7143--7153
+[][] 
+[187]
+Overfull \hbox (171.29695pt too wide) has occurred while \output is active
+\T1/lmr/m/n/10.95 188 \T1/lmr/m/sl/10.95 CHAPTER 15.  TUTORIAL 1: SETTING UP YO
+UR PYTHON AND GITLAB FOR CODE AND PROJECT MANAGEMENT
+[188 <./images/tutorial-1-gitlab-flow.png>]
+Overfull \hbox (178.76524pt too wide) in paragraph at lines 7259--7266
+[][] 
+[189]
+Overfull \hbox (34.52133pt too wide) in paragraph at lines 7355--7356
+[]\T1/lmr/m/n/10.95 (-20) Optionally set \T1/lmr/bx/n/10.95 (-20) La-bels \T1/l
+mr/m/n/10.95 (-20) (e.g., CODESPAN_0_END, CODESPAN_1_END, CODESPAN_2_END),
+
+Overfull \hbox (171.29695pt too wide) has occurred while \output is active
+\T1/lmr/m/n/10.95 190 \T1/lmr/m/sl/10.95 CHAPTER 15.  TUTORIAL 1: SETTING UP YO
+UR PYTHON AND GITLAB FOR CODE AND PROJECT MANAGEMENT
+[190]
+Overfull \hbox (13.46729pt too wide) in paragraph at lines 7404--7405
+[]\T1/lmr/m/n/10.95 (-20) Enter the es-ti-mate (e.g. CODESPAN_0_END, CODESPAN_1
+_END, CODESPAN_2_END)
+[191]
+Overfull \hbox (82.36421pt too wide) in paragraph at lines 7458--7468
+[][] 
+
+Overfull \hbox (171.29695pt too wide) has occurred while \output is active
+\T1/lmr/m/n/10.95 192 \T1/lmr/m/sl/10.95 CHAPTER 15.  TUTORIAL 1: SETTING UP YO
+UR PYTHON AND GITLAB FOR CODE AND PROJECT MANAGEMENT
+[192 <./images/tutorial-1-burndown-chart.png>]
+Overfull \hbox (52.81908pt too wide) in paragraph at lines 7469--7476
+[][] 
+[193]
+Overfull \hbox (26.65012pt too wide) in paragraph at lines 7524--7525
+[]\T1/lmr/bx/n/10.95 (-20) Supported clos-ing key-words: \T1/lmr/m/n/10.95 (-20
+) CODESPAN_0_END, CODESPAN_1_END, CODESPAN_2_END
+
+Overfull \hbox (50.81755pt too wide) in paragraph at lines 7567--7568
+[]\T1/lmr/m/n/10.95 (-20) Conventional Com-mits --- Spec-i-fi-ca-tion for the c
+om-mit mes-sage type tag for-mat (CODESPAN_0_END,
+
+Overfull \hbox (171.29695pt too wide) has occurred while \output is active
+\T1/lmr/m/n/10.95 194 \T1/lmr/m/sl/10.95 CHAPTER 15.  TUTORIAL 1: SETTING UP YO
+UR PYTHON AND GITLAB FOR CODE AND PROJECT MANAGEMENT
+[194]
+Chapter 16.
+
+Overfull \hbox (13.58798pt too wide) in paragraph at lines 7578--7578
+|\T1/lmr/bx/n/24.88 (-20) Tutorial 2: Elic-it-ing Re-quire-ments from
+[195]
+Overfull \hbox (14.50407pt too wide) has occurred while \output is active
+\T1/lmr/m/n/10.95 196 \T1/lmr/m/sl/10.95 CHAPTER 16.  TUTORIAL 2: ELICITING REQ
+UIREMENTS FROM AI AS YOUR CLIENT
+[196 <./images/tutorial2-copilot-ui.png>] [197]
+Overfull \hbox (39.97289pt too wide) in paragraph at lines 7709--7720
+[][] 
+
+Overfull \hbox (14.50407pt too wide) has occurred while \output is active
+\T1/lmr/m/n/10.95 198 \T1/lmr/m/sl/10.95 CHAPTER 16.  TUTORIAL 2: ELICITING REQ
+UIREMENTS FROM AI AS YOUR CLIENT
+[198] [199]
+Overfull \hbox (14.50407pt too wide) has occurred while \output is active
+\T1/lmr/m/n/10.95 200 \T1/lmr/m/sl/10.95 CHAPTER 16.  TUTORIAL 2: ELICITING REQ
+UIREMENTS FROM AI AS YOUR CLIENT
+[200]
+Chapter 17.
+[201]
+Overfull \hbox (502.24225pt too wide) in paragraph at lines 7867--7879
+[][] 
+[202]
+Overfull \hbox (256.2627pt too wide) in paragraph at lines 7898--7906
+[][] 
+[203] [204]
+Overfull \hbox (35.4402pt too wide) in paragraph at lines 7964--7965
+\T1/lmr/m/n/10.95 (-20) Draw a class di-a-gram for the core do-main. In-clude a
+t least: CODESPAN_0_END, CODESPAN_1_END,
+[205] [206]
+Underfull \vbox (badness 10000) has occurred while \output is active [207]
+[208] [209] [210] [211] [212]
+Chapter 18.
+[213] [214] [215]
+Underfull \vbox (badness 10000) has occurred while \output is active [216]
+[217]
+Overfull \hbox (0.15494pt too wide) in paragraph at lines 8668--8676
+[][] 
+
+Overfull \hbox (39.65651pt too wide) in paragraph at lines 8687--8688
+[]\T1/lmr/m/n/10.95 (-20) When a func-tion is ex-pected to raise an ex-cep-tion
+, Act and As-sert merge into a sin-gle CODESPAN_0_END
+[218]
+Overfull \hbox (25.4887pt too wide) in paragraph at lines 8748--8749
+[]\T1/lmr/m/n/10.95 (-20) Python CODESPAN_0_END Doc-u-men-ta-tion --- Built-in 
+test frame-work: CODESPAN_1_END,
+[219] [220]
+Chapter 19.
+
+Overfull \hbox (5.4448pt too wide) in paragraph at lines 8762--8767
+[][] 
+[221] [222] [223]
+Overfull \hbox (16.5194pt too wide) in paragraph at lines 8994--9002
+[][] 
+[224] [225]
+Overfull \hbox (355.11678pt too wide) in paragraph at lines 9075--9086
+[][] 
+[226]
+Overfull \hbox (59.33026pt too wide) in paragraph at lines 9158--9159
+[]\T1/lmr/m/n/10.95 (-20) CODESPAN_0_END and CODESPAN_1_END run in par-al-lel -
+-- they share the CODESPAN_2_END
+[227]
+Overfull \hbox (60.741pt too wide) in paragraph at lines 9229--9230
+[]\T1/lmr/bx/n/10.95 (-20) Why CODESPAN_0_END and CODESPAN_1_END are skipped: \
+T1/lmr/m/n/10.95 (-20) when the CODESPAN_2_END
+[228]
+Overfull \hbox (44.72496pt too wide) in paragraph at lines 9273--9274
+[]\T1/lmr/m/n/10.95 (-20) GitLab Pre-de-fined CI/CD Vari-ables --- Vari-ables a
+vail-able in ev-ery CI job (e.g., CODESPAN_0_END,
+[229] [230]
+Chapter 20.
+[231] [232] [233] [234] [235] [236]
+Overfull \hbox (111.08829pt too wide) in paragraph at lines 9620--9631
+[][] 
+[237] [238] [239] [240] [241] [242]
+Chapter 21.
+[243]
+Overfull \hbox (43.78072pt too wide) has occurred while \output is active
+\T1/lmr/m/n/10.95 244 \T1/lmr/m/sl/10.95 CHAPTER 21.  TUTORIAL 7: THE AI-ASSIST
+ED SDLC: FROM CODE TO WELL-TESTED APP
+[244] [245]
+Overfull \hbox (45.79605pt too wide) in paragraph at lines 10016--10017
+[]\T1/lmr/m/n/10.95 (-20) Here is a bug re-port: CODESPAN_0_END re-turns 200 an
+d the re-sponse body shows CODESPAN_1_END,
+
+Overfull \hbox (281.67093pt too wide) in paragraph at lines 10024--10033
+[][] 
+
+Overfull \hbox (62.19905pt too wide) in paragraph at lines 10048--10049
+[]\T1/lmr/m/n/10.95 (-20) Given the cur-rent im-ple-men-ta-tion in CODESPAN_0_E
+ND, CODESPAN_1_END, and CODESPAN_2_END,
+
+Overfull \hbox (43.78072pt too wide) has occurred while \output is active
+\T1/lmr/m/n/10.95 246 \T1/lmr/m/sl/10.95 CHAPTER 21.  TUTORIAL 7: THE AI-ASSIST
+ED SDLC: FROM CODE TO WELL-TESTED APP
+[246]
+Overfull \hbox (24.09149pt too wide) in paragraph at lines 10052--10053
+[]\T1/lmr/m/n/10.95 (-20) What is the risk of adding an CODESPAN_0_END branch d
+i-rectly in-side CODESPAN_1_END? 
+
+Overfull \hbox (311.11682pt too wide) in paragraph at lines 10084--10094
+[][] 
+[247]
+Overfull \hbox (43.78072pt too wide) has occurred while \output is active
+\T1/lmr/m/n/10.95 248 \T1/lmr/m/sl/10.95 CHAPTER 21.  TUTORIAL 7: THE AI-ASSIST
+ED SDLC: FROM CODE TO WELL-TESTED APP
+[248]
+Underfull \vbox (badness 10000) has occurred while \output is active [249]
+Underfull \vbox (badness 10000) has occurred while \output is active
+Overfull \hbox (43.78072pt too wide) has occurred while \output is active
+\T1/lmr/m/n/10.95 250 \T1/lmr/m/sl/10.95 CHAPTER 21.  TUTORIAL 7: THE AI-ASSIST
+ED SDLC: FROM CODE TO WELL-TESTED APP
+[250]
+Overfull \hbox (2.23534pt too wide) in paragraph at lines 10292--10293
+[]\T1/lmr/m/n/10.95 (-20) pytest Doc-u-men-ta-tion --- Test frame-work; fix-tur
+es, as-ser-tions, and the CODESPAN_0_END
+
+Overfull \hbox (53.75172pt too wide) in paragraph at lines 10294--10295
+[]\T1/lmr/m/n/10.95 (-20) unittest.mock Doc-u-men-ta-tion --- CODESPAN_0_END, C
+ODESPAN_1_END, CODESPAN_2_END,
+[251]
+Overfull \hbox (43.78072pt too wide) has occurred while \output is active
+\T1/lmr/m/n/10.95 252 \T1/lmr/m/sl/10.95 CHAPTER 21.  TUTORIAL 7: THE AI-ASSIST
+ED SDLC: FROM CODE TO WELL-TESTED APP
+[252]
+Chapter 22.
+
+Overfull \hbox (108.39066pt too wide) in paragraph at lines 10306--10311
+[][] 
+[253]
+Overfull \hbox (21.57845pt too wide) has occurred while \output is active
+\T1/lmr/m/n/10.95 254 \T1/lmr/m/sl/10.95 CHAPTER 22.  TUTORIAL 8: SAST, AI, AND
+ HUMAN ON VULNERABILITY DETECTION
+[254] [255]
+Overfull \hbox (363.76422pt too wide) in paragraph at lines 10465--10466
+[][][][][][] 
+
+Overfull \hbox (319.37756pt too wide) in paragraph at lines 10472--10486
+[][] 
+
+Overfull \hbox (21.57845pt too wide) has occurred while \output is active
+\T1/lmr/m/n/10.95 256 \T1/lmr/m/sl/10.95 CHAPTER 22.  TUTORIAL 8: SAST, AI, AND
+ HUMAN ON VULNERABILITY DETECTION
+[256] [257]
+Overfull \hbox (999.15752pt too wide) in paragraph at lines 10610--10636
+[][] 
+
+Overfull \hbox (13.27914pt too wide) in paragraph at lines 10639--10649
+[] 
+
+Overfull \hbox (21.57845pt too wide) has occurred while \output is active
+\T1/lmr/m/n/10.95 258 \T1/lmr/m/sl/10.95 CHAPTER 22.  TUTORIAL 8: SAST, AI, AND
+ HUMAN ON VULNERABILITY DETECTION
+[258] [259]
+Overfull \hbox (21.57845pt too wide) has occurred while \output is active
+\T1/lmr/m/n/10.95 260 \T1/lmr/m/sl/10.95 CHAPTER 22.  TUTORIAL 8: SAST, AI, AND
+ HUMAN ON VULNERABILITY DETECTION
+[260]
+Chapter 23.
+
+Overfull \hbox (213.57016pt too wide) in paragraph at lines 10691--10696
+[][] 
+[261]
+Overfull \hbox (18.532pt too wide) has occurred while \output is active
+\T1/lmr/m/n/10.95 262 \T1/lmr/m/sl/10.95 CHAPTER 23.  TUTORIAL 9: INTEGRATING S
+AST INTO A CI/CD SECURITY PIPELINE
+[262]
+Overfull \hbox (40.06844pt too wide) in paragraph at lines 10821--10822
+[]\T1/lmr/m/n/10.95 (-20) Semgrep's CODESPAN_0_END rule-set cov-ers in-jec-tion
+ and in-se-cure API pat-terns; CODESPAN_1_END
+[263]
+Overfull \hbox (18.532pt too wide) has occurred while \output is active
+\T1/lmr/m/n/10.95 264 \T1/lmr/m/sl/10.95 CHAPTER 23.  TUTORIAL 9: INTEGRATING S
+AST INTO A CI/CD SECURITY PIPELINE
+[264] [265]
+Overfull \hbox (18.532pt too wide) has occurred while \output is active
+\T1/lmr/m/n/10.95 266 \T1/lmr/m/sl/10.95 CHAPTER 23.  TUTORIAL 9: INTEGRATING S
+AST INTO A CI/CD SECURITY PIPELINE
+[266]
+Overfull \hbox (46.60176pt too wide) in paragraph at lines 11030--11031
+[]\T1/lmr/m/n/10.95 (-20) The rule should flag CODESPAN_0_END and pass CODESPAN
+_1_END. If it flags CODESPAN_2_END,
+
+Overfull \hbox (14.09767pt too wide) in paragraph at lines 11037--11038
+[]\T1/lmr/m/n/10.95 (-20) Flag any CODESPAN_0_END / CODESPAN_1_END call that pa
+sses CODESPAN_2_END
+[267]
+Overfull \hbox (18.532pt too wide) has occurred while \output is active
+\T1/lmr/m/n/10.95 268 \T1/lmr/m/sl/10.95 CHAPTER 23.  TUTORIAL 9: INTEGRATING S
+AST INTO A CI/CD SECURITY PIPELINE
+[268] [269]
+Overfull \hbox (18.532pt too wide) has occurred while \output is active
+\T1/lmr/m/n/10.95 270 \T1/lmr/m/sl/10.95 CHAPTER 23.  TUTORIAL 9: INTEGRATING S
+AST INTO A CI/CD SECURITY PIPELINE
+[270] [271]
+Overfull \hbox (18.532pt too wide) has occurred while \output is active
+\T1/lmr/m/n/10.95 272 \T1/lmr/m/sl/10.95 CHAPTER 23.  TUTORIAL 9: INTEGRATING S
+AST INTO A CI/CD SECURITY PIPELINE
+[272]
+Chapter 24.
+[273]
+Overfull \hbox (88.8719pt too wide) has occurred while \output is active
+\T1/lmr/m/n/10.95 274 \T1/lmr/m/sl/10.95 CHAPTER 24.  TUTORIAL 10: REFACTOR TO 
+REDUCE COMPLEXITY WITHOUT BREAKING TESTS
+[274]
+Overfull \hbox (24.38774pt too wide) in paragraph at lines 11381--11382
+\T1/lmr/m/it/10.95 (-20) never eval-u-ated. Putting the CODESPAN_2_END check fi
+rst means CODESPAN_3_END
+
+Overfull \hbox (54.92036pt too wide) in paragraph at lines 11381--11382
+\T1/lmr/m/it/10.95 (-20) CODESPAN_5_END rather than a CODESPAN_6_END from com-p
+ar-ing CODESPAN_7_END
+[275]
+Underfull \vbox (badness 10000) has occurred while \output is active
+Overfull \hbox (88.8719pt too wide) has occurred while \output is active
+\T1/lmr/m/n/10.95 276 \T1/lmr/m/sl/10.95 CHAPTER 24.  TUTORIAL 10: REFACTOR TO 
+REDUCE COMPLEXITY WITHOUT BREAKING TESTS
+[276]
+Overfull \hbox (29.45575pt too wide) in paragraph at lines 11509--11510
+\T1/lmr/m/n/10.95 (-20) Before chang-ing any code, write down what is mak-ing t
+he func-tion com-plex. Open CODESPAN_0_END
+[277]
+Overfull \hbox (88.8719pt too wide) has occurred while \output is active
+\T1/lmr/m/n/10.95 278 \T1/lmr/m/sl/10.95 CHAPTER 24.  TUTORIAL 10: REFACTOR TO 
+REDUCE COMPLEXITY WITHOUT BREAKING TESTS
+[278]
+Overfull \hbox (7.14734pt too wide) in paragraph at lines 11627--11628
+\T1/lmr/m/n/10.95 (-20) for CODESPAN_2_END, plus a small CODESPAN_3_END func-ti
+on rated CODESPAN_4_END
+[279]
+Overfull \hbox (88.8719pt too wide) has occurred while \output is active
+\T1/lmr/m/n/10.95 280 \T1/lmr/m/sl/10.95 CHAPTER 24.  TUTORIAL 10: REFACTOR TO 
+REDUCE COMPLEXITY WITHOUT BREAKING TESTS
+[280] [281]
+Overfull \hbox (88.8719pt too wide) has occurred while \output is active
+\T1/lmr/m/n/10.95 282 \T1/lmr/m/sl/10.95 CHAPTER 24.  TUTORIAL 10: REFACTOR TO 
+REDUCE COMPLEXITY WITHOUT BREAKING TESTS
+[282] [283]
+Overfull \hbox (88.8719pt too wide) has occurred while \output is active
+\T1/lmr/m/n/10.95 284 \T1/lmr/m/sl/10.95 CHAPTER 24.  TUTORIAL 10: REFACTOR TO 
+REDUCE COMPLEXITY WITHOUT BREAKING TESTS
+[284] [285]
+Overfull \hbox (88.8719pt too wide) has occurred while \output is active
+\T1/lmr/m/n/10.95 286 \T1/lmr/m/sl/10.95 CHAPTER 24.  TUTORIAL 10: REFACTOR TO 
+REDUCE COMPLEXITY WITHOUT BREAKING TESTS
+[286]
+Chapter 25.
+
+Overfull \hbox (534.72751pt too wide) in paragraph at lines 11987--11992
+[][] 
+
+Overfull \hbox (21.32024pt too wide) in paragraph at lines 12011--12012
+[]\T1/lmr/m/n/10.95 (-20) Compose a CODESPAN_0_END stack with named vol-umes, s
+e-crets, and CODESPAN_1_END. 
+[287]
+Overfull \hbox (43.9104pt too wide) in paragraph at lines 12065--12066
+[]\T1/lmr/m/n/10.95 (-20) The CODESPAN_0_END di-rec-tory is empty in ver-sion c
+on-trol; only the place-holder CODESPAN_1_END
+
+Overfull \hbox (23.70518pt too wide) has occurred while \output is active
+\T1/lmr/m/n/10.95 288 \T1/lmr/m/sl/10.95 CHAPTER 25.  TUTORIAL 11: CONTAINERISE
+ AND SHIP A THREE-TIER APPLICATION
+[288] [289]
+Overfull \hbox (23.70518pt too wide) has occurred while \output is active
+\T1/lmr/m/n/10.95 290 \T1/lmr/m/sl/10.95 CHAPTER 25.  TUTORIAL 11: CONTAINERISE
+ AND SHIP A THREE-TIER APPLICATION
+[290]
+Overfull \hbox (1.06091pt too wide) in paragraph at lines 12234--12235
+[]\T1/lmr/bx/it/10.95 (-20) The di-gest in CODESPAN_0_END is il-lus-tra-tive. \
+T1/lmr/m/it/10.95 (-20) Run CODESPAN_1_END
+
+Overfull \hbox (43.46689pt too wide) in paragraph at lines 12243--12244
+[]\T1/lmr/bx/n/10.95 (-20) CODESPAN_0_END \T1/lmr/m/n/10.95 (-20) --- gives the
+ API time to con-nect to Post-gres and run CODESPAN_1_END
+[291] (/usr/local/texlive/2026/texmf-dist/tex/latex/listings/lstlang1.sty)
+(/usr/local/texlive/2026/texmf-dist/tex/latex/listings/lstmisc.sty)
+Overfull \hbox (23.70518pt too wide) has occurred while \output is active
+\T1/lmr/m/n/10.95 292 \T1/lmr/m/sl/10.95 CHAPTER 25.  TUTORIAL 11: CONTAINERISE
+ AND SHIP A THREE-TIER APPLICATION
+[292] [293]
+Overfull \hbox (23.70518pt too wide) has occurred while \output is active
+\T1/lmr/m/n/10.95 294 \T1/lmr/m/sl/10.95 CHAPTER 25.  TUTORIAL 11: CONTAINERISE
+ AND SHIP A THREE-TIER APPLICATION
+[294]
+Overfull \hbox (40.1874pt too wide) in paragraph at lines 12420--12421
+[]\T1/lmr/m/n/10.95 (-20) CODESPAN_0_END --- Com-pose builds the im-age \T1/lmr
+/m/it/10.95 (-20) and \T1/lmr/m/n/10.95 (-20) tags it with what-ever CODESPAN_1
+_END
+
+Overfull \hbox (46.18896pt too wide) in paragraph at lines 12432--12433
+[]\T1/lmr/m/n/10.95 (-20) Expected: three ser-vices, all CODESPAN_0_END af-ter 
+about 20 sec-onds. If any are CODESPAN_1_END,
+[295]
+Overfull \hbox (23.70518pt too wide) has occurred while \output is active
+\T1/lmr/m/n/10.95 296 \T1/lmr/m/sl/10.95 CHAPTER 25.  TUTORIAL 11: CONTAINERISE
+ AND SHIP A THREE-TIER APPLICATION
+[296] [297]
+Overfull \hbox (23.70518pt too wide) has occurred while \output is active
+\T1/lmr/m/n/10.95 298 \T1/lmr/m/sl/10.95 CHAPTER 25.  TUTORIAL 11: CONTAINERISE
+ AND SHIP A THREE-TIER APPLICATION
+[298] [299]
+Overfull \hbox (23.70518pt too wide) has occurred while \output is active
+\T1/lmr/m/n/10.95 300 \T1/lmr/m/sl/10.95 CHAPTER 25.  TUTORIAL 11: CONTAINERISE
+ AND SHIP A THREE-TIER APPLICATION
+[300]
+Chapter 26.
+
+Overfull \hbox (243.13654pt too wide) in paragraph at lines 12715--12720
+[][] 
+[301]
+Overfull \hbox (38.71742pt too wide) in paragraph at lines 12802--12803
+\T1/lmr/m/n/10.95 (-20) CODESPAN_1_END matches GPL v2, GPL v3, and GNU Gen-eral
+ Pub-lic Li-cense; CODESPAN_2_END
+
+Overfull \hbox (32.52646pt too wide) has occurred while \output is active
+\T1/lmr/m/n/10.95 302 \T1/lmr/m/sl/10.95 CHAPTER 26.  TUTORIAL 12: LICENCES, PR
+IVACY, AND RESPONSIBLE AI IN PRACTICE
+[302] [303]
+Overfull \hbox (51.81871pt too wide) in paragraph at lines 12862--12872
+[][] 
+
+Overfull \hbox (32.52646pt too wide) has occurred while \output is active
+\T1/lmr/m/n/10.95 304 \T1/lmr/m/sl/10.95 CHAPTER 26.  TUTORIAL 12: LICENCES, PR
+IVACY, AND RESPONSIBLE AI IN PRACTICE
+[304] [305]
+Overfull \hbox (32.52646pt too wide) has occurred while \output is active
+\T1/lmr/m/n/10.95 306 \T1/lmr/m/sl/10.95 CHAPTER 26.  TUTORIAL 12: LICENCES, PR
+IVACY, AND RESPONSIBLE AI IN PRACTICE
+[306] [307]
+Overfull \hbox (336.00043pt too wide) in paragraph at lines 13111--13120
+[][] 
+
+Overfull \hbox (32.52646pt too wide) has occurred while \output is active
+\T1/lmr/m/n/10.95 308 \T1/lmr/m/sl/10.95 CHAPTER 26.  TUTORIAL 12: LICENCES, PR
+IVACY, AND RESPONSIBLE AI IN PRACTICE
+[308] [309]
+Overfull \hbox (7.58122pt too wide) in paragraph at lines 13202--13203
+[]\T1/lmr/m/n/10.95 (-20) If your project al-ready has a pass-ing CI con-fig-u-
+ra-tion from Tu-to-rial 9, add the CODESPAN_0_END
+
+Overfull \hbox (32.52646pt too wide) has occurred while \output is active
+\T1/lmr/m/n/10.95 310 \T1/lmr/m/sl/10.95 CHAPTER 26.  TUTORIAL 12: LICENCES, PR
+IVACY, AND RESPONSIBLE AI IN PRACTICE
+[310] (./main.aux) )
+(see the transcript file for additional information)</usr/local/texlive/2026/te
+xmf-dist/fonts/type1/public/lm/lmbx10.pfb></usr/local/texlive/2026/texmf-dist/f
+onts/type1/public/lm/lmbx12.pfb></usr/local/texlive/2026/texmf-dist/fonts/type1
+/public/lm/lmbxi10.pfb></usr/local/texlive/2026/texmf-dist/fonts/type1/public/l
+m/lmr10.pfb></usr/local/texlive/2026/texmf-dist/fonts/type1/public/lm/lmr12.pfb
+></usr/local/texlive/2026/texmf-dist/fonts/type1/public/lm/lmr17.pfb></usr/loca
+l/texlive/2026/texmf-dist/fonts/type1/public/lm/lmr6.pfb></usr/local/texlive/20
+26/texmf-dist/fonts/type1/public/lm/lmri10.pfb></usr/local/texlive/2026/texmf-d
+ist/fonts/type1/public/lm/lmro10.pfb></usr/local/texlive/2026/texmf-dist/fonts/
+type1/public/lm/lmtk10.pfb></usr/local/texlive/2026/texmf-dist/fonts/type1/publ
+ic/lm/lmtt10.pfb>
+Output written on main.pdf (326 pages, 14015774 bytes).
+Transcript written on main.log.
+This is pdfTeX, Version 3.141592653-2.6-1.40.29 (TeX Live 2026) (preloaded format=pdflatex)
+ restricted \write18 enabled.
+entering extended mode
+(./main.tex
+LaTeX2e <2025-11-01>
+L3 programming layer <2026-01-19>
+(/usr/local/texlive/2026/texmf-dist/tex/latex/base/book.cls
+Document Class: book 2025/01/22 v1.4n Standard LaTeX document class
+(/usr/local/texlive/2026/texmf-dist/tex/latex/base/bk11.clo))
+(/usr/local/texlive/2026/texmf-dist/tex/latex/base/fontenc.sty)
+(/usr/local/texlive/2026/texmf-dist/tex/latex/base/inputenc.sty)
+(/usr/local/texlive/2026/texmf-dist/tex/latex/lm/lmodern.sty)
+(/usr/local/texlive/2026/texmf-dist/tex/latex/geometry/geometry.sty
+(/usr/local/texlive/2026/texmf-dist/tex/latex/graphics/keyval.sty)
+(/usr/local/texlive/2026/texmf-dist/tex/generic/iftex/ifvtex.sty
+(/usr/local/texlive/2026/texmf-dist/tex/generic/iftex/iftex.sty)))
+(/usr/local/texlive/2026/texmf-dist/tex/latex/hyperref/hyperref.sty
+(/usr/local/texlive/2026/texmf-dist/tex/latex/kvsetkeys/kvsetkeys.sty)
+(/usr/local/texlive/2026/texmf-dist/tex/generic/kvdefinekeys/kvdefinekeys.sty)
+(/usr/local/texlive/2026/texmf-dist/tex/generic/pdfescape/pdfescape.sty
+(/usr/local/texlive/2026/texmf-dist/tex/generic/ltxcmds/ltxcmds.sty)
+(/usr/local/texlive/2026/texmf-dist/tex/generic/pdftexcmds/pdftexcmds.sty
+(/usr/local/texlive/2026/texmf-dist/tex/generic/infwarerr/infwarerr.sty)))
+(/usr/local/texlive/2026/texmf-dist/tex/latex/hycolor/hycolor.sty)
+(/usr/local/texlive/2026/texmf-dist/tex/latex/hyperref/nameref.sty
+(/usr/local/texlive/2026/texmf-dist/tex/latex/refcount/refcount.sty)
+(/usr/local/texlive/2026/texmf-dist/tex/generic/gettitlestring/gettitlestring.s
+ty (/usr/local/texlive/2026/texmf-dist/tex/latex/kvoptions/kvoptions.sty)))
+(/usr/local/texlive/2026/texmf-dist/tex/latex/etoolbox/etoolbox.sty)
+(/usr/local/texlive/2026/texmf-dist/tex/generic/stringenc/stringenc.sty)
+(/usr/local/texlive/2026/texmf-dist/tex/latex/hyperref/pd1enc.def)
+(/usr/local/texlive/2026/texmf-dist/tex/generic/intcalc/intcalc.sty)
+(/usr/local/texlive/2026/texmf-dist/tex/latex/hyperref/puenc.def)
+(/usr/local/texlive/2026/texmf-dist/tex/latex/url/url.sty)
+(/usr/local/texlive/2026/texmf-dist/tex/generic/bitset/bitset.sty
+(/usr/local/texlive/2026/texmf-dist/tex/generic/bigintcalc/bigintcalc.sty)))
+(/usr/local/texlive/2026/texmf-dist/tex/latex/hyperref/hpdftex.def
+(/usr/local/texlive/2026/texmf-dist/tex/latex/rerunfilecheck/rerunfilecheck.sty
+
+(/usr/local/texlive/2026/texmf-dist/tex/generic/uniquecounter/uniquecounter.sty
+))) (/usr/local/texlive/2026/texmf-dist/tex/latex/listings/listings.sty
+(/usr/local/texlive/2026/texmf-dist/tex/latex/listings/lstpatch.sty)
+(/usr/local/texlive/2026/texmf-dist/tex/latex/listings/lstmisc.sty)
+(/usr/local/texlive/2026/texmf-dist/tex/latex/listings/listings.cfg))
+==> First Aid for listings.sty no longer applied!
+    Expected:
+        2024/09/23 1.10c (Carsten Heinz)
+    but found:
+        2025/11/14 1.11b (Carsten Heinz)
+    so I'm assuming it got fixed.
+(/usr/local/texlive/2026/texmf-dist/tex/latex/xcolor/xcolor.sty
+(/usr/local/texlive/2026/texmf-dist/tex/latex/graphics-cfg/color.cfg)
+(/usr/local/texlive/2026/texmf-dist/tex/latex/graphics-def/pdftex.def)
+(/usr/local/texlive/2026/texmf-dist/tex/latex/graphics/mathcolor.ltx))
+(/usr/local/texlive/2026/texmf-dist/tex/latex/booktabs/booktabs.sty)
+(/usr/local/texlive/2026/texmf-dist/tex/latex/tools/longtable.sty)
+(/usr/local/texlive/2026/texmf-dist/tex/latex/tools/array.sty)
+(/usr/local/texlive/2026/texmf-dist/tex/latex/graphics/graphicx.sty
+(/usr/local/texlive/2026/texmf-dist/tex/latex/graphics/graphics.sty
+(/usr/local/texlive/2026/texmf-dist/tex/latex/graphics/trig.sty)
+(/usr/local/texlive/2026/texmf-dist/tex/latex/graphics-cfg/graphics.cfg)))
+(/usr/local/texlive/2026/texmf-dist/tex/latex/parskip/parskip.sty)
+(/usr/local/texlive/2026/texmf-dist/tex/latex/microtype/microtype.sty
+(/usr/local/texlive/2026/texmf-dist/tex/latex/microtype/microtype-pdftex.def)
+(/usr/local/texlive/2026/texmf-dist/tex/latex/microtype/microtype.cfg))
+(/usr/local/texlive/2026/texmf-dist/tex/latex/amsmath/amsmath.sty
+For additional information on amsmath, use the `?' option.
+(/usr/local/texlive/2026/texmf-dist/tex/latex/amsmath/amstext.sty
+(/usr/local/texlive/2026/texmf-dist/tex/latex/amsmath/amsgen.sty))
+(/usr/local/texlive/2026/texmf-dist/tex/latex/amsmath/amsbsy.sty)
+(/usr/local/texlive/2026/texmf-dist/tex/latex/amsmath/amsopn.sty))
+(/usr/local/texlive/2026/texmf-dist/tex/latex/amsfonts/amssymb.sty
+(/usr/local/texlive/2026/texmf-dist/tex/latex/amsfonts/amsfonts.sty))
+(/usr/local/texlive/2026/texmf-dist/tex/latex/titlesec/titlesec.sty)
+(/usr/local/texlive/2026/texmf-dist/tex/latex/lm/t1lmr.fd)
+(/usr/local/texlive/2026/texmf-dist/tex/latex/l3backend/l3backend-pdftex.def)
+(./main.aux)
+*geometry* driver: auto-detecting
+*geometry* detected driver: pdftex
+(./main.out) (./main.out)
+(/usr/local/texlive/2026/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
+[Loading MPS to PDF converter (version 2006.09.02).]
+) (/usr/local/texlive/2026/texmf-dist/tex/latex/epstopdf-pkg/epstopdf-base.sty
+(/usr/local/texlive/2026/texmf-dist/tex/latex/latexconfig/epstopdf-sys.cfg))
+(/usr/local/texlive/2026/texmf-dist/tex/latex/microtype/mt-cmr.cfg)
+(/usr/local/texlive/2026/texmf-dist/tex/latex/lm/ot1lmr.fd)
+(/usr/local/texlive/2026/texmf-dist/tex/latex/lm/omllmm.fd)
+(/usr/local/texlive/2026/texmf-dist/tex/latex/lm/omslmsy.fd)
+(/usr/local/texlive/2026/texmf-dist/tex/latex/lm/omxlmex.fd)
+(/usr/local/texlive/2026/texmf-dist/tex/latex/amsfonts/umsa.fd)
+(/usr/local/texlive/2026/texmf-dist/tex/latex/microtype/mt-msa.cfg)
+(/usr/local/texlive/2026/texmf-dist/tex/latex/amsfonts/umsb.fd)
+(/usr/local/texlive/2026/texmf-dist/tex/latex/microtype/mt-msb.cfg) [1{/usr/loc
+al/texlive/2026/texmf-var/fonts/map/pdftex/updmap/pdftex.map}{/usr/local/texliv
+e/2026/texmf-dist/fonts/enc/dvips/lm/lm-ec.enc}] [2] (./main.toc [3] [4]
+[5]
+Overfull \hbox (2.51758pt too wide) in paragraph at lines 168--168
+ [][] [][][]\T1/lmr/m/n/10.95 (-20) 6.5 The Agen-tic SDLC: Spec $\rightar-row$ 
+Gen-er-ate $\rightar-row$ Ver-ify $\rightar- 
+[6] [7] [8] [9] [10] [11] [12] [13] [14] [15]) [16] [1] [2]
+Chapter 1.
+[3] (/usr/local/texlive/2026/texmf-dist/tex/latex/lm/ts1lmr.fd) [4] [5{/usr/loc
+al/texlive/2026/texmf-dist/fonts/enc/dvips/lm/lm-ts1.enc}] [6] [7] [8]
+Chapter 2.
+
+Overfull \hbox (5.61856pt too wide) in paragraph at lines 239--244
+\T1/lmr/m/n/10.95 (-20) <div style="display:flex; gap:2.5rem; align-items:flex-
+start; flex-wrap:wrap; margin-bottom:2rem;">
+[9] [10] [11] [12]
+Chapter 3.
+[13]
+Overfull \hbox (79.50342pt too wide) in paragraph at lines 345--355
+[][] 
+
+Overfull \hbox (35.72249pt too wide) has occurred while \output is active
+\T1/lmr/m/n/10.95 14 \T1/lmr/m/sl/10.95 CHAPTER 3.  CHAPTER 1: SOFTWARE ENGINEE
+RING FUNDAMENTALS AND PROCESSES
+[14]
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+
+Overfull \hbox (134.98941pt too wide) in paragraph at lines 420--429
+[] 
+[15]
+Overfull \hbox (35.72249pt too wide) has occurred while \output is active
+\T1/lmr/m/n/10.95 16 \T1/lmr/m/sl/10.95 CHAPTER 3.  CHAPTER 1: SOFTWARE ENGINEE
+RING FUNDAMENTALS AND PROCESSES
+[16 <./images/nato-conference-photo.png (PNG copy)>]
+Overfull \hbox (389.13882pt too wide) in paragraph at lines 474--483
+[][] 
+
+Underfull \vbox (badness 1248) has occurred while \output is active [17 <./imag
+es/chapter-1-ppt-model.png>]
+Overfull \hbox (35.72249pt too wide) has occurred while \output is active
+\T1/lmr/m/n/10.95 18 \T1/lmr/m/sl/10.95 CHAPTER 3.  CHAPTER 1: SOFTWARE ENGINEE
+RING FUNDAMENTALS AND PROCESSES
+[18]
+Overfull \hbox (198.64178pt too wide) in paragraph at lines 530--539
+[] 
+
+Overfull \hbox (361.81804pt too wide) in paragraph at lines 550--559
+[][] 
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+[19]
+Overfull \hbox (149.85933pt too wide) in paragraph at lines 580--589
+[][] 
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+
+Overfull \hbox (35.72249pt too wide) has occurred while \output is active
+\T1/lmr/m/n/10.95 20 \T1/lmr/m/sl/10.95 CHAPTER 3.  CHAPTER 1: SOFTWARE ENGINEE
+RING FUNDAMENTALS AND PROCESSES
+[20 <./images/chapter-1-cost-to-fix-bugs.png>] [21 <./images/waterfall.png (PNG
+ copy)>]
+Overfull \hbox (35.72249pt too wide) has occurred while \output is active
+\T1/lmr/m/n/10.95 22 \T1/lmr/m/sl/10.95 CHAPTER 3.  CHAPTER 1: SOFTWARE ENGINEE
+RING FUNDAMENTALS AND PROCESSES
+[22]
+Underfull \vbox (badness 1571) has occurred while \output is active [23 <./imag
+es/chapter-1-agile-manifesto.png>]
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+
+Overfull \hbox (35.72249pt too wide) has occurred while \output is active
+\T1/lmr/m/n/10.95 24 \T1/lmr/m/sl/10.95 CHAPTER 3.  CHAPTER 1: SOFTWARE ENGINEE
+RING FUNDAMENTALS AND PROCESSES
+[24 <./images/chapter-1-scrum.png>] [25 <./images/chapter-1-kanban.png>]
+Overfull \hbox (35.72249pt too wide) has occurred while \output is active
+\T1/lmr/m/n/10.95 26 \T1/lmr/m/sl/10.95 CHAPTER 3.  CHAPTER 1: SOFTWARE ENGINEE
+RING FUNDAMENTALS AND PROCESSES
+[26] [27]
+Overfull \hbox (35.72249pt too wide) has occurred while \output is active
+\T1/lmr/m/n/10.95 28 \T1/lmr/m/sl/10.95 CHAPTER 3.  CHAPTER 1: SOFTWARE ENGINEE
+RING FUNDAMENTALS AND PROCESSES
+[28]
+Chapter 4.
+[29] [30] [31]
+Overfull \hbox (313.78123pt too wide) in paragraph at lines 1010--1023
+[][] 
+
+Underfull \vbox (badness 2035) has occurred while \output is active [32]
+Overfull \hbox (604.1594pt too wide) in paragraph at lines 1045--1057
+[][] 
+(/usr/local/texlive/2026/texmf-dist/tex/latex/lm/t1lmtt.fd) [33]
+Overfull \hbox (128.97017pt too wide) in paragraph at lines 1090--1100
+[][] 
+[34]
+Overfull \hbox (20.61096pt too wide) in paragraph at lines 1131--1140
+[][] 
+[35] [36] [37] [38] [39] [40]
+Chapter 5.
+[41] (/usr/local/texlive/2026/texmf-dist/tex/latex/listings/lstlang1.sty)
+[42] [43] [44] [45] [46] [47] [48] [49] [50] [51]
+Underfull \vbox (badness 6842) has occurred while \output is active [52]
+[53] [54] [55] [56] [57] [58]
+Chapter 6.
+[59]
+Overfull \hbox (14.54335pt too wide) in paragraph at lines 2229--2237
+[][] 
+[60] [61] [62]
+Overfull \hbox (32.80066pt too wide) in paragraph at lines 2379--2380
+[]\T1/lmr/bx/n/10.95 (-20) Valid (non-zero)\T1/lmr/m/n/10.95 (-20) : any CODESP
+AN_0_END, e.g. CODESPAN_1_END, CODESPAN_2_END,
+[63] [64]
+Overfull \hbox (55.81683pt too wide) in paragraph at lines 2442--2443
+[]\T1/lmr/bx/n/10.95 (-20) Example\T1/lmr/m/n/10.95 (-20) : test-ing that CODES
+PAN_0_END re-turns CODESPAN_1_END, and that CODESPAN_2_END
+[65] [66] (/usr/local/texlive/2026/texmf-dist/tex/latex/listings/lstlang1.sty)
+(/usr/local/texlive/2026/texmf-dist/tex/latex/listings/lstlang1.sty) [67]
+[68]
+Chapter 7.
+
+Overfull \hbox (68.3156pt too wide) in paragraph at lines 2654--2667
+[][] 
+[69]
+Overfull \hbox (14.5835pt too wide) has occurred while \output is active
+\T1/lmr/m/n/10.95 70 \T1/lmr/m/sl/10.95 CHAPTER 7.  CHAPTER 5: AUTOMATED CODE R
+EVIEW, CODE QUALITY, AND CI/CD
+[70] [71]
+Overfull \hbox (14.5835pt too wide) has occurred while \output is active
+\T1/lmr/m/n/10.95 72 \T1/lmr/m/sl/10.95 CHAPTER 7.  CHAPTER 5: AUTOMATED CODE R
+EVIEW, CODE QUALITY, AND CI/CD
+[72] [73]
+Overfull \hbox (18.60484pt too wide) in paragraph at lines 2866--2867
+[]\T1/lmr/m/n/10.95 (-20) Fixing the an-no-ta-tion to CODESPAN_0_END forces ev-
+ery caller to han-dle the CODESPAN_1_END
+
+Overfull \hbox (14.5835pt too wide) has occurred while \output is active
+\T1/lmr/m/n/10.95 74 \T1/lmr/m/sl/10.95 CHAPTER 7.  CHAPTER 5: AUTOMATED CODE R
+EVIEW, CODE QUALITY, AND CI/CD
+[74]
+Overfull \hbox (41.27982pt too wide) in paragraph at lines 2904--2905
+[]\T1/lmr/m/n/10.95 (-20) The CODESPAN_0_END block runs be-fore ev-ery job, in-
+stalling de-pen-den-cies. The CODESPAN_1_END
+[75]
+Overfull \hbox (14.5835pt too wide) has occurred while \output is active
+\T1/lmr/m/n/10.95 76 \T1/lmr/m/sl/10.95 CHAPTER 7.  CHAPTER 5: AUTOMATED CODE R
+EVIEW, CODE QUALITY, AND CI/CD
+[76] [77] [78]
+Chapter 8.
+[79]
+Overfull \hbox (6.97801pt too wide) has occurred while \output is active
+\T1/lmr/m/n/10.95 80 \T1/lmr/m/sl/10.95 CHAPTER 8.  CHAPTER 6: AGENTIC SOFTWARE
+ ENGINEERING: A NEW PARADIGM
+[80]
+Overfull \hbox (637.99239pt too wide) in paragraph at lines 3030--3041
+[][] 
+[81]
+Overfull \hbox (6.97801pt too wide) has occurred while \output is active
+\T1/lmr/m/n/10.95 82 \T1/lmr/m/sl/10.95 CHAPTER 8.  CHAPTER 6: AGENTIC SOFTWARE
+ ENGINEERING: A NEW PARADIGM
+[82] [83]
+Overfull \hbox (68.77757pt too wide) in paragraph at lines 3133--3142
+[][] 
+
+Overfull \hbox (6.97801pt too wide) has occurred while \output is active
+\T1/lmr/m/n/10.95 84 \T1/lmr/m/sl/10.95 CHAPTER 8.  CHAPTER 6: AGENTIC SOFTWARE
+ ENGINEERING: A NEW PARADIGM
+[84]
+Overfull \hbox (12.85155pt too wide) in paragraph at lines 3175--3175
+|[]\T1/lmr/bx/n/14.4 (-20) 6.5 The Agen-tic SDLC: Spec $\rightar-row$ Gen-er-at
+e $\rightar-
+
+Overfull \hbox (189.55229pt too wide) has occurred while \output is active
+\T1/lmr/m/sl/10.95 8.6.  6.5 THE AGENTIC SDLC: SPEC $\RIGHTARROW$ GENERATE $\RI
+GHTARROW$ VERIFY $\RIGHTARROW$ REFINE \T1/lmr/m/n/10.95 85
+[85]
+Overfull \hbox (73.3703pt too wide) in paragraph at lines 3227--3240
+[][] 
+
+Overfull \hbox (6.97801pt too wide) has occurred while \output is active
+\T1/lmr/m/n/10.95 86 \T1/lmr/m/sl/10.95 CHAPTER 8.  CHAPTER 6: AGENTIC SOFTWARE
+ ENGINEERING: A NEW PARADIGM
+[86] [87]
+Overfull \hbox (54.38606pt too wide) in paragraph at lines 3283--3284
+[]\T1/lmr/bx/n/10.95 (-20) Context file dis-ci-pline. \T1/lmr/m/n/10.95 (-20) M
+ain-tain a project-level con-text file (CODESPAN_0_END, CODESPAN_1_END,
+
+Overfull \hbox (6.97801pt too wide) has occurred while \output is active
+\T1/lmr/m/n/10.95 88 \T1/lmr/m/sl/10.95 CHAPTER 8.  CHAPTER 6: AGENTIC SOFTWARE
+ ENGINEERING: A NEW PARADIGM
+[88] [89]
+Overfull \hbox (6.97801pt too wide) has occurred while \output is active
+\T1/lmr/m/n/10.95 90 \T1/lmr/m/sl/10.95 CHAPTER 8.  CHAPTER 6: AGENTIC SOFTWARE
+ ENGINEERING: A NEW PARADIGM
+[90] [91]
+Overfull \hbox (1.66814pt too wide) in paragraph at lines 3425--3426
+[]\T1/lmr/m/n/10.95 (-20) Anthropic. (2024). \T1/lmr/m/it/10.95 (-20) Model Con
+-text Pro-to-col Spec-i-fi-ca-tion\T1/lmr/m/n/10.95 (-20) . [][]$\T1/lmtt/m/n/1
+0.95 https : / / modelcontextprotocol .
+
+Overfull \hbox (156.60329pt too wide) in paragraph at lines 3426--3427
+[][]$\T1/lmtt/m/n/10.95 https : / / github . blog / 2022-[]09-[]07-[]research-[
+]quantifying-[]github-[]copilots-[]impact-[]on-[]developer-[]productivity/$[][]
+ 
+
+Overfull \hbox (6.97801pt too wide) has occurred while \output is active
+\T1/lmr/m/n/10.95 92 \T1/lmr/m/sl/10.95 CHAPTER 8.  CHAPTER 6: AGENTIC SOFTWARE
+ ENGINEERING: A NEW PARADIGM
+[92] [93]
+Overfull \hbox (6.97801pt too wide) has occurred while \output is active
+\T1/lmr/m/n/10.95 94 \T1/lmr/m/sl/10.95 CHAPTER 8.  CHAPTER 6: AGENTIC SOFTWARE
+ ENGINEERING: A NEW PARADIGM
+[94]
+Chapter 9.
+[95]
+Overfull \hbox (89.63422pt too wide) has occurred while \output is active
+\T1/lmr/m/n/10.95 96 \T1/lmr/m/sl/10.95 CHAPTER 9.  CHAPTER 7: CONFIGURING THE 
+AGENT'S WORLD --- CONTEXT, SKILLS, AND TOOLS
+[96] [97]
+Overfull \hbox (89.63422pt too wide) has occurred while \output is active
+\T1/lmr/m/n/10.95 98 \T1/lmr/m/sl/10.95 CHAPTER 9.  CHAPTER 7: CONFIGURING THE 
+AGENT'S WORLD --- CONTEXT, SKILLS, AND TOOLS
+[98]
+Overfull \hbox (5.46391pt too wide) in paragraph at lines 3643--3653
+[][] 
+[99]
+Overfull \hbox (95.1092pt too wide) has occurred while \output is active
+\T1/lmr/m/n/10.95 100 \T1/lmr/m/sl/10.95 CHAPTER 9.  CHAPTER 7: CONFIGURING THE
+ AGENT'S WORLD --- CONTEXT, SKILLS, AND TOOLS
+[100] [101]
+Overfull \hbox (95.1092pt too wide) has occurred while \output is active
+\T1/lmr/m/n/10.95 102 \T1/lmr/m/sl/10.95 CHAPTER 9.  CHAPTER 7: CONFIGURING THE
+ AGENT'S WORLD --- CONTEXT, SKILLS, AND TOOLS
+[102] [103]
+Overfull \hbox (95.1092pt too wide) has occurred while \output is active
+\T1/lmr/m/n/10.95 104 \T1/lmr/m/sl/10.95 CHAPTER 9.  CHAPTER 7: CONFIGURING THE
+ AGENT'S WORLD --- CONTEXT, SKILLS, AND TOOLS
+[104] [105]
+Overfull \hbox (44.2446pt too wide) in paragraph at lines 4006--4016
+[][] 
+
+Overfull \hbox (95.1092pt too wide) has occurred while \output is active
+\T1/lmr/m/n/10.95 106 \T1/lmr/m/sl/10.95 CHAPTER 9.  CHAPTER 7: CONFIGURING THE
+ AGENT'S WORLD --- CONTEXT, SKILLS, AND TOOLS
+[106] [107]
+Overfull \hbox (95.1092pt too wide) has occurred while \output is active
+\T1/lmr/m/n/10.95 108 \T1/lmr/m/sl/10.95 CHAPTER 9.  CHAPTER 7: CONFIGURING THE
+ AGENT'S WORLD --- CONTEXT, SKILLS, AND TOOLS
+[108]
+Chapter 10.
+[109]
+Overfull \hbox (132.15141pt too wide) in paragraph at lines 4153--4168
+[][] 
+[110]
+Overfull \hbox (36.89223pt too wide) in paragraph at lines 4233--4234
+\T1/lmr/m/n/10.95 (-20) Path traver-sal al-lows at-tack-ers to ac-cess files ou
+t-side the in-tended di-rec-tory by us-ing CODESPAN_0_END
+[111] [112] [113] [114] [115] [116]
+Chapter 11.
+[117]
+Overfull \hbox (8.03981pt too wide) has occurred while \output is active
+\T1/lmr/m/n/10.95 118 \T1/lmr/m/sl/10.95 CHAPTER 11.  CHAPTER 9: SECURITY CONCE
+RNS OF AGENTIC AI CODING TOOLS
+[118] [119]
+Overfull \hbox (8.03981pt too wide) has occurred while \output is active
+\T1/lmr/m/n/10.95 120 \T1/lmr/m/sl/10.95 CHAPTER 11.  CHAPTER 9: SECURITY CONCE
+RNS OF AGENTIC AI CODING TOOLS
+[120] [121]
+Overfull \hbox (8.03981pt too wide) has occurred while \output is active
+\T1/lmr/m/n/10.95 122 \T1/lmr/m/sl/10.95 CHAPTER 11.  CHAPTER 9: SECURITY CONCE
+RNS OF AGENTIC AI CODING TOOLS
+[122]
+Overfull \hbox (23.75145pt too wide) in paragraph at lines 4760--4761
+[]\T1/lmr/m/n/10.95 (-20) Pin MCP server ver-sions in your con-fig-u-ra-tion (C
+ODESPAN_0_END not CODESPAN_1_END) 
+[123]
+Overfull \hbox (8.03981pt too wide) has occurred while \output is active
+\T1/lmr/m/n/10.95 124 \T1/lmr/m/sl/10.95 CHAPTER 11.  CHAPTER 9: SECURITY CONCE
+RNS OF AGENTIC AI CODING TOOLS
+[124] [125]
+Overfull \hbox (8.03981pt too wide) has occurred while \output is active
+\T1/lmr/m/n/10.95 126 \T1/lmr/m/sl/10.95 CHAPTER 11.  CHAPTER 9: SECURITY CONCE
+RNS OF AGENTIC AI CODING TOOLS
+[126] [127]
+Overfull \hbox (203.10982pt too wide) in paragraph at lines 4949--4963
+[] 
+
+Overfull \hbox (8.03981pt too wide) has occurred while \output is active
+\T1/lmr/m/n/10.95 128 \T1/lmr/m/sl/10.95 CHAPTER 11.  CHAPTER 9: SECURITY CONCE
+RNS OF AGENTIC AI CODING TOOLS
+[128] [129]
+Overfull \hbox (48.99582pt too wide) in paragraph at lines 5031--5032
+[]\T1/lmr/bx/n/10.95 (-20) Supply chain at-tacks \T1/lmr/m/n/10.95 (-20) tar-ge
+t agent con-fig-u-ra-tion files (CODESPAN_0_END, CODESPAN_1_END)
+
+Overfull \hbox (8.03981pt too wide) has occurred while \output is active
+\T1/lmr/m/n/10.95 130 \T1/lmr/m/sl/10.95 CHAPTER 11.  CHAPTER 9: SECURITY CONCE
+RNS OF AGENTIC AI CODING TOOLS
+[130] [131]
+Overfull \hbox (8.03981pt too wide) has occurred while \output is active
+\T1/lmr/m/n/10.95 132 \T1/lmr/m/sl/10.95 CHAPTER 11.  CHAPTER 9: SECURITY CONCE
+RNS OF AGENTIC AI CODING TOOLS
+[132] [133] [134]
+Chapter 12.
+[135]
+Overfull \hbox (61.80386pt too wide) in paragraph at lines 5130--5139
+[][] 
+
+Overfull \hbox (3.48026pt too wide) has occurred while \output is active
+\T1/lmr/m/n/10.95 136 \T1/lmr/m/sl/10.95 CHAPTER 12.  CHAPTER 10: SOFTWARE MAIN
+TENANCE AND TECHNICAL DEBTS
+[136]
+Overfull \hbox (88.12947pt too wide) in paragraph at lines 5156--5163
+[][] 
+
+Overfull \hbox (341.33049pt too wide) in paragraph at lines 5174--5189
+[][] 
+
+Underfull \vbox (badness 1057) has occurred while \output is active [137]
+Overfull \hbox (31.43849pt too wide) in paragraph at lines 5216--5217
+\T1/lmr/m/n/10.95 (-20) mark it --- CODESPAN_1_END, CODESPAN_2_END, CODESPAN_3_
+END, CODESPAN_4_END.
+
+Overfull \hbox (3.48026pt too wide) has occurred while \output is active
+\T1/lmr/m/n/10.95 138 \T1/lmr/m/sl/10.95 CHAPTER 12.  CHAPTER 10: SOFTWARE MAIN
+TENANCE AND TECHNICAL DEBTS
+[138]
+Overfull \hbox (135.3111pt too wide) in paragraph at lines 5229--5240
+[][] 
+
+Overfull \hbox (39.77797pt too wide) in paragraph at lines 5251--5252
+[]\T1/lmr/m/n/10.95 (-20) The out-put is the list of files most worth in-ves-ti
+-gat-ing with CODESPAN_0_END or CODESPAN_1_END.
+[139]
+Overfull \hbox (599.74004pt too wide) in paragraph at lines 5296--5309
+[][] 
+
+Overfull \hbox (3.48026pt too wide) has occurred while \output is active
+\T1/lmr/m/n/10.95 140 \T1/lmr/m/sl/10.95 CHAPTER 12.  CHAPTER 10: SOFTWARE MAIN
+TENANCE AND TECHNICAL DEBTS
+[140] [141]
+Overfull \hbox (3.48026pt too wide) has occurred while \output is active
+\T1/lmr/m/n/10.95 142 \T1/lmr/m/sl/10.95 CHAPTER 12.  CHAPTER 10: SOFTWARE MAIN
+TENANCE AND TECHNICAL DEBTS
+[142] [143]
+Overfull \hbox (64.3527pt too wide) in paragraph at lines 5447--5457
+[][] 
+
+Overfull \hbox (3.48026pt too wide) has occurred while \output is active
+\T1/lmr/m/n/10.95 144 \T1/lmr/m/sl/10.95 CHAPTER 12.  CHAPTER 10: SOFTWARE MAIN
+TENANCE AND TECHNICAL DEBTS
+[144] [145]
+Overfull \hbox (3.48026pt too wide) has occurred while \output is active
+\T1/lmr/m/n/10.95 146 \T1/lmr/m/sl/10.95 CHAPTER 12.  CHAPTER 10: SOFTWARE MAIN
+TENANCE AND TECHNICAL DEBTS
+[146]
+Chapter 13.
+
+Overfull \hbox (6.63626pt too wide) in paragraph at lines 5544--5544
+|\T1/lmr/bx/n/24.88 (-20) Chapter 11: Soft-ware Ver-sion-ing, Pack-
+[147]
+Overfull \hbox (475.6593pt too wide) in paragraph at lines 5599--5608
+[][] 
+
+Overfull \hbox (39.14703pt too wide) has occurred while \output is active
+\T1/lmr/m/n/10.95 148 \T1/lmr/m/sl/10.95 CHAPTER 13.  CHAPTER 11: SOFTWARE VERS
+IONING, PACKAGING, AND DEPLOYMENT
+[148] [149]
+Overfull \hbox (14.84912pt too wide) in paragraph at lines 5642--5643
+\T1/lmr/m/n/10.95 (-20) dered be-fore the un-suf-fixed ver-sion (CODESPAN_3_END
+ is older than CODESPAN_4_END). 
+
+Overfull \hbox (0.2884pt too wide) in paragraph at lines 5646--5647
+[]\T1/lmr/m/n/10.95 (-20) Pin pre-release suf-fixes in lock-files --- CODESPAN_
+0_END does not match CODESPAN_1_END
+
+Overfull \hbox (12.98497pt too wide) in paragraph at lines 5655--5656
+[]\T1/lmr/bx/n/10.95 (-20) Floating tags in pro-duc-tion \T1/lmr/m/n/10.95 (-20
+) --- de-pend-ing on CODESPAN_0_END, CODESPAN_1_END,
+
+Overfull \hbox (0.94832pt too wide) in paragraph at lines 5662--5663
+[]\T1/lmr/m/n/10.95 (-20) The les-son did not stick for ev-ery-one. In Jan-uary
+ 2022, the main-tainer of the CODESPAN_0_END
+
+Overfull \hbox (219.6937pt too wide) in paragraph at lines 5672--5680
+[][] 
+
+Overfull \hbox (39.14703pt too wide) has occurred while \output is active
+\T1/lmr/m/n/10.95 150 \T1/lmr/m/sl/10.95 CHAPTER 13.  CHAPTER 11: SOFTWARE VERS
+IONING, PACKAGING, AND DEPLOYMENT
+[150]
+Overfull \hbox (261.72359pt too wide) in paragraph at lines 5718--5728
+[][] 
+[151]
+Overfull \hbox (49.39531pt too wide) in paragraph at lines 5729--5730
+[]\T1/lmr/m/n/10.95 (-20) Lockfiles must be com-mit-ted to source con-trol. A C
+ODESPAN_0_END that ex-cludes CODESPAN_1_END
+
+Overfull \hbox (39.14703pt too wide) has occurred while \output is active
+\T1/lmr/m/n/10.95 152 \T1/lmr/m/sl/10.95 CHAPTER 13.  CHAPTER 11: SOFTWARE VERS
+IONING, PACKAGING, AND DEPLOYMENT
+[152]
+Overfull \hbox (327.74391pt too wide) in paragraph at lines 5757--5767
+[][] 
+[153]
+Overfull \hbox (39.14703pt too wide) has occurred while \output is active
+\T1/lmr/m/n/10.95 154 \T1/lmr/m/sl/10.95 CHAPTER 13.  CHAPTER 11: SOFTWARE VERS
+IONING, PACKAGING, AND DEPLOYMENT
+[154]
+Overfull \hbox (17.60297pt too wide) in paragraph at lines 5845--5846
+[]\T1/lmr/m/n/10.95 (-20) Secrets in build args --- any-one who pulls the im-ag
+e can ex-tract them with CODESPAN_0_END. 
+[155]
+Overfull \hbox (39.14703pt too wide) has occurred while \output is active
+\T1/lmr/m/n/10.95 156 \T1/lmr/m/sl/10.95 CHAPTER 13.  CHAPTER 11: SOFTWARE VERS
+IONING, PACKAGING, AND DEPLOYMENT
+[156]
+Underfull \vbox (badness 1436) has occurred while \output is active [157]
+Overfull \hbox (355.75348pt too wide) in paragraph at lines 6004--6014
+[][] 
+
+Overfull \hbox (39.14703pt too wide) has occurred while \output is active
+\T1/lmr/m/n/10.95 158 \T1/lmr/m/sl/10.95 CHAPTER 13.  CHAPTER 11: SOFTWARE VERS
+IONING, PACKAGING, AND DEPLOYMENT
+[158]
+Overfull \hbox (309.34616pt too wide) in paragraph at lines 6029--6041
+[][] 
+[159]
+Overfull \hbox (39.14703pt too wide) has occurred while \output is active
+\T1/lmr/m/n/10.95 160 \T1/lmr/m/sl/10.95 CHAPTER 13.  CHAPTER 11: SOFTWARE VERS
+IONING, PACKAGING, AND DEPLOYMENT
+[160] [161]
+Overfull \hbox (39.14703pt too wide) has occurred while \output is active
+\T1/lmr/m/n/10.95 162 \T1/lmr/m/sl/10.95 CHAPTER 13.  CHAPTER 11: SOFTWARE VERS
+IONING, PACKAGING, AND DEPLOYMENT
+[162] [163]
+Overfull \hbox (39.14703pt too wide) has occurred while \output is active
+\T1/lmr/m/n/10.95 164 \T1/lmr/m/sl/10.95 CHAPTER 13.  CHAPTER 11: SOFTWARE VERS
+IONING, PACKAGING, AND DEPLOYMENT
+[164]
+Chapter 14.
+[165] [166]
+Overfull \hbox (50.0844pt too wide) in paragraph at lines 6269--6277
+[][] 
+[167]
+Overfull \hbox (51.17343pt too wide) in paragraph at lines 6321--6330
+[][] 
+[168]
+Overfull \hbox (0.9916pt too wide) in paragraph at lines 6377--6388
+[][] 
+[169]
+Overfull \hbox (169.0017pt too wide) in paragraph at lines 6451--6460
+[][] 
+[170] [171] [172] [173] [174] [175] [176] [177] [178] [179] [180]
+Chapter 15.
+[181]
+Overfull \hbox (112.37822pt too wide) in paragraph at lines 6847--6858
+[][] 
+
+Overfull \hbox (42.46805pt too wide) in paragraph at lines 6859--6860
+[]\T1/lmr/m/n/10.95 (-20) For a new project in 2025, CODESPAN_0_END is the rec-
+om-mended start-ing point. CODESPAN_1_END
+
+Overfull \hbox (171.29695pt too wide) has occurred while \output is active
+\T1/lmr/m/n/10.95 182 \T1/lmr/m/sl/10.95 CHAPTER 15.  TUTORIAL 1: SETTING UP YO
+UR PYTHON AND GITLAB FOR CODE AND PROJECT MANAGEMENT
+[182]
+Overfull \hbox (11.25336pt too wide) in paragraph at lines 6887--6888
+\T1/lmr/m/n/10.95 (-20) CODESPAN_3_END (which pins the Python ver-sion for the 
+project). Delete CODESPAN_4_END
+
+Overfull \hbox (2.22682pt too wide) in paragraph at lines 6904--6905
+[]\T1/lmr/m/n/10.95 (-20) As you add dev de-pen-den-cies in Step 3, CODESPAN_0_
+END will ap-pend a CODESPAN_1_END
+
+Overfull \hbox (23.43636pt too wide) has occurred while \output is active
+\T1/lmr/m/sl/10.95 15.3.  PART A: SETTING UP YOUR PYTHON DEVELOPMENT ENVIRONMEN
+T \T1/lmr/m/it/10.95 (~60 MIN) \T1/lmr/m/n/10.95 183
+[183]
+Overfull \hbox (171.29695pt too wide) has occurred while \output is active
+\T1/lmr/m/n/10.95 184 \T1/lmr/m/sl/10.95 CHAPTER 15.  TUTORIAL 1: SETTING UP YO
+UR PYTHON AND GITLAB FOR CODE AND PROJECT MANAGEMENT
+[184]
+Overfull \hbox (19.54593pt too wide) in paragraph at lines 7044--7056
+[][] 
+
+Overfull \hbox (23.43636pt too wide) has occurred while \output is active
+\T1/lmr/m/sl/10.95 15.3.  PART A: SETTING UP YOUR PYTHON DEVELOPMENT ENVIRONMEN
+T \T1/lmr/m/it/10.95 (~60 MIN) \T1/lmr/m/n/10.95 185
+[185]
+Overfull \hbox (93.71643pt too wide) in paragraph at lines 7078--7087
+[] 
+
+Overfull \hbox (43.77895pt too wide) in paragraph at lines 7110--7111
+[]\T1/lmr/m/n/10.95 (-20) Add a CODESPAN_0_END func-tion and a CODESPAN_1_END f
+unc-tion to CODESPAN_2_END. 
+
+Overfull \hbox (1.06201pt too wide) in paragraph at lines 7139--7140
+\T1/lmr/m/n/10.95 (-20) When a team col-lab-o-rates on a shared repos-i-tory, u
+n-con-trolled pushes to the CODESPAN_0_END
+
+Overfull \hbox (171.29695pt too wide) has occurred while \output is active
+\T1/lmr/m/n/10.95 186 \T1/lmr/m/sl/10.95 CHAPTER 15.  TUTORIAL 1: SETTING UP YO
+UR PYTHON AND GITLAB FOR CODE AND PROJECT MANAGEMENT
+[186]
+Overfull \hbox (74.15977pt too wide) in paragraph at lines 7143--7153
+[][] 
+[187]
+Overfull \hbox (171.29695pt too wide) has occurred while \output is active
+\T1/lmr/m/n/10.95 188 \T1/lmr/m/sl/10.95 CHAPTER 15.  TUTORIAL 1: SETTING UP YO
+UR PYTHON AND GITLAB FOR CODE AND PROJECT MANAGEMENT
+[188 <./images/tutorial-1-gitlab-flow.png>]
+Overfull \hbox (178.76524pt too wide) in paragraph at lines 7259--7266
+[][] 
+[189]
+Overfull \hbox (34.52133pt too wide) in paragraph at lines 7355--7356
+[]\T1/lmr/m/n/10.95 (-20) Optionally set \T1/lmr/bx/n/10.95 (-20) La-bels \T1/l
+mr/m/n/10.95 (-20) (e.g., CODESPAN_0_END, CODESPAN_1_END, CODESPAN_2_END),
+
+Overfull \hbox (171.29695pt too wide) has occurred while \output is active
+\T1/lmr/m/n/10.95 190 \T1/lmr/m/sl/10.95 CHAPTER 15.  TUTORIAL 1: SETTING UP YO
+UR PYTHON AND GITLAB FOR CODE AND PROJECT MANAGEMENT
+[190]
+Overfull \hbox (13.46729pt too wide) in paragraph at lines 7404--7405
+[]\T1/lmr/m/n/10.95 (-20) Enter the es-ti-mate (e.g. CODESPAN_0_END, CODESPAN_1
+_END, CODESPAN_2_END)
+[191]
+Overfull \hbox (82.36421pt too wide) in paragraph at lines 7458--7468
+[][] 
+
+Overfull \hbox (171.29695pt too wide) has occurred while \output is active
+\T1/lmr/m/n/10.95 192 \T1/lmr/m/sl/10.95 CHAPTER 15.  TUTORIAL 1: SETTING UP YO
+UR PYTHON AND GITLAB FOR CODE AND PROJECT MANAGEMENT
+[192 <./images/tutorial-1-burndown-chart.png>]
+Overfull \hbox (52.81908pt too wide) in paragraph at lines 7469--7476
+[][] 
+[193]
+Overfull \hbox (26.65012pt too wide) in paragraph at lines 7524--7525
+[]\T1/lmr/bx/n/10.95 (-20) Supported clos-ing key-words: \T1/lmr/m/n/10.95 (-20
+) CODESPAN_0_END, CODESPAN_1_END, CODESPAN_2_END
+
+Overfull \hbox (50.81755pt too wide) in paragraph at lines 7567--7568
+[]\T1/lmr/m/n/10.95 (-20) Conventional Com-mits --- Spec-i-fi-ca-tion for the c
+om-mit mes-sage type tag for-mat (CODESPAN_0_END,
+
+Overfull \hbox (171.29695pt too wide) has occurred while \output is active
+\T1/lmr/m/n/10.95 194 \T1/lmr/m/sl/10.95 CHAPTER 15.  TUTORIAL 1: SETTING UP YO
+UR PYTHON AND GITLAB FOR CODE AND PROJECT MANAGEMENT
+[194]
+Chapter 16.
+
+Overfull \hbox (13.58798pt too wide) in paragraph at lines 7578--7578
+|\T1/lmr/bx/n/24.88 (-20) Tutorial 2: Elic-it-ing Re-quire-ments from
+[195]
+Overfull \hbox (14.50407pt too wide) has occurred while \output is active
+\T1/lmr/m/n/10.95 196 \T1/lmr/m/sl/10.95 CHAPTER 16.  TUTORIAL 2: ELICITING REQ
+UIREMENTS FROM AI AS YOUR CLIENT
+[196 <./images/tutorial2-copilot-ui.png>] [197]
+Overfull \hbox (39.97289pt too wide) in paragraph at lines 7709--7720
+[][] 
+
+Overfull \hbox (14.50407pt too wide) has occurred while \output is active
+\T1/lmr/m/n/10.95 198 \T1/lmr/m/sl/10.95 CHAPTER 16.  TUTORIAL 2: ELICITING REQ
+UIREMENTS FROM AI AS YOUR CLIENT
+[198] [199]
+Overfull \hbox (14.50407pt too wide) has occurred while \output is active
+\T1/lmr/m/n/10.95 200 \T1/lmr/m/sl/10.95 CHAPTER 16.  TUTORIAL 2: ELICITING REQ
+UIREMENTS FROM AI AS YOUR CLIENT
+[200]
+Chapter 17.
+[201]
+Overfull \hbox (502.24225pt too wide) in paragraph at lines 7867--7879
+[][] 
+[202]
+Overfull \hbox (256.2627pt too wide) in paragraph at lines 7898--7906
+[][] 
+[203] [204]
+Overfull \hbox (35.4402pt too wide) in paragraph at lines 7964--7965
+\T1/lmr/m/n/10.95 (-20) Draw a class di-a-gram for the core do-main. In-clude a
+t least: CODESPAN_0_END, CODESPAN_1_END,
+[205] [206]
+Underfull \vbox (badness 10000) has occurred while \output is active [207]
+[208] [209] [210] [211] [212]
+Chapter 18.
+[213] [214] [215]
+Underfull \vbox (badness 10000) has occurred while \output is active [216]
+[217]
+Overfull \hbox (0.15494pt too wide) in paragraph at lines 8668--8676
+[][] 
+
+Overfull \hbox (39.65651pt too wide) in paragraph at lines 8687--8688
+[]\T1/lmr/m/n/10.95 (-20) When a func-tion is ex-pected to raise an ex-cep-tion
+, Act and As-sert merge into a sin-gle CODESPAN_0_END
+[218]
+Overfull \hbox (25.4887pt too wide) in paragraph at lines 8748--8749
+[]\T1/lmr/m/n/10.95 (-20) Python CODESPAN_0_END Doc-u-men-ta-tion --- Built-in 
+test frame-work: CODESPAN_1_END,
+[219] [220]
+Chapter 19.
+
+Overfull \hbox (5.4448pt too wide) in paragraph at lines 8762--8767
+[][] 
+[221] [222] [223]
+Overfull \hbox (16.5194pt too wide) in paragraph at lines 8994--9002
+[][] 
+[224] [225]
+Overfull \hbox (355.11678pt too wide) in paragraph at lines 9075--9086
+[][] 
+[226]
+Overfull \hbox (59.33026pt too wide) in paragraph at lines 9158--9159
+[]\T1/lmr/m/n/10.95 (-20) CODESPAN_0_END and CODESPAN_1_END run in par-al-lel -
+-- they share the CODESPAN_2_END
+[227]
+Overfull \hbox (60.741pt too wide) in paragraph at lines 9229--9230
+[]\T1/lmr/bx/n/10.95 (-20) Why CODESPAN_0_END and CODESPAN_1_END are skipped: \
+T1/lmr/m/n/10.95 (-20) when the CODESPAN_2_END
+[228]
+Overfull \hbox (44.72496pt too wide) in paragraph at lines 9273--9274
+[]\T1/lmr/m/n/10.95 (-20) GitLab Pre-de-fined CI/CD Vari-ables --- Vari-ables a
+vail-able in ev-ery CI job (e.g., CODESPAN_0_END,
+[229] [230]
+Chapter 20.
+[231] [232] [233] [234] [235] [236]
+Overfull \hbox (111.08829pt too wide) in paragraph at lines 9620--9631
+[][] 
+[237] [238] [239] [240] [241] [242]
+Chapter 21.
+[243]
+Overfull \hbox (43.78072pt too wide) has occurred while \output is active
+\T1/lmr/m/n/10.95 244 \T1/lmr/m/sl/10.95 CHAPTER 21.  TUTORIAL 7: THE AI-ASSIST
+ED SDLC: FROM CODE TO WELL-TESTED APP
+[244] [245]
+Overfull \hbox (45.79605pt too wide) in paragraph at lines 10016--10017
+[]\T1/lmr/m/n/10.95 (-20) Here is a bug re-port: CODESPAN_0_END re-turns 200 an
+d the re-sponse body shows CODESPAN_1_END,
+
+Overfull \hbox (281.67093pt too wide) in paragraph at lines 10024--10033
+[][] 
+
+Overfull \hbox (62.19905pt too wide) in paragraph at lines 10048--10049
+[]\T1/lmr/m/n/10.95 (-20) Given the cur-rent im-ple-men-ta-tion in CODESPAN_0_E
+ND, CODESPAN_1_END, and CODESPAN_2_END,
+
+Overfull \hbox (43.78072pt too wide) has occurred while \output is active
+\T1/lmr/m/n/10.95 246 \T1/lmr/m/sl/10.95 CHAPTER 21.  TUTORIAL 7: THE AI-ASSIST
+ED SDLC: FROM CODE TO WELL-TESTED APP
+[246]
+Overfull \hbox (24.09149pt too wide) in paragraph at lines 10052--10053
+[]\T1/lmr/m/n/10.95 (-20) What is the risk of adding an CODESPAN_0_END branch d
+i-rectly in-side CODESPAN_1_END? 
+
+Overfull \hbox (311.11682pt too wide) in paragraph at lines 10084--10094
+[][] 
+[247]
+Overfull \hbox (43.78072pt too wide) has occurred while \output is active
+\T1/lmr/m/n/10.95 248 \T1/lmr/m/sl/10.95 CHAPTER 21.  TUTORIAL 7: THE AI-ASSIST
+ED SDLC: FROM CODE TO WELL-TESTED APP
+[248]
+Underfull \vbox (badness 10000) has occurred while \output is active [249]
+Underfull \vbox (badness 10000) has occurred while \output is active
+Overfull \hbox (43.78072pt too wide) has occurred while \output is active
+\T1/lmr/m/n/10.95 250 \T1/lmr/m/sl/10.95 CHAPTER 21.  TUTORIAL 7: THE AI-ASSIST
+ED SDLC: FROM CODE TO WELL-TESTED APP
+[250]
+Overfull \hbox (2.23534pt too wide) in paragraph at lines 10292--10293
+[]\T1/lmr/m/n/10.95 (-20) pytest Doc-u-men-ta-tion --- Test frame-work; fix-tur
+es, as-ser-tions, and the CODESPAN_0_END
+
+Overfull \hbox (53.75172pt too wide) in paragraph at lines 10294--10295
+[]\T1/lmr/m/n/10.95 (-20) unittest.mock Doc-u-men-ta-tion --- CODESPAN_0_END, C
+ODESPAN_1_END, CODESPAN_2_END,
+[251]
+Overfull \hbox (43.78072pt too wide) has occurred while \output is active
+\T1/lmr/m/n/10.95 252 \T1/lmr/m/sl/10.95 CHAPTER 21.  TUTORIAL 7: THE AI-ASSIST
+ED SDLC: FROM CODE TO WELL-TESTED APP
+[252]
+Chapter 22.
+
+Overfull \hbox (108.39066pt too wide) in paragraph at lines 10306--10311
+[][] 
+[253]
+Overfull \hbox (21.57845pt too wide) has occurred while \output is active
+\T1/lmr/m/n/10.95 254 \T1/lmr/m/sl/10.95 CHAPTER 22.  TUTORIAL 8: SAST, AI, AND
+ HUMAN ON VULNERABILITY DETECTION
+[254] [255]
+Overfull \hbox (363.76422pt too wide) in paragraph at lines 10465--10466
+[][][][][][] 
+
+Overfull \hbox (319.37756pt too wide) in paragraph at lines 10472--10486
+[][] 
+
+Overfull \hbox (21.57845pt too wide) has occurred while \output is active
+\T1/lmr/m/n/10.95 256 \T1/lmr/m/sl/10.95 CHAPTER 22.  TUTORIAL 8: SAST, AI, AND
+ HUMAN ON VULNERABILITY DETECTION
+[256] [257]
+Overfull \hbox (999.15752pt too wide) in paragraph at lines 10610--10636
+[][] 
+
+Overfull \hbox (13.27914pt too wide) in paragraph at lines 10639--10649
+[] 
+
+Overfull \hbox (21.57845pt too wide) has occurred while \output is active
+\T1/lmr/m/n/10.95 258 \T1/lmr/m/sl/10.95 CHAPTER 22.  TUTORIAL 8: SAST, AI, AND
+ HUMAN ON VULNERABILITY DETECTION
+[258] [259]
+Overfull \hbox (21.57845pt too wide) has occurred while \output is active
+\T1/lmr/m/n/10.95 260 \T1/lmr/m/sl/10.95 CHAPTER 22.  TUTORIAL 8: SAST, AI, AND
+ HUMAN ON VULNERABILITY DETECTION
+[260]
+Chapter 23.
+
+Overfull \hbox (213.57016pt too wide) in paragraph at lines 10691--10696
+[][] 
+[261]
+Overfull \hbox (18.532pt too wide) has occurred while \output is active
+\T1/lmr/m/n/10.95 262 \T1/lmr/m/sl/10.95 CHAPTER 23.  TUTORIAL 9: INTEGRATING S
+AST INTO A CI/CD SECURITY PIPELINE
+[262]
+Overfull \hbox (40.06844pt too wide) in paragraph at lines 10821--10822
+[]\T1/lmr/m/n/10.95 (-20) Semgrep's CODESPAN_0_END rule-set cov-ers in-jec-tion
+ and in-se-cure API pat-terns; CODESPAN_1_END
+[263]
+Overfull \hbox (18.532pt too wide) has occurred while \output is active
+\T1/lmr/m/n/10.95 264 \T1/lmr/m/sl/10.95 CHAPTER 23.  TUTORIAL 9: INTEGRATING S
+AST INTO A CI/CD SECURITY PIPELINE
+[264] [265]
+Overfull \hbox (18.532pt too wide) has occurred while \output is active
+\T1/lmr/m/n/10.95 266 \T1/lmr/m/sl/10.95 CHAPTER 23.  TUTORIAL 9: INTEGRATING S
+AST INTO A CI/CD SECURITY PIPELINE
+[266]
+Overfull \hbox (46.60176pt too wide) in paragraph at lines 11030--11031
+[]\T1/lmr/m/n/10.95 (-20) The rule should flag CODESPAN_0_END and pass CODESPAN
+_1_END. If it flags CODESPAN_2_END,
+
+Overfull \hbox (14.09767pt too wide) in paragraph at lines 11037--11038
+[]\T1/lmr/m/n/10.95 (-20) Flag any CODESPAN_0_END / CODESPAN_1_END call that pa
+sses CODESPAN_2_END
+[267]
+Overfull \hbox (18.532pt too wide) has occurred while \output is active
+\T1/lmr/m/n/10.95 268 \T1/lmr/m/sl/10.95 CHAPTER 23.  TUTORIAL 9: INTEGRATING S
+AST INTO A CI/CD SECURITY PIPELINE
+[268] [269]
+Overfull \hbox (18.532pt too wide) has occurred while \output is active
+\T1/lmr/m/n/10.95 270 \T1/lmr/m/sl/10.95 CHAPTER 23.  TUTORIAL 9: INTEGRATING S
+AST INTO A CI/CD SECURITY PIPELINE
+[270] [271]
+Overfull \hbox (18.532pt too wide) has occurred while \output is active
+\T1/lmr/m/n/10.95 272 \T1/lmr/m/sl/10.95 CHAPTER 23.  TUTORIAL 9: INTEGRATING S
+AST INTO A CI/CD SECURITY PIPELINE
+[272]
+Chapter 24.
+[273]
+Overfull \hbox (88.8719pt too wide) has occurred while \output is active
+\T1/lmr/m/n/10.95 274 \T1/lmr/m/sl/10.95 CHAPTER 24.  TUTORIAL 10: REFACTOR TO 
+REDUCE COMPLEXITY WITHOUT BREAKING TESTS
+[274]
+Overfull \hbox (24.38774pt too wide) in paragraph at lines 11381--11382
+\T1/lmr/m/it/10.95 (-20) never eval-u-ated. Putting the CODESPAN_2_END check fi
+rst means CODESPAN_3_END
+
+Overfull \hbox (54.92036pt too wide) in paragraph at lines 11381--11382
+\T1/lmr/m/it/10.95 (-20) CODESPAN_5_END rather than a CODESPAN_6_END from com-p
+ar-ing CODESPAN_7_END
+[275]
+Underfull \vbox (badness 10000) has occurred while \output is active
+Overfull \hbox (88.8719pt too wide) has occurred while \output is active
+\T1/lmr/m/n/10.95 276 \T1/lmr/m/sl/10.95 CHAPTER 24.  TUTORIAL 10: REFACTOR TO 
+REDUCE COMPLEXITY WITHOUT BREAKING TESTS
+[276]
+Overfull \hbox (29.45575pt too wide) in paragraph at lines 11509--11510
+\T1/lmr/m/n/10.95 (-20) Before chang-ing any code, write down what is mak-ing t
+he func-tion com-plex. Open CODESPAN_0_END
+[277]
+Overfull \hbox (88.8719pt too wide) has occurred while \output is active
+\T1/lmr/m/n/10.95 278 \T1/lmr/m/sl/10.95 CHAPTER 24.  TUTORIAL 10: REFACTOR TO 
+REDUCE COMPLEXITY WITHOUT BREAKING TESTS
+[278]
+Overfull \hbox (7.14734pt too wide) in paragraph at lines 11627--11628
+\T1/lmr/m/n/10.95 (-20) for CODESPAN_2_END, plus a small CODESPAN_3_END func-ti
+on rated CODESPAN_4_END
+[279]
+Overfull \hbox (88.8719pt too wide) has occurred while \output is active
+\T1/lmr/m/n/10.95 280 \T1/lmr/m/sl/10.95 CHAPTER 24.  TUTORIAL 10: REFACTOR TO 
+REDUCE COMPLEXITY WITHOUT BREAKING TESTS
+[280] [281]
+Overfull \hbox (88.8719pt too wide) has occurred while \output is active
+\T1/lmr/m/n/10.95 282 \T1/lmr/m/sl/10.95 CHAPTER 24.  TUTORIAL 10: REFACTOR TO 
+REDUCE COMPLEXITY WITHOUT BREAKING TESTS
+[282] [283]
+Overfull \hbox (88.8719pt too wide) has occurred while \output is active
+\T1/lmr/m/n/10.95 284 \T1/lmr/m/sl/10.95 CHAPTER 24.  TUTORIAL 10: REFACTOR TO 
+REDUCE COMPLEXITY WITHOUT BREAKING TESTS
+[284] [285]
+Overfull \hbox (88.8719pt too wide) has occurred while \output is active
+\T1/lmr/m/n/10.95 286 \T1/lmr/m/sl/10.95 CHAPTER 24.  TUTORIAL 10: REFACTOR TO 
+REDUCE COMPLEXITY WITHOUT BREAKING TESTS
+[286]
+Chapter 25.
+
+Overfull \hbox (534.72751pt too wide) in paragraph at lines 11987--11992
+[][] 
+
+Overfull \hbox (21.32024pt too wide) in paragraph at lines 12011--12012
+[]\T1/lmr/m/n/10.95 (-20) Compose a CODESPAN_0_END stack with named vol-umes, s
+e-crets, and CODESPAN_1_END. 
+[287]
+Overfull \hbox (43.9104pt too wide) in paragraph at lines 12065--12066
+[]\T1/lmr/m/n/10.95 (-20) The CODESPAN_0_END di-rec-tory is empty in ver-sion c
+on-trol; only the place-holder CODESPAN_1_END
+
+Overfull \hbox (23.70518pt too wide) has occurred while \output is active
+\T1/lmr/m/n/10.95 288 \T1/lmr/m/sl/10.95 CHAPTER 25.  TUTORIAL 11: CONTAINERISE
+ AND SHIP A THREE-TIER APPLICATION
+[288] [289]
+Overfull \hbox (23.70518pt too wide) has occurred while \output is active
+\T1/lmr/m/n/10.95 290 \T1/lmr/m/sl/10.95 CHAPTER 25.  TUTORIAL 11: CONTAINERISE
+ AND SHIP A THREE-TIER APPLICATION
+[290]
+Overfull \hbox (1.06091pt too wide) in paragraph at lines 12234--12235
+[]\T1/lmr/bx/it/10.95 (-20) The di-gest in CODESPAN_0_END is il-lus-tra-tive. \
+T1/lmr/m/it/10.95 (-20) Run CODESPAN_1_END
+
+Overfull \hbox (43.46689pt too wide) in paragraph at lines 12243--12244
+[]\T1/lmr/bx/n/10.95 (-20) CODESPAN_0_END \T1/lmr/m/n/10.95 (-20) --- gives the
+ API time to con-nect to Post-gres and run CODESPAN_1_END
+[291] (/usr/local/texlive/2026/texmf-dist/tex/latex/listings/lstlang1.sty)
+(/usr/local/texlive/2026/texmf-dist/tex/latex/listings/lstmisc.sty)
+Overfull \hbox (23.70518pt too wide) has occurred while \output is active
+\T1/lmr/m/n/10.95 292 \T1/lmr/m/sl/10.95 CHAPTER 25.  TUTORIAL 11: CONTAINERISE
+ AND SHIP A THREE-TIER APPLICATION
+[292] [293]
+Overfull \hbox (23.70518pt too wide) has occurred while \output is active
+\T1/lmr/m/n/10.95 294 \T1/lmr/m/sl/10.95 CHAPTER 25.  TUTORIAL 11: CONTAINERISE
+ AND SHIP A THREE-TIER APPLICATION
+[294]
+Overfull \hbox (40.1874pt too wide) in paragraph at lines 12420--12421
+[]\T1/lmr/m/n/10.95 (-20) CODESPAN_0_END --- Com-pose builds the im-age \T1/lmr
+/m/it/10.95 (-20) and \T1/lmr/m/n/10.95 (-20) tags it with what-ever CODESPAN_1
+_END
+
+Overfull \hbox (46.18896pt too wide) in paragraph at lines 12432--12433
+[]\T1/lmr/m/n/10.95 (-20) Expected: three ser-vices, all CODESPAN_0_END af-ter 
+about 20 sec-onds. If any are CODESPAN_1_END,
+[295]
+Overfull \hbox (23.70518pt too wide) has occurred while \output is active
+\T1/lmr/m/n/10.95 296 \T1/lmr/m/sl/10.95 CHAPTER 25.  TUTORIAL 11: CONTAINERISE
+ AND SHIP A THREE-TIER APPLICATION
+[296] [297]
+Overfull \hbox (23.70518pt too wide) has occurred while \output is active
+\T1/lmr/m/n/10.95 298 \T1/lmr/m/sl/10.95 CHAPTER 25.  TUTORIAL 11: CONTAINERISE
+ AND SHIP A THREE-TIER APPLICATION
+[298] [299]
+Overfull \hbox (23.70518pt too wide) has occurred while \output is active
+\T1/lmr/m/n/10.95 300 \T1/lmr/m/sl/10.95 CHAPTER 25.  TUTORIAL 11: CONTAINERISE
+ AND SHIP A THREE-TIER APPLICATION
+[300]
+Chapter 26.
+
+Overfull \hbox (243.13654pt too wide) in paragraph at lines 12715--12720
+[][] 
+[301]
+Overfull \hbox (38.71742pt too wide) in paragraph at lines 12802--12803
+\T1/lmr/m/n/10.95 (-20) CODESPAN_1_END matches GPL v2, GPL v3, and GNU Gen-eral
+ Pub-lic Li-cense; CODESPAN_2_END
+
+Overfull \hbox (32.52646pt too wide) has occurred while \output is active
+\T1/lmr/m/n/10.95 302 \T1/lmr/m/sl/10.95 CHAPTER 26.  TUTORIAL 12: LICENCES, PR
+IVACY, AND RESPONSIBLE AI IN PRACTICE
+[302] [303]
+Overfull \hbox (51.81871pt too wide) in paragraph at lines 12862--12872
+[][] 
+
+Overfull \hbox (32.52646pt too wide) has occurred while \output is active
+\T1/lmr/m/n/10.95 304 \T1/lmr/m/sl/10.95 CHAPTER 26.  TUTORIAL 12: LICENCES, PR
+IVACY, AND RESPONSIBLE AI IN PRACTICE
+[304] [305]
+Overfull \hbox (32.52646pt too wide) has occurred while \output is active
+\T1/lmr/m/n/10.95 306 \T1/lmr/m/sl/10.95 CHAPTER 26.  TUTORIAL 12: LICENCES, PR
+IVACY, AND RESPONSIBLE AI IN PRACTICE
+[306] [307]
+Overfull \hbox (336.00043pt too wide) in paragraph at lines 13111--13120
+[][] 
+
+Overfull \hbox (32.52646pt too wide) has occurred while \output is active
+\T1/lmr/m/n/10.95 308 \T1/lmr/m/sl/10.95 CHAPTER 26.  TUTORIAL 12: LICENCES, PR
+IVACY, AND RESPONSIBLE AI IN PRACTICE
+[308] [309]
+Overfull \hbox (7.58122pt too wide) in paragraph at lines 13202--13203
+[]\T1/lmr/m/n/10.95 (-20) If your project al-ready has a pass-ing CI con-fig-u-
+ra-tion from Tu-to-rial 9, add the CODESPAN_0_END
+
+Overfull \hbox (32.52646pt too wide) has occurred while \output is active
+\T1/lmr/m/n/10.95 310 \T1/lmr/m/sl/10.95 CHAPTER 26.  TUTORIAL 12: LICENCES, PR
+IVACY, AND RESPONSIBLE AI IN PRACTICE
+[310] (./main.aux) )
+(see the transcript file for additional information)</usr/local/texlive/2026/te
+xmf-dist/fonts/type1/public/lm/lmbx10.pfb></usr/local/texlive/2026/texmf-dist/f
+onts/type1/public/lm/lmbx12.pfb></usr/local/texlive/2026/texmf-dist/fonts/type1
+/public/lm/lmbxi10.pfb></usr/local/texlive/2026/texmf-dist/fonts/type1/public/l
+m/lmr10.pfb></usr/local/texlive/2026/texmf-dist/fonts/type1/public/lm/lmr12.pfb
+></usr/local/texlive/2026/texmf-dist/fonts/type1/public/lm/lmr17.pfb></usr/loca
+l/texlive/2026/texmf-dist/fonts/type1/public/lm/lmr6.pfb></usr/local/texlive/20
+26/texmf-dist/fonts/type1/public/lm/lmri10.pfb></usr/local/texlive/2026/texmf-d
+ist/fonts/type1/public/lm/lmro10.pfb></usr/local/texlive/2026/texmf-dist/fonts/
+type1/public/lm/lmtk10.pfb></usr/local/texlive/2026/texmf-dist/fonts/type1/publ
+ic/lm/lmtt10.pfb>
+Output written on main.pdf (326 pages, 14015774 bytes).
+Transcript written on main.log.

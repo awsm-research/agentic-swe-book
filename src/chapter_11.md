@@ -548,8 +548,8 @@ The CrowdStrike incident took down 8.5 million hosts because *one* configuration
 
 ## Further Reading
 
-- Adams, B., & van der Hoek, A. (2016). *Modern Release Engineering in a Nutshell — Why Researchers Should Care*. IEEE SANER. [ieeexplore.ieee.org/document/7476770](https://ieeexplore.ieee.org/document/7476770)
-- Beyer, B., Jones, C., Petoff, J., & Murphy, N. R. (2016). *Site Reliability Engineering: How Google Runs Production Systems*. O'Reilly. [sre.google/sre-book/release-engineering/](https://sre.google/sre-book/release-engineering/)
+- Adams, B., & McIntosh, S. (2016). *Modern Release Engineering in a Nutshell — Why Researchers Should Care*. IEEE SANER. [ieeexplore.ieee.org/document/7476775](https://ieeexplore.ieee.org/document/7476775/)
+- McNutt, D. (Beyer, B., & Harvey, T., Eds.). *Site Reliability Engineering: How Google Runs Production Systems*. O'Reilly. [sre.google/sre-book/release-engineering/](https://sre.google/sre-book/release-engineering/)
 - Wiggins, A. (2011). *The Twelve-Factor App*. [12factor.net](https://12factor.net/)
 - Preston-Werner, T. (2013). *Semantic Versioning 2.0.0*. [semver.org](https://semver.org/spec/v2.0.0.html)
 - Open Container Initiative. (2017). *OCI Image and Runtime Specifications*. [opencontainers.org](https://opencontainers.org/)

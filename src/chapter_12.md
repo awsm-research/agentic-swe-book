@@ -238,7 +238,7 @@ For most software development use cases, AI coding assistants fall in the "minim
 ### 12.5.3 Documentation and Audit Trails
 
 Responsible AI deployment requires documentation:
-- **Model cards** ([Mitchell et al., 2019](https://arxiv.org/abs/1812.03993)): Structured documents describing an AI model's intended use, limitations, evaluation results, and ethical considerations
+- **Model cards** ([Mitchell et al., 2019](https://arxiv.org/abs/1810.03993)): Structured documents describing an AI model's intended use, limitations, evaluation results, and ethical considerations
 - **Datasheets for datasets** ([Gebru et al., 2018](https://arxiv.org/abs/1803.09010)): Structured documents describing a dataset's composition, collection process, and known limitations
 - **System cards**: Documentation of a deployed AI system, including the models used, their risk assessments, and mitigation measures
 

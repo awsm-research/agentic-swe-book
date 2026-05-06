@@ -182,7 +182,7 @@ Security research consistently shows that even well-instructed models can be mad
 
 ### 9.4.1 The Classical Problem
 
-The *confused deputy problem* ([Hardy, 1988](https://dl.acm.org/doi/10.1145/54289.871712)) is a well-known security concept: a privileged program (the "deputy") is tricked by an unprivileged caller into using its privileges on the caller's behalf, doing something the caller could not have done directly.
+The *confused deputy problem* ([Hardy, 1988](https://dl.acm.org/doi/10.1145/54289.871709)) is a well-known security concept: a privileged program (the "deputy") is tricked by an unprivileged caller into using its privileges on the caller's behalf, doing something the caller could not have done directly.
 
 A classic example: a compiler with write access to a billing file is asked by a user to compile a program, but the user names the output file as the billing file. The compiler, which has permission to write billing files, overwrites it — not because it was instructed to by an authorised principal, but because it used its privilege based on untrusted input.
 

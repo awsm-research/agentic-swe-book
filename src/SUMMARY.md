@@ -45,6 +45,7 @@
 - [Tutorial 7: The AI-Assisted SDLC: From Code to Well-Tested App](./tutorial_7.md)
 - [Tutorial 8: SAST, AI, and Human on Vulnerability Detection](./tutorial_8.md)
 - [Tutorial 9: Security Review in CI/CD Pipeline](./tutorial_9.md)
+- [Tutorial 10: Licences, Privacy, and Responsible AI in Practice](./tutorial_10.md)
 
 # Appendices
  

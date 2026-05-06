@@ -1,6 +1,6 @@
-# Chapter 9: Emerging Security Concerns in Agentic Software Engineering
+# Chapter 9: Security Concerns of Agentic AI Coding Tools
 
-<!-- > *"Every capability you give an agent is also a capability an attacker can try to redirect. The agent does not know the difference between your instructions and someone else's."*
+> *"Every capability you give an agent is also a capability an attacker can try to redirect. The agent does not know the difference between your instructions and someone else's."*
 
 ---
 
@@ -716,4 +716,4 @@ Write a five-item security checklist for agent-generated code in your course pro
 - OWASP. (2025). *OWASP Top 10 for Large Language Model Applications*. [https://owasp.org/www-project-top-10-for-large-language-model-applications/](https://owasp.org/www-project-top-10-for-large-language-model-applications/)
 - NIST. (2024). *Artificial Intelligence Risk Management Framework (AI RMF 1.0)*. National Institute of Standards and Technology.
 - Hardy, N. (1988). The confused deputy (or why capabilities might have been invented). *ACM SIGOPS Operating Systems Review, 22*(4), 36–38.
-- Simon, L. et al. (2023). Exploiting programmatic behavior of LLMs: Dual-use through standard security attacks. *IEEE Security & Privacy Workshop on Language Model Security*. -->
+- Simon, L. et al. (2023). Exploiting programmatic behavior of LLMs: Dual-use through standard security attacks. *IEEE Security & Privacy Workshop on Language Model Security*.

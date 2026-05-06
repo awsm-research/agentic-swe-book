@@ -291,13 +291,6 @@ integration-tests:
     - pytest tests/integration/ -v
   allow_failure: false
 
-# Stage 3: security
-bandit:
-  stage: security
-  script:
-    - pip install bandit
-    - bandit -r src/ -ll
-  allow_failure: false
 ```
 
 **Key configuration details:**

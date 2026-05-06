@@ -15,9 +15,9 @@
 # Part II: Agentic Software Engineering
 
 - [Chapter 6: Agentic Software Engineering: A New Paradigm](./chapter_6.md)
-<!-- - [Chapter 7: Hands-on Activities with AI Coding Agents](./chapter_7.md) -->
-- [Chapter 8: Configuring the Agent's World — Context, Skills, and Tools](./chapter_8.md)
-- [Chapter 9: Emerging Security Concerns in Agentic Software Engineering](./chapter_9.md)
+- [Chapter 7: Configuring the Agent's World — Context, Skills, and Tools](./chapter_7.md)
+- [Chapter 8: Security of AI-Generated Code](./chapter_8.md)
+- [Chapter 9: Security Concerns of Agentic AI Coding Tools](./chapter_9.md)
 
 
 # Part III: Engineering with Responsibility
@@ -43,6 +43,7 @@
 - [Tutorial 5: Code Quality and CI/CD](./tutorial_5.md)
 - [Tutorial 6: The AI-Assisted SDLC: From Spec to Code](./tutorial_6.md)
 - [Tutorial 7: The AI-Assisted SDLC: From Code to Well-Tested App](./tutorial_7.md)
+- [Tutorial 8: SAST Triage — True Positives vs False Positives](./tutorial_8.md)
 
 # Appendices
  

@@ -106,7 +106,7 @@ Common tools available to coding agents:
 | **create_branch** | Create a new git branch |
 | **submit_pr** | Open a pull request with a given diff and description |
 
-Tools are powerful because they allow the agent to *observe* the results of its actions and adapt. After calling `run_command("pytest")`, the agent reads the test output, identifies failures, and updates its plan accordingly. This observe-adapt loop is what distinguishes an agent from a stateless text predictor.
+Tools are powerful because they allow the agent to *observe* the results of its actions and adapt. After calling `run_command("pytest")`, the agent reads the test output, identifies failures, and updates its plan accordingly. This observe-adapt loop — formalised by Yao et al. as the *ReAct* pattern — is what distinguishes an agent from a stateless text predictor ([Yao et al., 2022](https://arxiv.org/abs/2210.03629)).
 
 Tools are also the primary source of risk. A `write_file` call on a production configuration file, a `run_command` that drops a database table, a `submit_pr` that opens a request to the wrong repository — these are irreversible actions that the engineer must prevent through careful permissions, sandboxing, and oversight postures.
 
@@ -138,7 +138,7 @@ The practical consequence is that an agent connected to a GitHub MCP server can 
 
 ### 6.3.4 Memory
 
-*Memory* determines what information persists across steps, sessions, and agents. It is the most architecturally subtle of the four components.
+*Memory* determines what information persists across steps, sessions, and agents. It is the most architecturally subtle of the four components. Surveys of LLM-based agent architectures identify four distinct memory types ([Wang et al., 2024](https://arxiv.org/abs/2308.11432)):
 
 | Memory type | Scope | Persistence | Example |
 |---|---|---|---|
@@ -159,7 +159,13 @@ Hassan's central argument is that the correct mental model for AI coding tools i
 
 The tool metaphor leads engineers to treat AI as passive: you invoke it, it does a thing, you evaluate the output. The teammate metaphor leads engineers to think about communication, context, delegation, and feedback loops. A good teammate is not one who executes instructions blindly; it is one who understands the goal, flags when the instructions conflict with the goal, and asks for clarification before going wrong.
 
-**Context matters as much as instructions.** When you brief a new team member on a task, you give them background: the architecture, the constraints, the conventions, the known landmines. Effective AI-native engineers do the same — they invest in maintaining context files that orient the agent before each task. Brief your AI teammate as you would brief a capable but context-free colleague.
+**Context matters as much as instructions.** Compare two ways to kick off the same task:
+
+> *"Add input validation to the user registration endpoint."*
+
+> *"Add input validation to the `/api/register` endpoint in `auth/views.py`. The project uses Pydantic v2 for validation — see `schemas/user.py` for existing patterns. Reject emails that are not RFC 5322 compliant, passwords under 12 characters, and usernames containing special characters other than hyphens and underscores. Do not touch the rate-limiting middleware in `auth/middleware.py`. Tests live in `tests/test_auth.py`."*
+
+The first prompt produces code that validates *something*. The second produces code that validates *exactly what you need*. The difference is not in the model — it is in the brief. Effective AI-native engineers invest in context files (`CLAUDE.md`, `.cursorrules`) that provide this background automatically before every task.
 
 **Feedback is iterative.** You would not expect a teammate to get a complex task right on the first attempt. The Spec → Generate → Verify → Refine loop (see Section 6.5) is the professional workflow for collaborating with an AI teammate — not a workaround for the AI's limitations, but the natural structure of iterative collaborative work.
 
@@ -213,7 +219,7 @@ The common mistake is to treat generation as the primary activity. Engineers who
 
 *Verification* is the act of determining whether the generated output meets the specification. This is where most engineering judgment lives in the Agentic SDLC.
 
-Verification is not optional and cannot be delegated to the agent itself. An agent asked to check its own output will often confirm that the output is correct even when it is not — it is evaluating against the same implicit model that produced the error. Verification requires a human with the engineering knowledge to recognise what correct looks like.
+Verification is not optional and cannot be delegated to the agent itself. An agent asked to check its own output will often confirm that the output is correct even when it is not — it is evaluating against the same implicit model that produced the error ([Huang et al., 2023](https://arxiv.org/abs/2310.01798)). Verification requires a human with the engineering knowledge to recognise what correct looks like.
 
 A structured verification checklist for AI-generated code:
 
@@ -249,7 +255,15 @@ The discipline of refinement is to *improve the specification*, not just re-run 
 
 ## 6.6 Patterns and Anti-Patterns
 
-Agentic software engineering has accumulated a short but instructive body of practice. Hassan (2025) identifies patterns that distinguish effective AI-native engineers from those who simply adopted new tools without changing their approach.
+Agentic software engineering has accumulated a short but instructive body of practice. Hassan (2025) identifies patterns that distinguish effective AI-native engineers from those who simply adopted new tools without changing their approach. Each pattern has a corresponding failure mode:
+
+| Pattern | Anti-Pattern it corrects |
+|---|---|
+| Specification-first development | Prompt-and-pray |
+| Verification-driven generation | Confidence by plausibility |
+| Context file discipline | Context starvation |
+| Incremental delegation | Overlong agentic sessions |
+| Commit granularity | Ownership transfer |
 
 ### Patterns
 
@@ -273,7 +287,9 @@ Agentic software engineering has accumulated a short but instructive body of pra
 
 **Context starvation.** The engineer invokes the agent with minimal context — no project conventions, no relevant file background, no architectural constraints — and then iterates through many rounds of refinement because the initial output was disconnected from the project's reality. The fix is to invest in context upfront, not to iterate expensively later.
 
-**Overlong agentic sessions.** Allowing an agent to operate for many steps without verification checkpoints. Each step can propagate errors from earlier steps. An agent that went wrong at step 3 of a 20-step task may have built an entire feature on a flawed foundation. Establish verification checkpoints after every 3–5 significant steps.
+**Overlong agentic sessions.** A developer asks an agent to implement a new authentication flow — "full OAuth2 integration with GitHub, including token refresh." The agent runs for 23 steps: reads the codebase, writes token storage code, adds callback handlers, modifies session middleware, generates tests. The tests pass. The developer commits. Two days later, in code review, a colleague spots that the token storage in step 4 wrote refresh tokens to a plain-text log file — and every subsequent step was built on that foundation. Unwinding it requires reworking 19 steps of layered changes.
+
+The rule: establish a verification checkpoint after every 3–5 significant steps. Confirm the agent is still on track before continuing.
 
 ---
 
@@ -360,8 +376,6 @@ The tool does not make the engineer. Jensen Huang was right that the barrier to 
 3. Your team is considering adopting an AI-native IDE (Cursor or Windsurf) versus a terminal-based agent (Claude Code). The project is a 200-KLOC Python monolith with a comprehensive test suite and no AI tooling currently. What questions would you ask to determine which approach is more appropriate, and what evidence would lead you toward each choice?
 
 4. A developer uses an AI agent to implement a database migration. The agent runs the migration against the staging database, observes success, and reports the task complete. The developer commits and deploys. The migration silently drops a column used by a feature not covered in the test suite. Who is responsible, and what process changes would have prevented the incident?
-
-5. Ahmed Hassan argues AI should be treated as a teammate rather than a tool. A sceptical colleague responds: "Teammates have professional accountability. AI has none. The metaphor is misleading." Construct the strongest version of both sides of this argument, then take a position on which framing produces better engineering behaviour in practice.
 
 ---
 

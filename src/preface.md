@@ -215,7 +215,7 @@ This book is a living document. Errors, outdated examples, and gaps in explanati
 
 The source is open and maintained at [github.com/awsm-research/agentic-swe-book](https://github.com/awsm-research/agentic-swe-book). There are three ways to engage:
 
-- **Questions and discussion** — use [GitHub Discussions](https://github.com/awsm-research/agentic-swe-book/discussions) for questions about the material, chapter reactions, and conversations with other readers. This is the right place for anything that is not a concrete error.
+- **Questions and discussion** — contact me via email at [chakkrit@monash.edu](mailto:chakkrit@monash.edu) for questions about the material, chapter reactions, or conversations about the book.
 - **Errors and corrections** — open a GitHub Issue with the chapter reference and a brief description of the problem. Reserve issues for specific, actionable mistakes: wrong code, broken links, factual errors.
 - **Direct contributions** — submit a pull request with a clear description of the change and why it helps readers. Examples, exercises, and case studies are especially welcome.
 

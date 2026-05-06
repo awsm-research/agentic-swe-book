@@ -1,10 +1,11 @@
-# Chapter 10: Licenses, Ethics, and Responsible AI
+# Chapter 10: Software Maintenance and Technical Debts
 
-> *"The question is not whether AI systems can do things. The question is who is responsible when they do them badly."*
+> *"Shipping first-time code is like going into debt. A little debt speeds development so long as it is paid back promptly with a rewrite. The danger occurs when the debt is not repaid."*
+> — Ward Cunningham, OOPSLA 1992
 
 ---
 
-In March 2023, three Samsung engineers independently used ChatGPT to help with their work. One pasted proprietary source code from a semiconductor yield measurement tool and asked for debugging help. A second pasted meeting notes and asked for a summary. A third submitted internal test data to generate test scenarios. In each case, the data entered as a prompt was potentially retained for model training by OpenAI under the terms of service active at the time. When Samsung's security team discovered the incidents, the company banned external generative AI tools on company devices within weeks ([The Register, 2023](https://www.theregister.com/2023/05/02/samsung_bans_chatgpt/)). None of the engineers had acted maliciously. They used a tool the way it was designed to be used. The problem was the absence of any policy telling them not to — and the absence of any understanding of what IP obligations and privacy regulations that tool use triggered. That gap — between using AI tools and understanding the legal and ethical obligations they create — is what this chapter addresses.
+On 1 August 2012, the high-frequency trading firm Knight Capital deployed new software to its order-routing system. The deployment was manual. One of eight servers did not receive the new code, and an old feature flag — repurposed for the new release — was reactivated on that server, waking up an eight-year-old block of dead code that had never been removed. Over the next forty-five minutes, the dormant code executed roughly four million erroneous trades across 154 stocks. By the time the firm halted trading, it had lost USD 440 million — more than its market capitalisation at the time ([SEC, 2013](https://www.sec.gov/litigation/admin/2013/34-70694.pdf)). Knight Capital was acquired the following year and ceased to exist as an independent company. The bug was not in the new code. It was in the code that should have been deleted years earlier — and in the deployment process that allowed half a release to ship to production.
 
 ---
 
@@ -12,491 +13,390 @@ In March 2023, three Samsung engineers independently used ChatGPT to help with t
 
 By the end of this chapter, you will be able to:
 
-1. Explain the major categories of software licences and their obligations.
-2. Navigate the copyright ambiguity around AI-generated code.
-3. Apply a responsible AI framework to evaluate an AI-enabled system.
-4. Identify sources of bias in AI coding assistants and their practical consequences.
-5. Describe key governance frameworks for responsible AI development.
-6. Conduct a basic license and responsible AI audit of a software project.
+1. Distinguish the four classes of software maintenance and explain why preventive maintenance is consistently underfunded.
+2. Apply Fowler's debt quadrant to classify technical debt and identify the categories most likely to arise from AI-generated code.
+3. Identify the major types of technical debt — code, design, architecture, test, dependency, infrastructure, security, and documentation — and choose a detection method for each.
+4. Compare repayment strategies (Boy Scout rule, opportunistic refactor, debt budget, strangler fig, branch by abstraction, parallel change) and select an appropriate one for a given debt shape.
+5. Use AI assistants safely for refactoring legacy code, including the use of characterisation tests as a regression safety net.
+6. Conduct a structured debugging investigation using reproduction, bisection, and observability — and write a blameless postmortem.
 
 ---
 
-## 10.1 Intellectual Property and Code Ownership
+## 10.1 Why Maintenance Dominates the Software Lifecycle
 
-Intellectual property (IP) law governs who owns creative works, including software.
+Software engineering textbooks devote most of their pages to building new systems. Industry spends most of its money keeping old ones running. Empirical studies dating back to Lientz and Swanson's 1980 survey put post-deployment maintenance at 60–80% of total software cost over a system's lifetime ([Lientz & Swanson, 1980](https://dl.acm.org/doi/book/10.5555/539249)). Sommerville's 2016 textbook puts the figure at the high end of that range. The numbers have not improved in forty years — they have got worse, because systems live longer and integrate with more dependencies than they used to.
 
-### 10.1.1 Copyright
+The British computer scientist Manny Lehman articulated why maintenance is unavoidable in his 1980 *Laws of Software Evolution* ([Lehman, 1980](https://ieeexplore.ieee.org/document/1456074)). Three of the laws matter for our purposes:
 
-Copyright is the primary form of IP protection for software. In most jurisdictions, copyright in software belongs to its author (or the author's employer if created in the course of employment) automatically upon creation — no registration required.
+- **Continuing change** — a system used in the real world must be continually adapted, or it becomes progressively less useful.
+- **Increasing complexity** — as a system evolves, its complexity rises unless explicit work is done to reduce it.
+- **Declining quality** — the perceived quality of a system declines unless it is rigorously maintained and adapted to a changing environment.
 
-Copyright grants the owner exclusive rights to:
-- Copy the software
-- Distribute the software
-- Create derivative works
-- Display or perform the software publicly
+Lehman's laws have a quiet implication: doing nothing is not stable. A codebase left alone gets worse, because the world around it keeps moving. Operating systems upgrade. Browsers deprecate APIs. Dependencies publish breaking changes. Regulators introduce new compliance requirements. Code that was correct in 2018 may be insecure, slow, or non-compliant in 2026 — without anyone editing a single line.
 
-For software, this means that you cannot legally copy, distribute, or build upon someone else's code without either a licence from the copyright holder or an applicable exception (such as fair use/fair dealing).
+### The AI Inversion
 
-**Work for hire**: In most employment relationships, software created by an employee in the course of their duties is owned by the employer, not the employee. Contractors may retain ownership depending on the contract.
-
-### 10.1.2 Patents
-
-Software patents protect specific technical implementations or processes. They are controversial in the software industry — critics argue they stifle innovation by allowing trivial ideas to be patented. Their relevance varies significantly by jurisdiction (more significant in the US than in Europe).
-
-### 10.1.3 Trade Secrets
-
-Some software (particularly proprietary algorithms and training data) is protected as a trade secret rather than through copyright or patents. Trade secret protection requires the owner to take reasonable measures to keep the information confidential.
+For most of the field's history, the ratio of writing to reading code was roughly 1:10 — engineers spent ten times longer reading existing code than writing new code. Coding agents have inverted the writing speed, but they have done nothing to change the reading and reviewing burden. If an agent can produce a thousand lines of code in five minutes, the question is no longer "can we build it?" but "can we maintain it?". Every line generated becomes a future obligation. Knight Capital's USD 440 million loss came from forgetting to delete eight-year-old code; agentic systems can produce that volume of forgotten code in an afternoon.
 
 ---
 
-## 10.2 Software Licenses
+## 10.2 The Four Types of Maintenance
 
-A software licence is a legal instrument through which a copyright holder grants others permission to use, copy, modify, and/or distribute their software under specified conditions.
+The ISO/IEC 14764 standard divides maintenance into four categories based on what triggers the work ([ISO/IEC, 2006](https://www.iso.org/standard/39064.html)). The taxonomy is forty years old and still useful — most teams are unbalanced across these categories, and naming them helps to see the imbalance.
 
-### 10.2.1 Proprietary Licenses
-
-Proprietary licences retain all rights for the copyright holder. Users may run the software but cannot view the source code, modify it, or redistribute it. Examples: Microsoft Windows, Adobe Photoshop, most commercial SaaS products.
-
-### 10.2.2 Open Source Licenses
-
-Open source licences grant users the freedom to use, study, modify, and distribute the software. The [Open Source Initiative](https://opensource.org/osd) (OSI) maintains the definitive list of approved open source licences.
-
-Open source licences fall broadly into two categories:
-
-**Permissive licences** allow the software to be used in almost any way, including incorporation into proprietary software:
-
-| Licence | Key Conditions | Common Use Cases |
+| Type | Trigger | Example |
 |---|---|---|
-| MIT | Include copyright notice | Most popular for libraries |
-| Apache 2.0 | Include copyright notice; patent grant | Corporate-friendly projects |
-| BSD (2/3-clause) | Include copyright notice | BSD-origin software |
+| **Corrective** | A defect was found in production | Hotfix a NullPointerException reported by a user |
+| **Adaptive** | The environment changed | Migrate from Python 3.9 to 3.13 |
+| **Perfective** | The code works, but should be better | Refactor a 600-line class into smaller units |
+| **Preventive** | Reduce the likelihood of future defects | Add tests to a fragile module before touching it |
 
-**Copyleft licences** require that derivative works be distributed under the same licence:
+Corrective maintenance dominates most teams' attention because it is the loudest — bugs get reported, paged, escalated. Preventive maintenance is the quietest, because nothing visible happens when you do it well. The result is predictable: teams underinvest in prevention, defects accumulate, and corrective work crowds out everything else. The pattern is the maintenance equivalent of running a hospital that only has an emergency department.
 
-| Licence | Key Conditions | Common Use Cases |
+The economic argument for preventive maintenance is well-established. Barry Boehm's 1981 *Software Engineering Economics* established the now-canonical 1:5:10:50 cost progression — defects fixed in design cost roughly one unit; the same defect in production costs fifty ([Boehm, 1981](https://dl.acm.org/doi/book/10.5555/539302)). Capers Jones' later work extended this with broader industry data confirming a 30–100× factor between design-time and production-time fixes ([Jones, 2013](https://www.springer.com/gp/book/9781441973269)). The Knight Capital incident is at the extreme end of this curve — eight years of deferred dead-code removal cost the firm its existence.
+
+---
+
+## 10.3 What Technical Debt Actually Means
+
+The term *technical debt* was coined by Ward Cunningham in 1992 to explain to non-technical stakeholders why the software team needed to refactor before adding features ([Cunningham, 1992](http://wiki.c2.com/?WardExplainsDebtMetaphor)). His original framing was specific. Shipping code that did not yet reflect the team's full understanding of the problem was acceptable — even desirable, if it accelerated learning — *provided the team came back and refactored once the understanding had matured*. The debt was the gap between what the code expressed and what the team knew. The interest was the friction that gap caused on every subsequent change.
+
+The metaphor has been corrupted in common usage. *Technical debt* is now used as a synonym for *code I do not like*, *legacy*, or *anything that should be rewritten*. The corrupted version is rhetorically convenient but analytically useless — if every imperfection is debt, the term carries no information.
+
+### Fowler's Debt Quadrant
+
+In 2009, Martin Fowler refined the metaphor with a four-quadrant classification ([Fowler, 2009](https://martinfowler.com/bliki/TechnicalDebtQuadrant.html)):
+
+|  | Deliberate | Inadvertent |
 |---|---|---|
-| GPL v2/v3 | Derivative works must be GPL | Linux kernel, GNU tools |
-| LGPL | Weaker copyleft; allows linking without GPL obligation | Libraries intended for wide use |
-| AGPL | GPL + network use triggers copyleft | SaaS applications |
+| **Prudent** | "We must ship now and deal with the consequences" | "Now we know how we should have done it" |
+| **Reckless** | "We don't have time for design" | "What's layering?" |
 
-**The copyleft risk**: If your proprietary application incorporates AGPL-licensed code, the AGPL requires you to release your application's source code. Mixing GPL-licensed libraries into a proprietary codebase creates licence compatibility problems.
+The quadrant is not symmetric. *Deliberate prudent* debt is rational engineering — a team chooses to ship a known compromise to meet a deadline, and tracks it for repayment. *Inadvertent prudent* debt is the inevitable cost of learning — you only see the right design after you have built the wrong one. Both are normal.
 
-### 10.2.3 Creative Commons
-
-Creative Commons licences are primarily for non-software creative works (documentation, datasets, design assets). They are not appropriate for software source code — use an OSI-approved licence instead.
-
-### 10.2.4 Choosing a License
-
-For open source projects:
-- **MIT or Apache 2.0**: Maximise adoption; allow use in proprietary software
-- **GPL**: Ensure all derivatives remain open source
-- **AGPL**: Ensure even SaaS deployments that use the software release modifications
-
-For internal/proprietary projects: use a proprietary licence (explicitly state no licence is granted if you want to be clear).
-
-**No licence = all rights reserved**: If you publish code without a licence, copyright law gives no-one the right to use it, even if it is publicly visible.
-
-### 10.2.5 Real-World Licensing Case Studies
-
-**Case 1: The AGPL Trap — MongoDB and Elastic**
-
-MongoDB originally used the AGPL licence for its core database. When MongoDB's commercial competitiveness was threatened by cloud providers offering MongoDB-as-a-service without contributing back, MongoDB switched to the Server Side Public License (SSPL), which extends the AGPL copyleft to *all* software used to offer the database as a service. Elastic made a similar move with Elasticsearch in 2021.
-
-*Lesson for engineers*: If your SaaS product depends on an AGPL or SSPL component, the copyleft may require you to release your entire application's source code. Check licences before adopting new dependencies.
-
-**Case 2: The GPL Enforcement — BusyBox and Android**
-
-The Software Freedom Conservancy has pursued numerous enforcement actions against device manufacturers shipping Linux (GPL v2) and BusyBox (GPL v2) without distributing corresponding source code, as required by the GPL. High-profile cases include actions against Best Buy, Samsung, and several router manufacturers.
-
-*Lesson for engineers*: GPL compliance for embedded or distributed software (firmware, IoT devices) requires distributing the source code or making it available on written request. Many organisations fail this requirement and only discover the problem during acquisition due diligence.
-
-**Case 3: The GitHub Copilot Class Action**
-
-In 2022, a class action lawsuit was filed against GitHub, Microsoft, and OpenAI alleging that Copilot reproduces copyrighted code from training data — including code under licences that require attribution and source disclosure — without attribution ([Doe v. GitHub, 2022](https://githubcopilotlitigation.com/)). As of 2024–2025, this litigation is ongoing.
-
-*Lesson for engineers*: AI tools trained on copyrighted code may reproduce that code verbatim. Several organisations (Samsung, Apple, JPMorgan) have restricted or banned external AI coding tools to mitigate this risk. Understand your organisation's policy before using AI tools with proprietary code.
-
-**Case 4: The Copyleft Compatibility Matrix**
-
-Not all open source licences are compatible with each other. The following matrix summarises common compatibility issues:
-
-| Combining | With GPL v3 | With Apache 2.0 | With MIT |
-|---|---|---|---|
-| **GPL v3** | Compatible | Compatible (Apache can be relicensed under GPL v3) | Compatible |
-| **Apache 2.0** | Compatible | Compatible | Compatible |
-| **GPL v2 only** | **Incompatible** | **Incompatible** | Compatible |
-| **AGPL v3** | Compatible | Compatible | Compatible |
-
-The GPL v2 / GPL v3 incompatibility matters because the Linux kernel (GPL v2 only) cannot legally incorporate code from GPL v3 projects. This has practical consequences for kernel modules and embedded Linux distributions.
-
-*Lesson for engineers*: Before incorporating a library, check that its licence is compatible with your project's licence and all other dependencies. Tools like [FOSSA](https://fossa.com/) and [TLDR Legal](https://tldrlegal.com/) can help.
+The dangerous quadrants are the reckless ones. *Deliberate reckless* debt — "we don't have time for design" — is a management failure. *Inadvertent reckless* debt — "what's layering?" — is a competence failure. The latter is where AI-generated code lands by default: an agent does not know your project's layering rules unless you have specified them in context, and the code it produces will violate boundaries it does not know exist. A reviewer who waves the code through inherits the debt without realising it has been incurred.
 
 ---
 
-## 10.3 AI-Generated Code and Copyright
+## 10.4 A Taxonomy of Debt
 
-The copyright status of AI-generated code is one of the most actively litigated and debated questions in technology law as of 2024–2025.
+Debt is not one thing. Different categories of debt have different detection methods, different costs, and different repayment strategies. The taxonomy below covers the categories that recur in production systems.
 
-### 10.3.1 The Current Legal Landscape
-
-**Human authorship requirement**: In most jurisdictions, copyright requires human authorship. The United States Copyright Office has repeatedly held that works produced autonomously by AI without human creative input are not copyrightable ([US Copyright Office, 2024](https://www.copyright.gov/ai/)). This means purely AI-generated code may have no copyright holder — it may be in the public domain.
-
-**Human-AI collaboration**: Where a human makes meaningful creative choices in directing, selecting, and refining AI output, the resulting work may be copyrightable as a human-authored work. The threshold for "meaningful creative contribution" is not yet clearly defined.
-
-**Training data and copyright**: Several lawsuits have been filed alleging that AI models trained on copyrighted code without permission infringe copyright ([GitHub Copilot class action, 2022](https://githubcopilotlitigation.com/)). These cases are unresolved as of this writing.
-
-### 10.3.2 Practical Guidance
-
-In the absence of settled law, the pragmatic guidance is:
-
-1. **For critical proprietary systems**: Treat AI-generated code with the same IP review you would apply to any third-party code. Understand what training data the model was trained on, and whether it may reproduce copyrighted code verbatim.
-
-2. **For licence compliance**: AI coding assistants trained on copyleft code could theoretically reproduce that code in their outputs, creating a hidden licence obligation. Some organisations have adopted policies requiring a human review of AI-generated code before incorporating it.
-
-3. **For attribution**: If an AI assistant produces code that is substantially similar to an existing open source project, treat it as if it were copied from that project and apply the appropriate licence obligations.
-
-4. **Keep documentation**: Record which parts of your codebase are AI-generated, which tools were used, and which specifications were provided. This documentation supports IP claims and audits.
-
----
-
-## 10.4 Responsible AI Principles
-
-Responsible AI has moved from academic concern to regulatory requirement: the EU AI Act ([European Parliament, 2024](https://www.europarl.europa.eu/news/en/press-room/20240308IPR19015/artificial-intelligence-act-meps-adopt-landmark-law)), the US Executive Order on Safe, Secure, and Trustworthy AI ([White House, 2023](https://www.whitehouse.gov/briefing-room/presidential-actions/2023/10/30/executive-order-on-the-safe-secure-and-trustworthy-development-and-use-of-artificial-intelligence/)), and the Australian Government's AI Ethics Framework ([DISER, 2019](https://www.industry.gov.au/publications/australias-artificial-intelligence-ethics-framework)) all impose obligations on organisations developing or deploying AI.
-
-Key responsible AI principles ([Jobin et al., 2019](https://www.nature.com/articles/s42256-019-0088-2)):
-
-| Principle | Description |
-|---|---|
-| **Fairness** | AI systems should not discriminate unfairly against individuals or groups |
-| **Transparency** | The behaviour and decision-making of AI systems should be explainable |
-| **Accountability** | There must be clear human responsibility for AI system outcomes |
-| **Privacy** | AI systems should respect individuals' privacy rights |
-| **Safety** | AI systems should not cause harm |
-| **Beneficence** | AI systems should benefit individuals and society |
-
-### 10.4.1 Fairness and Bias in AI Coding Assistants
-
-AI coding assistants can exhibit bias in several ways:
-
-**Code quality disparity**: Research has found that AI coding tools perform better on code written in widely-used languages and paradigms. Code in less common languages, frameworks, or domains receives lower quality suggestions — creating a "rich get richer" dynamic where well-resourced projects benefit more from AI assistance ([Dakhel et al., 2023](https://arxiv.org/abs/2304.10778)).
-
-**Representation in training data**: AI models trained on public code repositories inherit the demographics and conventions of those repositories. If the training data overrepresents certain coding styles, conventions, or languages, the model's suggestions will reflect those biases.
-
-**Accessibility**: AI coding tools require reliable internet access, modern hardware, and often paid subscriptions. This creates barriers for developers in lower-income countries or those working in resource-constrained environments.
-
-### 10.4.2 Transparency and Explainability
-
-When AI systems make decisions or generate outputs that affect people, those affected often have a right to understand how the decision was made. For AI coding assistants, relevant questions include:
-
-- What training data was used?
-- How does the model decide what code to generate?
-- When the model generates insecure code, can this be detected and explained?
-
-Current AI coding assistants offer limited explainability. This is an active research area, and engineers should be cautious about deploying AI decision-making in contexts where explainability is legally or ethically required.
-
-### 10.4.3 Accountability
-
-The "accountability gap" in AI systems refers to the challenge of assigning responsibility when an AI system causes harm. For software engineers, the practical principle is:
-
-**You are accountable for AI-generated code you ship.** The fact that an AI assistant generated a vulnerable function does not transfer responsibility to the AI vendor. The engineer who reviewed, accepted, and deployed the code is responsible.
-
-This accountability principle reinforces the evaluation-driven approach of Chapter 7: you cannot disclaim responsibility for code you did not evaluate.
-
----
-
-## 10.5 Organisational AI Governance
-
-### 10.5.1 AI Use Policies
-
-An AI use policy defines:
-- Which AI tools are approved for use (and for what purposes)
-- What data may and may not be sent to AI services
-- How AI-generated code must be reviewed before production use
-- How AI tool usage should be documented
-
-**Example policy clauses:**
-
-> "Engineers may use approved AI coding assistants (see the approved tools list) for code generation. All AI-generated code must be reviewed by a human engineer before merging to the main branch."
-
-> "No customer PII, authentication credentials, or proprietary algorithm details may be included in prompts to external AI services."
-
-> "Engineers must disclose AI tool usage in pull request descriptions when AI-generated code constitutes more than 20% of the change."
-
-### 10.5.2 Risk Tiering
-
-The EU AI Act introduced a risk-tiered framework for AI systems ([European Parliament, 2024](https://www.europarl.europa.eu/news/en/press-room/20240308IPR19015/artificial-intelligence-act-meps-adopt-landmark-law)):
-
-| Risk Tier | Examples | Requirements |
+| Category | What it looks like | Why it costs |
 |---|---|---|
-| **Unacceptable risk** | Social scoring, real-time biometric surveillance | Prohibited |
-| **High risk** | Medical devices, hiring decisions, credit scoring | Conformity assessment, transparency, human oversight |
-| **Limited risk** | Chatbots, deepfakes | Transparency obligations |
-| **Minimal risk** | AI coding assistants, spam filters | Voluntary codes of conduct |
+| **Code debt** | Duplication, dead code, deep nesting, long methods | Every change becomes more expensive |
+| **Design debt** | Wrong abstractions, leaky boundaries, god objects | New features fight the existing structure |
+| **Architecture debt** | Distributed monolith, missing layers, circular service dependencies | Cannot scale or evolve subsystems independently |
+| **Test debt** | Missing coverage, flaky tests, tautological assertions | Cannot refactor safely; bugs reach production |
+| **Documentation debt** | Stale README, missing ADRs, undocumented invariants | Onboarding takes weeks; the same questions get re-answered |
+| **Dependency debt** | Outdated, abandoned, vulnerable, or licence-incompatible packages | Security exposures; future upgrades become coordinated migrations |
+| **Infrastructure debt** | Manual deploys, snowflake servers, missing IaC | Releases are risky; recovery from incidents is slow |
+| **Security debt** | Known CVEs, missing auth checks, leaked secrets | A single exploit becomes a regulatory event |
+| **Data debt** | Denormalised tables, missing constraints, dirty production data | Reports lie; migrations are dangerous |
+| **Process debt** | Manual release steps, no rollback plan, undocumented runbooks | Every incident is novel; recovery time is unpredictable |
 
-For most software development use cases, AI coding assistants fall in the "minimal risk" tier. However, if you are *building* a high-risk AI system (medical diagnosis, credit scoring, automated hiring), significantly stricter requirements apply.
+The categories interact. Test debt makes code debt unrepayable — you cannot refactor safely without tests. Infrastructure debt makes dependency debt unrepayable — you cannot upgrade safely without a reliable deploy and rollback path. The interaction is why teams that try to pay down one category at a time often fail: the prerequisites for repayment are themselves in debt.
 
-### 10.5.3 Documentation and Audit Trails
+### AI-Induced Debt
 
-Responsible AI deployment requires documentation:
-- **Model cards** ([Mitchell et al., 2019](https://arxiv.org/abs/1810.03993)): Structured documents describing an AI model's intended use, limitations, evaluation results, and ethical considerations
-- **Datasheets for datasets** ([Gebru et al., 2018](https://arxiv.org/abs/1803.09010)): Structured documents describing a dataset's composition, collection process, and known limitations
-- **System cards**: Documentation of a deployed AI system, including the models used, their risk assessments, and mitigation measures
+AI-generated code introduces a category that did not exist before agentic tools became commonplace. The patterns are distinct enough to warrant their own list:
+
+- **Hallucinated APIs** — generated code calls functions that do not exist, or uses signatures from an older version of the library
+- **Confidently wrong logic** — code that compiles, passes a happy-path test, and is silently incorrect on edge cases the agent did not consider
+- **Over-abstraction** — agents reach for design patterns when a function would do
+- **Copy-paste at scale** — agents replicate near-duplicates faster than humans can refactor them away
+- **Stylistic drift** — every prompt produces slightly different conventions; the codebase becomes a fragmented archaeology of past sessions
+- **Phantom dependencies** — agents add libraries the project does not need
+- **Test theatre** — generated tests that mock the system under test and assert on the mocks
+
+What makes AI-induced debt distinctive is its plausibility. Human carelessness leaves recognisable fingerprints: shortcuts, half-finished refactors, comments admitting the workaround. AI-induced debt looks like competent code written by someone who does not know your project. It passes review because it reads as confident. The Samsung incident from Chapter 12 — three engineers leaking proprietary code to an AI service in 2023 — is the visible version of this problem. The invisible version is the thousand pull requests that look fine and quietly erode the codebase.
 
 ---
 
-## 10.6 Privacy Regulation and AI-Generated Code
+## 10.5 Detecting Debt
 
-A governance policy controls what engineers do with AI tools. Privacy regulation controls what the code those tools produce does with user data. The two obligations are independent — an organisation can have a perfect AI use policy and still ship GDPR-non-compliant code.
+You cannot manage what you do not measure. Each category of debt has detection tools that are mature, free, and ignored.
 
-### 10.6.1 Key Regulations
+### Self-Admitted Technical Debt
 
-**GDPR (General Data Protection Regulation)** — applies to any organisation that processes personal data of EU residents, regardless of where the organisation is located ([EU Regulation 2016/679](https://gdpr.eu/)).
-
-Key obligations relevant to AI-generated code:
-- **Data minimisation**: Collect only the data you need. AI-generated code that logs request bodies may inadvertently collect PII.
-- **Purpose limitation**: Use data only for the purpose collected. AI-generated analytics code may aggregate data in ways that exceed the original purpose.
-- **Right to erasure ("right to be forgotten")**: Code must support deleting a user's personal data on request. AI-generated CRUD code frequently omits this.
-- **Data portability**: Code must support exporting a user's personal data in a structured format.
-- **Lawful basis**: You need a lawful basis (consent, contract, legitimate interest) to process personal data. AI-generated signup flows may not implement consent collection correctly.
-
-**CCPA (California Consumer Privacy Act)** — similar to GDPR in scope, applies to businesses collecting personal information of California residents ([California Attorney General](https://oag.ca.gov/privacy/ccpa)).
-
-**Australian Privacy Act 1988** — applies to Australian Government agencies and organisations with annual turnover over $3 million ([OAIC](https://www.oaic.gov.au/privacy/the-privacy-act)).
-
-### 10.6.2 Worked Scenario: AI-Generated User Deletion Endpoint
-
-**Prompt to AI assistant:**
-```
-Add a DELETE /users/{user_id} endpoint to our FastAPI application that removes 
-a user from the database.
-```
-
-**AI-generated code (non-compliant):**
-```python
-@app.delete("/users/{user_id}")
-async def delete_user(user_id: int, db: Session = Depends(get_db)):
-    user = db.query(User).filter(User.id == user_id).first()
-    if not user:
-        raise HTTPException(status_code=404, detail="User not found")
-    db.delete(user)
-    db.commit()
-    return {"message": "User deleted"}
-```
-
-This deletes the `User` row but fails GDPR requirements in several ways:
-
-| GDPR Requirement | Gap in Generated Code |
-|---|---|
-| Cascade deletion | User's tasks, comments, audit logs may retain PII |
-| Audit trail | No record that deletion was requested and completed |
-| Third-party notification | External services (email, analytics) may still hold the user's data |
-| Verification | No check that the requester is authorised to delete this account |
-| Confirmation | No confirmation email to document the right-to-erasure request |
-
-**Improved specification for AI:**
-```
-Add a GDPR-compliant DELETE /users/{user_id} endpoint:
-- Verify the caller is the user themselves (JWT claim) or an admin
-- Cascade delete: remove all tasks, comments, and audit logs owned by the user
-- Anonymise rather than delete activity that is required for financial records (replace 
-  user name/email with "Deleted User [id]" in order history)
-- Create a DeletionRequest audit record with: user_id, requester_id, timestamp, 
-  cascaded_tables
-- Return 204 No Content on success
-- Send a confirmation email to the user's address before deleting it
-Assume: User, Task, Comment, AuditLog, DeletionRequest SQLAlchemy models; 
-        send_email(to, subject, body) utility function available
-```
-
-The difference between the two prompts is one sentence of context per GDPR requirement. That is the engineering cost of compliance — not implementing deletion differently, but specifying it precisely enough that the generated code actually does it.
-
-### 10.6.3 PII in AI Prompts
-
-GDPR Article 28 requires a Data Processing Agreement (DPA) with any third party that processes personal data on your behalf. Most major AI providers offer DPAs, but these must be executed before sending personal data.
-
-**Do not send to external AI APIs (without a DPA and privacy review):**
-- Names, email addresses, phone numbers
-- IP addresses (considered personal data under GDPR)
-- User-generated content that may contain PII
-- Authentication tokens or session identifiers
-
-**Automated PII detection before AI prompts:**
+The cheapest debt detector is `grep`. Authors who know they are writing debt mark it — `TODO`, `FIXME`, `HACK`, `XXX`. The empirical literature on *self-admitted technical debt* (SATD) is consistent: most TODOs are never repaid, and the median lifetime of a FIXME comment is measured in years ([Potdar & Shihab, 2014](https://users.encs.concordia.ca/~eshihab/pubs/Potdar_ICSME2014.pdf)). The fact that authors admitted the debt is exactly what makes SATD valuable to track — it represents the part of the debt landscape that is already labelled.
 
 ```bash
-uv add --dev presidio-analyzer presidio-anonymizer
+# Mine the repository for self-admitted debt
+rg -n '(TODO|FIXME|HACK|XXX)\b' --type py
 ```
 
-```python
-# pii_guard.py
-import anthropic
-from presidio_analyzer import AnalyzerEngine
+A simple metric — *SATD count per thousand lines of code*, tracked over time — is one of the easiest debt indicators a team can adopt.
 
-analyzer = AnalyzerEngine()
-client = anthropic.Anthropic()
+### Code-Level Metrics
 
+Cyclomatic complexity, originally proposed by Thomas McCabe in 1976 ([McCabe, 1976](https://ieeexplore.ieee.org/document/1702388)), counts the number of linearly independent paths through a function. It correlates roughly with both bug density and the cognitive cost of understanding a function. A method with cyclomatic complexity above 15 is a refactoring candidate; above 30 it is a hazard.
 
-def safe_ai_request(prompt: str, model: str = "claude-haiku-4-5-20251001") -> str:
-    """Reject prompts that contain detectable PII."""
-    results = analyzer.analyze(text=prompt, language="en")
-    
-    pii_found = [r.entity_type for r in results if r.score > 0.7]
-    if pii_found:
-        raise ValueError(
-            f"Prompt contains potential PII ({pii_found}). "
-            "Remove PII before sending to external AI services."
-        )
-    
-    response = client.messages.create(
-        model=model,
-        max_tokens=1024,
-        messages=[{"role": "user", "content": prompt}],
-    )
-    return response.content[0].text
+| Tool | Language | Measures |
+|---|---|---|
+| `radon`, `lizard` | Python, multi-language | Cyclomatic complexity, maintainability index |
+| `vulture` | Python | Unused functions, classes, imports |
+| `ts-prune`, `knip` | TypeScript | Dead exports |
+| `jscpd`, `pmd-cpd` | Multi-language | Duplicate code blocks |
+| `ruff`, `pylint` | Python | Style, smells, simple bugs |
+| SonarQube, CodeScene | Multi-language | Hosted dashboards combining all of the above |
 
+### Hotspot Analysis
 
-# Usage
-try:
-    result = safe_ai_request(
-        "Fix the bug in this function. The user john.doe@example.com reported it."
-    )
-except ValueError as e:
-    print(f"PII guard blocked request: {e}")
-    # Sanitise the prompt: remove the email address before retrying
-```
-
----
-
-## 10.7 License Compliance Audit and Responsible AI Checklist
-
-### 10.7.1 License Compliance Audit with pip-licenses
+Adam Tornhill's *churn × complexity* analysis is the single most actionable debt detector ([Tornhill, 2018](https://pragprog.com/titles/atevol/software-design-x-rays/)). The argument is simple: complex code that nobody touches is not costing you anything; complex code that changes weekly is where every defect accumulates. Multiplying file-level complexity by the count of recent changes produces a heat map of the files where debt is actively burning capacity.
 
 ```bash
-uv add --dev pip-licenses
-
-# List all dependencies and their licenses
-uv run pip-licenses --format=table
-
-# Export to CSV for review
-uv run pip-licenses --format=csv --output-file=licenses.csv
-
-# Check for copyleft licenses that may require disclosure
-uv run pip-licenses --fail-on="GPL;AGPL" --format=table
+# Approximate hotspot detection from git
+git log --since="6 months ago" --name-only --pretty=format: \
+  | sort | uniq -c | sort -rn | head -20
 ```
 
-Sample output:
+The output is the list of files most worth investigating with `radon` or `lizard`. Tools like `code-maat` and CodeScene formalise the analysis and produce visualisations.
+
+### Dependency, Security, and Test Debt
+
+Dependency debt is detected by automated auditors:
+
+| Tool | Ecosystem |
+|---|---|
+| `pip-audit`, `safety` | Python |
+| `npm audit`, `pnpm audit` | JavaScript |
+| `cargo audit` | Rust |
+| Dependabot, Renovate | Hosted, multi-ecosystem |
+
+Security debt is detected by SAST tools (Bandit, Semgrep, CodeQL — covered in Chapter 8) and secret scanners (GitLeaks, TruffleHog).
+
+Test debt requires a more careful instrument. Coverage is necessary but not sufficient — a test suite with 95% line coverage and no meaningful assertions is debt dressed as quality. *Mutation testing* introduces small modifications to the production code and verifies that at least one test fails for each mutation. A high mutation score is much harder to fake than a high coverage number.
+
+```bash
+# Mutation testing for Python
+uv add --dev mutmut
+uv run mutmut run --paths-to-mutate=src/
+uv run mutmut results
 ```
-Name              Version  License
-anthropic         0.28.0   MIT License
-fastapi           0.111.0  MIT License
-pytest            8.2.0    MIT License
-sqlalchemy        2.0.30   MIT License
-```
 
-If any dependency has a GPL or AGPL licence, review whether your use triggers copyleft obligations.
-
-### 10.7.2 Responsible AI Checklist for the Course Project
-
-**Step 1: Generate a risk assessment with an AI assistant**
-
-Paste the following prompt into any AI assistant (Claude, ChatGPT, Gemini), replacing the project block with your own project description:
-
-**System prompt:**
-
-<div class="admonish-prompt">
-
-You are a responsible AI auditor with expertise in software engineering and AI ethics
-frameworks. You provide concise, actionable risk assessments grounded in established
-responsible AI principles (Fairness, Transparency, Accountability, Privacy, Safety,
-Beneficence). Be specific to the technology stack and deployment context described.
-
-</div>
-
-**User:**
-
-<div class="admonish-prompt">
-
-Based on the project description below, provide a brief responsible AI risk assessment.
-For each of the six principles — Fairness, Transparency, Accountability, Privacy,
-Safety, and Beneficence — identify:
-
-1. The primary risk for this project
-2. A specific mitigation recommendation
-
-Project:
-Task Management API for software development teams.
-- Built with Python and FastAPI
-- Uses AI coding assistants for feature development
-- Stores user data including email addresses and work activity
-- Will be deployed as a SaaS product to paying customers
-
-</div>
-
-**Step 2: Complete the self-audit checklist**
-
-Work through the checklist below for your own project. Each unchecked item is a gap to address before the project is considered responsible-AI-compliant.
-
-<div class="admonish-prompt">
-
-### Responsible AI Self-Audit
-
-### Fairness
-- [ ] Have we considered who may be disadvantaged by AI-generated code quality disparities?
-- [ ] Have we tested the system with diverse inputs, not just the "happy path"?
-
-### Transparency
-- [ ] Is it documented which parts of the codebase are AI-generated?
-- [ ] Are AI tools used in this project disclosed in project documentation?
-
-### Accountability
-- [ ] Has all AI-generated code been reviewed by a human engineer?
-- [ ] Is there clear ownership of each component, including AI-generated ones?
-
-### Privacy
-- [ ] Have we verified that no PII or credentials were included in AI prompts?
-- [ ] Does the system comply with applicable privacy regulations (GDPR, Privacy Act)?
-
-### Security
-- [ ] Has AI-generated code undergone security review (Bandit, manual review)?
-- [ ] Have we run GitLeaks to ensure no credentials are in the repository?
-
-### Licensing
-- [ ] Have all dependencies been audited for licence compatibility?
-- [ ] Is it clear that AI-generated code does not reproduce copylefted code?
-</div>
+Mutation testing is computationally expensive and slow. The pragmatic approach is to run it on hotspots, not the whole codebase.
 
 ---
 
-## 10.8 Key Takeaways
+## 10.6 Quantifying and Communicating Debt
 
-The legal and ethical landscape for AI-generated code is unsettled and changing quickly. The key ideas from this chapter:
+The SQALE model, developed by Jean-Louis Letouzey in 2010 and adopted by SonarQube, expresses debt in *remediation hours* — the estimated time to repay each detected issue ([Letouzey, 2012](https://www.sqale.org/)). A *debt ratio* is then computed as remediation cost divided by estimated development cost. The numbers are not precise. They are useful for trend, not for absolute claims.
 
-1. **Copyright, patents, and trade secrets are the three main IP protection mechanisms for software.** For most software, copyright is the operative form — it attaches automatically on creation, without registration, and it governs whether anyone can copy, distribute, or build on your code.
+The persistent problem with debt quantification is that engineers and product managers speak different dialects. Telling a product manager that the codebase has 412 hours of technical debt does not motivate action. Telling them that the team's average cycle time has increased from 3.2 to 5.7 days over the last quarter, and that the top three hotspots account for 60% of post-merge defects, will. Translate debt into delivery delay, defect rate, and time-to-recover before bringing it to a stakeholder conversation.
 
-2. **Open source licences are not interchangeable.** Permissive licences (MIT, Apache 2.0) allow incorporation into proprietary software; copyleft licences (GPL, AGPL) require derivative works to remain open source. Mixing incompatible licences creates hidden legal obligations. Check compatibility before adopting a dependency.
+The DORA metrics — deployment frequency, lead time for changes, change failure rate, and time to restore service ([Forsgren et al., 2018](https://itrevolution.com/product/accelerate/)) — are a useful complement to debt metrics. They measure the consequences of debt rather than debt itself, and they are the metrics product and engineering leaders already share.
 
-3. **AI-generated code exists in a copyright grey zone.** Purely AI-generated output may have no copyright holder — it may effectively be in the public domain. Where a human makes meaningful creative choices in directing and refining AI output, the work may be copyrightable as human-authored; the legal threshold for this is not yet settled.
+---
 
-4. **You are accountable for AI-generated code you ship.** Responsibility does not transfer to the AI vendor. The engineer who reviews, accepts, and deploys the code is the responsible party — regardless of which tool produced the first draft.
+## 10.7 Repayment Strategies
 
-5. **Privacy regulations impose concrete obligations on the code you write.** GDPR's right to erasure, data minimisation, and lawful basis requirements are not satisfied by default by AI-generated code — they must be specified in the prompt. The same applies to CCPA and the Australian Privacy Act for their respective jurisdictions.
+There is no universal repayment strategy because there is no universal debt shape. The table below summarises the major strategies, when each works, and when each fails.
 
-6. **Do not send personal data to external AI APIs without a Data Processing Agreement.** Names, email addresses, and IP addresses are personal data under GDPR. Executing a DPA with the AI provider is a legal requirement before sending them, not an optional precaution.
+| Strategy | When it works | When it fails |
+|---|---|---|
+| **Boy Scout Rule** — leave the file cleaner than you found it | Diffuse, low-grade debt across many files | Concentrated structural debt that no single change can address |
+| **Opportunistic refactor** — fix when you are already in the file | Code that is being touched anyway | Code nobody touches — it rots in the dark |
+| **Tech debt budget** — commit a fixed share of capacity (typically 20%) | Mature teams with backlog discipline and stakeholder trust | Teams whose product partners do not yet trust them to spend that capacity |
+| **Dedicated debt sprint** | One large, localised piece of debt | Teams that pretend a one-time sprint will solve a continuous problem |
+| **Strangler fig** — incremental rewrite of a legacy system around a façade | Legacy systems that still earn money and cannot be turned off | Greenfield projects where there is nothing to strangle |
+| **Branch by abstraction** | Mid-flight migrations across many call sites | Small-scope changes that can be made directly |
+| **Parallel change (expand–contract)** | API and schema changes with external consumers | Tightly-coupled internal code where dual-running is impractical |
+| **Rewrite from scratch** | Almost never | Almost always |
 
-7. **Organisational AI governance starts with a use policy that is actually enforced.** The policy must specify which tools are approved, what data may be sent, and how AI-generated code is reviewed before production use. The Samsung incident illustrates what happens in the absence of one.
+The case against rewrites deserves a paragraph of its own. In 2000, Joel Spolsky published *Things You Should Never Do, Part I*, in which he argued that Netscape's decision to rewrite its browser from scratch was the single worst strategic mistake the company ever made — it gave Microsoft three years to ship Internet Explorer unopposed and effectively killed the company ([Spolsky, 2000](https://www.joelonsoftware.com/2000/04/06/things-you-should-never-do-part-i/)). The pattern has repeated since: rewrites consistently take longer than expected, ship with fewer features than the original, and reproduce the bugs that the original system had spent years patching. Michael Feathers' alternative — incrementally taming legacy code with tests and seams — is unglamorous and almost always correct.
 
-8. **The EU AI Act classifies AI coding assistants as minimal risk.** If you are *building* a high-risk AI system — for medical diagnosis, hiring, or credit decisions — significantly stricter requirements apply, including conformity assessments, transparency obligations, and mandated human oversight.
+### Choosing by Debt Shape
+
+A simple decision procedure helps:
+
+1. **Is the debt diffuse or concentrated?** Diffuse debt favours Boy Scout and opportunistic refactor. Concentrated debt needs dedicated effort.
+2. **Is the affected code touched often?** Untouched code is not paying interest — leave it alone unless there is a specific reason (security, compliance, dependency upgrade).
+3. **Is the debt structural or cosmetic?** Cosmetic debt (style, naming) yields to small refactors. Structural debt (architecture, schema) needs strangler fig or parallel change.
+4. **Are there external consumers?** External consumers force expand–contract; internal-only changes can be more direct.
+
+---
+
+## 10.8 AI-Assisted Maintenance
+
+Coding agents are unusually well-suited to maintenance work — and unusually dangerous when used without guardrails.
+
+### Reading Legacy Code
+
+The first useful agentic task on a legacy system is exposition, not modification. Asking an agent to summarise a module, draw the call graph, list the invariants, or trace a request through the system surfaces structure that the original authors never documented. The output is a draft, not a finding — every claim must be checked against the code — but the draft is faster to verify than the codebase is to read cold.
+
+### Characterisation Tests Before Refactoring
+
+Michael Feathers' *Working Effectively with Legacy Code* defines legacy code as code without tests ([Feathers, 2004](https://www.oreilly.com/library/view/working-effectively-with/0131177052/)). His core technique is the *characterisation test* — a test that pins down what the existing code currently does, without making any claim about what it should do. Once behaviour is pinned, the code can be refactored with a regression safety net.
+
+This is exactly the workflow agents accelerate. A prompt of the form *"Generate characterisation tests for this module that exercise every public method with at least three input variants, asserting on the current return values"* produces a test suite in minutes that would take a careful human a day. The catch is that the tests must be reviewed — agents will sometimes assert on whatever the code happens to do today, including bugs. The tests pin the bug as well as the behaviour. Some of those tests need to fail, deliberately, before the refactor begins.
+
+### Generating Refactor Variants
+
+A productive pattern is to ask an agent for *three* refactor variants of the same function, optimising for different qualities — readability, performance, testability — and then evaluate them against the characterisation test suite. The variant that passes all the tests, reduces complexity, and reads cleanly wins. The other two are discarded. This is more disciplined than asking for *the* refactor, because it forces the reviewer to evaluate trade-offs explicitly.
+
+### Migration Scripts and Bulk Chores
+
+Agents do well at the unglamorous work that humans avoid: language version migrations, framework upgrades, type-annotation backfill, docstring generation, bulk renaming. The risk is uniform — agents replicate small mistakes consistently — so the verification strategy must be uniform too: run the test suite after every batch, not at the end.
+
+### The Anti-Pattern
+
+The most damaging way to use an agent in maintenance is to ask it to *clean up* a module without a regression safety net. The agent will produce code that looks better, passes the type-checker, and silently changes behaviour. Without characterisation tests, the change reaches production. The bug is then attributed to the agent, but the failure was the workflow.
+
+---
+
+## 10.9 Debugging as Maintenance
+
+Debugging is not separate from maintenance — it is the visible part of corrective maintenance, and the methodology applies to every other category. The disciplined approach is older than computing: observe, hypothesise, experiment, conclude. Brian Kernighan and Rob Pike made the argument explicit in *The Practice of Programming* — debugging is a scientific activity, and programmers who treat it as guessing are doing science badly ([Kernighan & Pike, 1999](https://www.cs.princeton.edu/~bwk/tpop.webpage/)).
+
+### Reproduce First
+
+A bug you cannot reproduce is not a bug you can fix. The first task in any debugging session is to find an input — a request, a sequence of actions, a fixture — that reliably triggers the failure. Reproduction is sometimes the entire job: a Heisenbug that vanishes when observed is usually a concurrency or timing issue, and finding the conditions under which it appears is harder than fixing it.
+
+### Bisection
+
+`git bisect` is binary search through history. Given a known good commit and a known bad commit, it walks through the intermediate commits in O(log n) steps until it identifies the first commit that introduced the failure.
+
+```bash
+git bisect start
+git bisect bad HEAD
+git bisect good v1.4.0
+# git checks out a midpoint commit; you run your reproduction
+git bisect good   # or 'git bisect bad'
+# repeat until git reports the first bad commit
+git bisect reset
+```
+
+For a repository with 1,024 commits between good and bad, bisection reaches the offending commit in about ten test runs. An agent can accelerate the process further: given the diff of a single commit and a description of the failure, it can usually identify the responsible line in seconds.
+
+### Observability
+
+A bug observed only in production cannot be debugged with a debugger. The investigation depends on the artefacts the system produced — logs, traces, metrics. Charity Majors' definition is useful: observability is the property of a system that lets you ask new questions about its behaviour without shipping new code ([Majors et al., 2022](https://www.oreilly.com/library/view/observability-engineering/9781492076438/)). A system without structured logs and distributed traces is a system you cannot debug; building observability into a service is preventive maintenance for the next outage.
+
+### Postmortems
+
+A blameless postmortem treats an incident as an output of the system, not the fault of an individual. The format Google popularised — timeline, impact, root cause, contributing factors, action items — is now standard ([Beyer et al., 2016](https://sre.google/sre-book/postmortem-culture/)). The discipline matters more than the format: a culture that punishes engineers for incidents teaches engineers to hide incidents, which is how the CBA case in Chapter 1 went undetected for three years.
+
+---
+
+## 10.10 Working with Legacy Code
+
+Feathers' definition is worth restating: *legacy code is code without tests*. Under this definition, code an agent produced last week with no tests is legacy code, regardless of its age. The techniques for working with legacy systems are therefore relevant to every team using AI assistants.
+
+The key concept is the *seam* — a place where you can change behaviour without editing the code itself. A function that takes a database connection as a parameter has a seam at the parameter; you can pass a fake connection in tests. A function that constructs the connection internally does not have a seam, and must be refactored before it can be tested. Identifying seams is the first step in taming legacy code.
+
+Feathers' *sprout method* and *wrap method* techniques add new functionality alongside legacy code without modifying it. New code is written cleanly, with tests; legacy code is left alone until it can be incrementally absorbed. The technique is the small-scale version of the strangler fig.
+
+### Code Archaeology
+
+When the original author is unavailable — and on a long-lived system, this is the norm rather than the exception — the commit history becomes the primary source. `git log --follow` traces a file's history across renames; `git blame` identifies the last author of each line; commit messages, when written carefully, preserve the *why* that the code itself does not record. Teams that write disposable commit messages ("WIP", "fix bug", "address review") are accumulating a kind of historical debt — they are deleting their own future investigative tools.
+
+---
+
+## 10.11 Knowledge Debt and Documentation
+
+Code records what the system does. Documentation records why. The why decays faster than the what, because the what is enforced by the compiler and the tests, while the why exists only in human memory and prose.
+
+### Architecture Decision Records
+
+Michael Nygard's 2011 proposal for *Architecture Decision Records* (ADRs) is now widespread practice ([Nygard, 2011](https://cognitect.com/blog/2011/11/15/documenting-architecture-decisions)). An ADR is a short markdown document — typically under a page — recording one architectural decision: the context, the alternatives considered, the decision made, and the consequences accepted. ADRs live in the repository alongside the code, are versioned with the code, and are reviewed in pull requests.
+
+```
+# ADR-0014: Use SQLite for Local Development Cache
+
+## Status
+Accepted, 2026-03-14
+
+## Context
+The CLI needs a local cache for command outputs. Options considered:
+- SQLite (chosen)
+- A flat JSON file
+- Redis
+
+## Decision
+SQLite. It ships with Python, requires no separate process, and gives us
+indexed lookups for free.
+
+## Consequences
+- No new infrastructure dependency
+- Concurrent writes are limited (acceptable for our usage)
+- Cache files are not human-readable (we accept this)
+```
+
+The format is unglamorous on purpose. The discipline is showing up to write it.
+
+### Comments: Why, Not What
+
+Code-level documentation has one rule: explain *why*, not *what*. A comment that paraphrases the code below it is noise — the code is its own description. A comment that captures a non-obvious constraint, a hidden invariant, or the reason for a workaround is information that cannot be recovered from the code itself. The first kind rots; the second kind earns its keep.
+
+### Runbooks
+
+A *runbook* is the documentation that prevents 3am pages. It records the failure modes a system has encountered, how to diagnose each, and how to recover. Runbooks are read under stress, by someone who did not write the system, with limited time. They should be written for that reader. The act of writing a runbook is itself preventive maintenance — the questions you cannot answer while writing become the next batch of work to do.
+
+---
+
+## 10.12 The Maintenance Maturity Model
+
+The model below is descriptive, not prescriptive. It describes where teams are; it does not claim that every team should reach Level 5.
+
+| Level | Behaviour |
+|---|---|
+| **L1 — Firefighting** | All maintenance is corrective; debt is invisible until it explodes |
+| **L2 — Reactive** | Debt is acknowledged but only addressed when it blocks features |
+| **L3 — Scheduled** | Recurring debt budget; dependencies updated on cadence |
+| **L4 — Measured** | Hotspots identified; debt metrics tracked; trends watched |
+| **L5 — Continuous renewal** | Debt repayment is part of every change; the codebase improves over time |
+
+Most organisations sit between L1 and L2 — and ship anyway. The economic case for moving up the model is not abstract: at L1, every incident is a novel emergency; at L4, most incidents are recognised patterns with known runbooks. The cost difference compounds.
+
+AI-assisted teams can move faster up the model than teams without agents, because the work that distinguishes higher levels — characterisation tests, migration scripts, hotspot investigation, ADR drafting — is exactly the work agents do well. The same tools that produce AI-induced debt can repay it, when directed.
+
+---
+
+## 10.13 Key Takeaways
+
+1. **Maintenance is the majority of the work.** Sixty to eighty per cent of total software cost is incurred after deployment. Engineering practices that treat maintenance as an afterthought are budgeting against forty years of evidence.
+
+2. **Lehman's first law is decisive.** A system used in the real world must change, or it loses value. Doing nothing is not a stable state — the world around the code keeps moving.
+
+3. **Cunningham's debt metaphor is precise; the popular usage is not.** Debt is the gap between what the code expresses and what the team understands. Calling every imperfection *technical debt* drains the term of meaning.
+
+4. **The dangerous quadrant is reckless and inadvertent.** This is exactly where AI-generated code lands by default, because the agent does not know the rules it is breaking. Reviewers who wave it through inherit the debt without realising.
+
+5. **Different debts need different detectors.** SATD mining, cyclomatic complexity, churn × complexity hotspots, dependency audits, and mutation scores each surface a different category. Pick the detector that matches the debt you are trying to manage.
+
+6. **Pin behaviour with characterisation tests before you refactor.** This is non-negotiable when an agent is doing the refactor. An agent's "clean-up" is a behaviour change unless tests prove otherwise.
+
+7. **Choose repayment strategy by debt shape.** Boy Scout for diffuse, dedicated effort for concentrated, strangler fig for structural, parallel change for external APIs. Rewrites are almost always the wrong answer.
+
+8. **Debugging is a scientific activity.** Reproduce, bisect, hypothesise, observe, conclude. Postmortems are blameless because punishing engineers teaches them to hide failures, not prevent them.
+
+9. **Documentation debt has no compiler.** Code rots when tests fail; documentation rots silently. ADRs, runbooks, and "why" comments are how a team preserves the reasoning that the code itself cannot record.
 
 ---
 
 ## Review Questions
 
-1. Your team wants to add an AGPL-licensed library to your SaaS product's backend. The product charges a monthly subscription fee and does not distribute compiled binaries. A colleague argues: "AGPL only applies when you distribute software — since we're SaaS, we don't distribute anything, so we're fine." Evaluate this argument. What obligation, if any, does the AGPL create for a network-accessible service, and what would you recommend?
+1. *Hotspot triage*: A churn × complexity report identifies one file as the top hotspot in a backend repository. The file has cyclomatic complexity 47, has been edited by twelve different engineers in the last six months, and has 14% test coverage. Walk through how you would decide whether to refactor it, ignore it, rewrite it, or strangle it — and what evidence you would gather before committing to a strategy.
 
-2. A developer uses GitHub Copilot to generate approximately 40% of a new fintech product's codebase. The CTO wants to register the codebase as a company copyright and is confident this is straightforward. What are the obstacles to this, and what documentation practices — starting today — would strengthen the company's legal position?
+2. *AI refactor with no safety net*: A junior engineer used an agent to "clean up" a 600-line revenue-reporting module. The pull request reduces cyclomatic complexity from 38 to 9, removes 200 lines, passes the existing test suite, and is open for review. What do you do before approving — and what change would you make to the team's process so that the next agent-driven refactor cannot land this way?
 
-3. You are implementing a user data export feature in a FastAPI application. You submit the following prompt: *"Add a GET /users/{user_id}/export endpoint that returns all user data as JSON."* The AI returns a function that serialises the `User` SQLAlchemy model directly. Identify at least two GDPR compliance gaps in the generated code, then write the revised prompt that addresses them.
+3. *Strangler fig argument*: A legacy payments service still processes 30% of company revenue. Two engineers have proposed rewriting it from scratch over a quarter "because the code is unmaintainable". Make the case for or against the rewrite, propose a strangler fig alternative, and identify the three pieces of work the team must complete before the strangler fig can begin.
 
-4. A junior developer generates a user authentication module using an AI assistant and merges it without a security review. The module contains a timing vulnerability in the password comparison function that leaks whether a username exists. When the issue is reported, the developer says: "The AI wrote it — that's on the tool, not me." As tech lead, how do you respond, and what specific changes would you make to the team's AI code review process to prevent this class of issue?
+4. *Reframing debt for a product manager*: A product manager rejects a debt-payoff sprint with "we don't have time for that — we have features to ship". Reframe the cost of the existing debt in terms the product manager is responsible for. Use specific metrics from this chapter, and identify the smallest piece of work that would produce the evidence you need.
 
-5. Your organisation has no AI use policy. You have been asked to draft three policy clauses before next week's sprint. Using the example clauses in Section 10.5.1 as a model, write three clauses specific to a team that builds healthcare data management software, uses external AI coding assistants daily, and is subject to GDPR. For each clause, explain the specific risk it mitigates.
+5. *Knight Capital postmortem*: Re-read the Knight Capital incident in the chapter opening. Identify three categories of debt from Section 10.4 that contributed to the failure, and describe one preventive maintenance practice that could have addressed each. What process change — not technology change — would have most reduced the blast radius?
 
+---
+
+## Further Reading
+
+- Cunningham, W. (1992). *The WyCash Portfolio Management System*. OOPSLA Experience Report. [c2.com](http://wiki.c2.com/?WardExplainsDebtMetaphor)
+- Fowler, M. (2009). *TechnicalDebtQuadrant*. [martinfowler.com](https://martinfowler.com/bliki/TechnicalDebtQuadrant.html)
+- Feathers, M. (2004). *Working Effectively with Legacy Code*. Prentice Hall.
+- Tornhill, A. (2018). *Software Design X-Rays: Fix Technical Debt with Behavioral Code Analysis*. Pragmatic Bookshelf.
+- Lehman, M. M. (1980). *Programs, life cycles, and laws of software evolution*. Proceedings of the IEEE, 68(9). [ieeexplore](https://ieeexplore.ieee.org/document/1456074)
+- Spolsky, J. (2000). *Things You Should Never Do, Part I*. [joelonsoftware.com](https://www.joelonsoftware.com/2000/04/06/things-you-should-never-do-part-i/)
+- Nygard, M. (2011). *Documenting Architecture Decisions*. [cognitect.com](https://cognitect.com/blog/2011/11/15/documenting-architecture-decisions)
+- Beyer, B., Jones, C., Petoff, J., & Murphy, N. R. (2016). *Site Reliability Engineering: How Google Runs Production Systems*. O'Reilly. [sre.google](https://sre.google/sre-book/postmortem-culture/)
+- US Securities and Exchange Commission. (2013). *In the Matter of Knight Capital Americas LLC*. [SEC Order](https://www.sec.gov/litigation/admin/2013/34-70694.pdf)

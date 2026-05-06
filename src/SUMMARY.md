@@ -20,11 +20,11 @@
 - [Chapter 9: Security Concerns of Agentic AI Coding Tools](./chapter_9.md)
 
 
-# Part III: Engineering with Responsibility
+# Part III: Engineering Complex Software Systems
 
-- [Chapter 10: Licenses, Ethics, and Responsible AI](./chapter_10.md)
-- [Chapter 11: Developer Productivity and Team Practices](./chapter_11.md)
-- [Chapter 12: The Future of AI-Native Engineering](./chapter_12.md)
+- [Chapter 10: Software Maintainance and Technical Debts](./chapter_10.md)
+- [Chapter 11: Software Production](./chapter_11.md)
+- [Chapter 12: Licenses, Ethics, and Responsible AI](./chapter_12.md)
 
 <!-- # Part IV: Advanced Topics in Software Testing -->
 
@@ -45,7 +45,8 @@
 - [Tutorial 7: The AI-Assisted SDLC: From Code to Well-Tested App](./tutorial_7.md)
 - [Tutorial 8: SAST, AI, and Human on Vulnerability Detection](./tutorial_8.md)
 - [Tutorial 9: Security Review in CI/CD Pipeline](./tutorial_9.md)
-- [Tutorial 10: Licences, Privacy, and Responsible AI in Practice](./tutorial_10.md)
+- [Tutorial 10: Pay Down Debt on a Real Hotspot](./tutorial_10.md)
+- [Tutorial 12: Licences, Privacy, and Responsible AI in Practice](./tutorial_12.md)
 
 # Appendices
  

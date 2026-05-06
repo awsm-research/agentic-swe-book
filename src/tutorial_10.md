@@ -1,26 +1,18 @@
-# Tutorial 10: Licences, Privacy, and Responsible AI in Practice
+# Tutorial 10: Refactor to Reduce Complexity Without Breaking Tests
 
-By the end of this tutorial you will have: audited your project's Python dependencies for copyleft obligations and confirmed the scan fails on a known GPL package; identified GDPR compliance gaps in an AI-generated API endpoint and corrected them with a precise specification; built a standalone PII detection guard that blocks personal data from reaching external AI prompts; extended it with automatic anonymisation; and completed a structured responsible AI checklist with concrete remediation actions for your course project.
+A senior engineer hands you a 60-line function. The tests pass, but every reviewer who looks at it asks for changes, and the cyclomatic complexity score is in the danger zone. Your job is to keep every test green while bringing the complexity down — using three refactoring techniques that work on almost any tangled function. By the end, the function is shorter, simpler, and behaves identically.
 
-**Concepts covered:** Licence compliance auditing, GDPR right-to-erasure, data portability, PII detection, presidio-analyzer, prompt anonymisation, responsible AI self-audit, CI/CD compliance gates
+**Concepts covered:** Cyclomatic complexity, guard clauses, lookup tables, extract function, behaviour-preserving refactoring, regression testing
 
-**Format:** Hands-on lab | **Duration:** ~2 hours | **Tool:** pip-licenses · presidio-analyzer · uv · GitHub Actions / GitLab CI
+**Format:** Individual or pairs | **Duration:** 2 hours | **Tool:** Python, uv, pytest, radon, Git
 
 ---
 
 ## Outline
 
-- [Part A: Licence Compliance Audit](#part-a-licence-compliance-audit) *(~25 min)*
-- [Part B: GDPR Gaps in AI-Generated Code](#part-b-gdpr-gaps-in-ai-generated-code) *(~25 min)*
-- [Part C: Automated PII Detection in AI Prompts](#part-c-automated-pii-detection-in-ai-prompts) *(~35 min)*
-- [Part D: Responsible AI Audit](#part-d-responsible-ai-audit) *(~15 min)*
-- [Part E: Add Licence Auditing to CI/CD](#part-e-add-licence-auditing-to-cicd) *(~20 min)*
-
-## Prerequisites
-
-- [uv](https://docs.astral.sh/uv/) installed (Tutorial 1) — manages Python and virtual environments
-- A Python project with a `pyproject.toml` and `uv.lock` (the Task Management API from Tutorial 6 is ideal)
-- A Git repository ([GitHub](https://github.com/) or [GitLab](https://gitlab.com/)) with push access
+- [Part A: Measure What You Are About to Refactor](#part-a-measure-what-you-are-about-to-refactor-60-min)
+- [Part B: Refactor in Three Stages, Keeping Tests Green](#part-b-refactor-in-three-stages-keeping-tests-green-60-min)
+- [References](#references)
 
 ---
 
@@ -28,458 +20,694 @@ By the end of this tutorial you will have: audited your project's Python depende
 
 By the end of this tutorial, you will be able to:
 
-1. Run a licence compliance audit on Python dependencies and detect copyleft obligations using pip-licenses.
-2. Identify GDPR compliance gaps in AI-generated code by comparing output against specific regulatory requirements.
-3. Build a PII detection guard using presidio-analyzer that raises an error when personal data is detected in a prompt.
-4. Extend the guard with automatic anonymisation to replace PII with entity-type placeholders.
-5. Complete a structured responsible AI checklist and write concrete remediation actions for each gap.
-6. Integrate licence auditing into a GitHub Actions or GitLab CI pipeline as a merge gate.
+1. Measure cyclomatic complexity for a Python function using radon.
+2. Apply guard clauses to flatten nested validation logic.
+3. Replace a nested if/elif chain with a lookup table.
+4. Extract small helper functions to isolate a single responsibility.
+5. Verify that a behaviour-preserving refactor does not change observable output by re-running an existing test suite after every step.
 
 ---
 
-## Part A: Licence Compliance Audit
+## Part A: Measure What You Are About to Refactor *(~60 min)*
 
-*(~25 min)*
+### Prerequisites
 
-Every Python project accumulates dependencies, and those dependencies carry licences. Permissive licences (MIT, Apache 2.0) impose no constraints on how you use the software. Copyleft licences (GPL, AGPL) require derivative works — and in some cases SaaS services built on them — to also be open source. Most teams discover a GPL dependency during legal review before acquisition, not before shipping. `pip-licenses` surfaces these obligations in seconds.
-
-### Step 1: Install pip-licenses
-
-```bash
-uv add --dev pip-licenses
-```
-
-### Step 2: Run the audit
-
-```bash
-uv run pip-licenses --format=table
-```
-
-Abbreviated output for a typical FastAPI project:
-
-```
-Name              Version  License
-fastapi           0.111.0  MIT License
-httpx             0.27.0   BSD License
-pytest            8.2.0    MIT License
-sqlalchemy        2.0.30   MIT License
-starlette         0.37.2   BSD License
-```
-
-### Step 3: Export to JSON for review
-
-```bash
-uv run pip-licenses --format=json --output-file=licenses.json
-```
-
-Open `licenses.json` and check two things: how many distinct licence families are present, and whether any dependency is labelled `UNKNOWN` — those require manual investigation because pip-licenses cannot determine their terms.
-
-### Step 4: Gate on copyleft licences
-
-```bash
-uv run pip-licenses --fail-on="GPL;AGPL" --format=table
-echo "Exit code: $?"   # 0 = clean, 1 = copyleft dependency found
-```
-
-The `--fail-on` flag accepts a semicolon-separated list of licence-name substrings. `"GPL"` matches GPL v2, GPL v3, and GNU General Public License; `"AGPL"` matches the Affero variants.
-
-### Step 5: Activity — Introduce and detect a copyleft violation
-
-`mysql-connector-python` ships under GPL 2.0. Add it to a throwaway branch, confirm the scan catches it, then remove it:
-
-```bash
-git checkout -b test/copyleft-check
-uv add mysql-connector-python
-uv run pip-licenses --fail-on="GPL;AGPL" --format=table
-echo "Exit code: $?"   # expect 1
-```
-
-```bash
-uv remove mysql-connector-python
-uv run pip-licenses --fail-on="GPL;AGPL" --format=table
-echo "Exit code: $?"   # expect 0
-git checkout main
-git branch -d test/copyleft-check
-```
-
-Now run the scan on your actual project. If any dependency carries a GPL or AGPL licence, record: the package name, the licence identifier, and whether your use triggers the copyleft obligation (hint: for AGPL, network access is enough).
+- Python 3.11+ and uv ([docs.astral.sh/uv](https://docs.astral.sh/uv/getting-started/installation/)) — installed in Tutorial 1
+- Git ([git-scm.com](https://git-scm.com/))
+- VS Code ([code.visualstudio.com](https://code.visualstudio.com/))
 
 ---
 
-## Part B: GDPR Gaps in AI-Generated Code
+### Step 1: Scaffold the Project
 
-*(~25 min)*
-
-AI assistants generate to the prompt, not to the regulation. A prompt that says "delete a user from the database" produces code that deletes a database row — it does not produce code that satisfies GDPR's right to erasure, because the prompt said nothing about GDPR. Identifying these gaps before code reaches production is a skill the regulatory environment now requires.
-
-### Step 1: Generate the non-compliant endpoint
-
-Paste the following into any AI assistant:
-
-**Prompt:**
-```
-Add a DELETE /users/{user_id} endpoint to our FastAPI application that removes
-a user from the database.
+```bash
+uv init refactor-practice
+cd refactor-practice
+rm hello.py
+mkdir -p src tests
+git init
+git add pyproject.toml .python-version
+git commit -m "chore: initial project setup"
 ```
 
-The AI will generate something close to:
+Install pytest and radon:
+
+```bash
+uv add --dev pytest radon
+```
+
+---
+
+### Step 2: Add the Function You Will Refactor
+
+Create `src/shipping.py` with this deliberately complex shipping-cost calculator. The function works — it computes correct prices for a parcel given weight, destination zone, service level, and a few flags — but it does so with deeply nested branches and repeated structure.
 
 ```python
-@app.delete("/users/{user_id}")
-async def delete_user(user_id: int, db: Session = Depends(get_db)):
-    user = db.query(User).filter(User.id == user_id).first()
-    if not user:
-        raise HTTPException(status_code=404, detail="User not found")
-    db.delete(user)
-    db.commit()
-    return {"message": "User deleted"}
+# src/shipping.py
+"""Calculates parcel shipping cost. Refactor target."""
+
+
+def calculate_shipping(
+    weight, zone, service,
+    is_member=False, has_insurance=False, is_holiday=False,
+):
+    if weight is None or weight <= 0:
+        raise ValueError("weight must be positive")
+    if zone not in (1, 2, 3, "international"):
+        raise ValueError(f"invalid zone: {zone}")
+
+    cost = 0.0
+    if zone == 1:
+        if service == "standard":
+            cost = 5.00 + weight * 1.00
+        elif service == "express":
+            cost = 10.00 + weight * 1.50
+        elif service == "overnight":
+            cost = 20.00 + weight * 2.00
+        else:
+            raise ValueError(f"invalid service: {service}")
+    elif zone == 2:
+        if service == "standard":
+            cost = 8.00 + weight * 1.20
+        elif service == "express":
+            cost = 14.00 + weight * 1.80
+        elif service == "overnight":
+            cost = 25.00 + weight * 2.50
+        else:
+            raise ValueError(f"invalid service: {service}")
+    elif zone == 3:
+        if service == "standard":
+            cost = 12.00 + weight * 1.50
+        elif service == "express":
+            cost = 18.00 + weight * 2.20
+        elif service == "overnight":
+            cost = 30.00 + weight * 3.00
+        else:
+            raise ValueError(f"invalid service: {service}")
+    elif zone == "international":
+        if service == "standard":
+            cost = 25.00 + weight * 3.00
+        elif service == "express":
+            cost = 40.00 + weight * 4.00
+        elif service == "overnight":
+            raise ValueError("overnight is not available internationally")
+        else:
+            raise ValueError(f"invalid service: {service}")
+
+    if is_member:
+        cost = cost * 0.90
+    if has_insurance:
+        cost = cost * 1.05
+    if is_holiday:
+        cost = cost * 1.20
+
+    return round(cost, 2)
 ```
 
-Save this as `endpoints/users_delete_v1.py`.
-
-### Step 2: Map the GDPR gaps
-
-Review the generated code against GDPR's right-to-erasure requirements (Article 17). For each row below, mark whether the generated code satisfies it:
-
-| GDPR Requirement | Satisfied? | Gap in Generated Code |
-|---|---|---|
-| Cascade deletion of all user PII | No | Related tables (tasks, comments, audit logs) retain PII |
-| Audit trail of the deletion request | No | No `DeletionRequest` record created |
-| Authorisation verification | No | Any authenticated caller can delete any account |
-| Financial record handling | No | PII in order history must be anonymised, not deleted |
-| Confirmation to the user | No | No confirmation email sent before deletion |
-
-Zero of the five requirements are satisfied.
-
-### Step 3: Write a compliant specification
-
-Save the following as `endpoints/users_delete_v2_prompt.txt`, then submit it to any AI assistant:
-
-**Prompt:**
-```
-Add a GDPR-compliant DELETE /users/{user_id} endpoint to our FastAPI application:
-- Verify the caller is the user themselves (JWT sub claim matches user_id) or has admin role
-- Cascade delete: remove all Task, Comment, and AuditLog rows owned by user_id
-- Anonymise rather than delete any OrderHistory rows: replace user name and email
-  with "Deleted User [user_id]" to preserve financial records
-- Create a DeletionRequest record with: user_id, requester_id, timestamp, list of
-  cascaded tables
-- Return 204 No Content on success
-- Send a confirmation email to the user's address before deleting it, using the
-  send_email(to, subject, body) utility already in the project
-Assume SQLAlchemy models: User, Task, Comment, AuditLog, OrderHistory, DeletionRequest.
-```
-
-Re-run the gap table against the new output. All five requirements should now be addressed.
-
-### Step 4: Activity — Write a compliant export endpoint
-
-GDPR Article 20 (data portability) requires that users can export all their personal data in a structured, machine-readable format on request. Write a prompt for a `GET /users/{user_id}/export` endpoint. Your prompt must specify:
-
-1. Which tables contain the user's personal data and must be included in the export
-2. That the response format is JSON
-3. That only the user themselves (or an admin) can trigger the export
-4. A rate limit — one export request per 24 hours per user
-
-Submit the prompt, then verify: does the generated endpoint include data from all relevant tables? Does it check authorisation? Does it enforce the rate limit? Document any remaining gap and write the revised specification that closes it.
+> **Why `weight is None or weight <= 0` and not the other way around?** Python's `or` short-circuits — if the left operand is true, the right operand is never evaluated. Putting the `None` check first means `weight <= 0` is only run for numeric values, so passing `weight=None` raises a clean `ValueError` rather than a `TypeError` from comparing `None` with `0`.
 
 ---
 
-## Part C: Automated PII Detection in AI Prompts
+### Step 3: Add the Test Suite
 
-*(~35 min)*
-
-GDPR Article 28 requires a Data Processing Agreement with any third party that processes personal data on your behalf. Every engineer who pastes a bug report containing a user's email address into an AI chat window is potentially processing personal data without a DPA. Manual vigilance does not scale. Automated detection does.
-
-[Microsoft's Presidio](https://microsoft.github.io/presidio/) is an open source PII detection and anonymisation library that uses named entity recognition to identify over 50 entity types — email addresses, phone numbers, IP addresses, passport numbers, credit card numbers, and more. It runs entirely locally: no data leaves the machine.
-
-### Step 1: Install presidio and its language model
-
-```bash
-uv add --dev presidio-analyzer presidio-anonymizer
-uv run python -m spacy download en_core_web_lg
-```
-
-`presidio-analyzer` performs detection; `presidio-anonymizer` performs redaction. Both depend on spaCy for named entity recognition. `en_core_web_lg` is the large English model presidio uses by default (~550 MB). If disk space is constrained, substitute `en_core_web_sm` — accuracy is lower but sufficient for testing.
-
-### Step 2: Run your first scan
-
-Save as `test_presidio.py`:
+Create `tests/test_shipping.py`. These are the tests the function currently passes. They are also the contract you must preserve through the refactor — every test must still pass after every change.
 
 ```python
-# test_presidio.py
-from presidio_analyzer import AnalyzerEngine
+# tests/test_shipping.py
+import pytest
+from src.shipping import calculate_shipping
 
-analyzer = AnalyzerEngine()
-text = "Contact john.doe@example.com or call +61 412 345 678 about the incident on 192.168.1.1"
-results = analyzer.analyze(text=text, language="en")
 
-for r in results:
-    print(f"{r.entity_type:20s}  score={r.score:.2f}  '{text[r.start:r.end]}'")
+# --- happy paths ---
+
+@pytest.mark.parametrize("zone,service,weight,expected", [
+    (1, "standard", 2.0, 7.00),
+    (1, "express", 2.0, 13.00),
+    (1, "overnight", 2.0, 24.00),
+    (2, "standard", 3.0, 11.60),
+    (2, "express", 3.0, 19.40),
+    (3, "overnight", 1.5, 34.50),
+    ("international", "standard", 5.0, 40.00),
+    ("international", "express", 5.0, 60.00),
+])
+def test_base_costs(zone, service, weight, expected):
+    assert calculate_shipping(weight, zone, service) == expected
+
+
+# --- modifiers ---
+
+def test_member_discount_applied():
+    assert calculate_shipping(2.0, 1, "standard", is_member=True) == 6.30
+
+
+def test_insurance_surcharge_applied():
+    assert calculate_shipping(2.0, 1, "standard", has_insurance=True) == 7.35
+
+
+def test_holiday_surcharge_applied():
+    assert calculate_shipping(2.0, 1, "standard", is_holiday=True) == 8.40
+
+
+def test_all_modifiers_combine():
+    # base 7.00 -> member 6.30 -> insurance 6.615 -> holiday 7.938 -> 7.94
+    assert calculate_shipping(
+        2.0, 1, "standard",
+        is_member=True, has_insurance=True, is_holiday=True,
+    ) == 7.94
+
+
+# --- error paths ---
+
+@pytest.mark.parametrize("weight", [0, -1.0, None])
+def test_invalid_weight_raises(weight):
+    with pytest.raises(ValueError, match="weight must be positive"):
+        calculate_shipping(weight, 1, "standard")
+
+
+def test_invalid_zone_raises():
+    with pytest.raises(ValueError, match="invalid zone"):
+        calculate_shipping(2.0, 99, "standard")
+
+
+def test_invalid_service_raises():
+    with pytest.raises(ValueError, match="invalid service"):
+        calculate_shipping(2.0, 1, "teleport")
+
+
+def test_overnight_international_rejected():
+    with pytest.raises(ValueError, match="overnight is not available"):
+        calculate_shipping(2.0, "international", "overnight")
 ```
 
+Run them:
+
 ```bash
-uv run python test_presidio.py
+uv run pytest tests/ -v
+```
+
+Expected: every test passes. If anything fails, you have a typo — fix it before continuing. The refactor is meaningless without a green baseline.
+
+Commit the starting point:
+
+```bash
+git add src/shipping.py tests/test_shipping.py pyproject.toml uv.lock
+git commit -m "feat: add shipping cost calculator with passing tests"
+```
+
+---
+
+### Step 4: Measure Cyclomatic Complexity
+
+Cyclomatic complexity counts the linearly independent paths through a function. Thomas McCabe proposed the metric in 1976 and recommended keeping functions below 10. Above 15 is a refactoring candidate; above 30 is a hazard.
+
+```bash
+uv run radon cc src/shipping.py -a -s
+```
+
+Expected output (the exact number depends on your Python version):
+
+```
+src/shipping.py
+    F 5:0 calculate_shipping - D (17)
+
+1 block (classes, functions, methods) analyzed.
+Average complexity: D (17.0)
+```
+
+The `D (17)` rating is the cost: every nested branch adds a path that a future reader has to trace.
+
+Record the starting numbers:
+
+| Metric | Before |
+|---|---|
+| Cyclomatic complexity | 17 |
+| Lines of code | ~60 |
+| Tests passing | all |
+
+---
+
+### Step 5: Activity — Identify the Sources of Complexity
+
+Before changing any code, write down what is making the function complex. Open `notes.md` and answer these questions:
+
+```markdown
+# Shipping Refactor — Sources of Complexity
+
+1. How many distinct (zone, service) combinations does the function handle?
+2. Which lines are *validation* and which lines are *calculation*?
+3. Which sections of code are nearly identical except for numeric values?
+4. Which `if` branches could be replaced by a data structure?
+5. If the company adds a fourth zone, how many lines need to change?
+```
+
+Commit your answers:
+
+```bash
+git add notes.md
+git commit -m "docs: identify sources of complexity in shipping function"
+```
+
+The goal of the refactor in Part B is not "make the code prettier" — it is to remove these specific sources of complexity, one at a time, while the test suite stays green.
+
+---
+
+## Part B: Refactor in Three Stages, Keeping Tests Green *(~60 min)*
+
+You will apply three refactoring techniques in order. After each technique, run the tests. If anything goes red, revert and try again. The rule is non-negotiable: the test suite must be green before you start the next stage.
+
+> **Why one technique at a time?** If you change ten things at once and a test fails, you do not know which change caused the failure. Refactoring is a sequence of small, reversible steps — each one verified before the next.
+
+---
+
+### Step 1: Stage 1 — Guard Clauses for Validation
+
+A *guard clause* is an early return that handles an invalid case at the top of the function, so the rest of the function can assume valid input. The technique flattens nesting and separates validation from calculation.
+
+The current function mixes validation with the main loop. Extract validation into a helper, called as a guard at the top of `calculate_shipping`.
+
+Replace the contents of `src/shipping.py` with:
+
+```python
+# src/shipping.py
+"""Calculates parcel shipping cost."""
+
+VALID_ZONES = (1, 2, 3, "international")
+VALID_SERVICES = ("standard", "express", "overnight")
+
+
+def _validate(weight, zone, service):
+    if weight is None or weight <= 0:
+        raise ValueError("weight must be positive")
+    if zone not in VALID_ZONES:
+        raise ValueError(f"invalid zone: {zone}")
+    if service not in VALID_SERVICES:
+        raise ValueError(f"invalid service: {service}")
+    if zone == "international" and service == "overnight":
+        raise ValueError("overnight is not available internationally")
+
+
+def calculate_shipping(
+    weight, zone, service,
+    is_member=False, has_insurance=False, is_holiday=False,
+):
+    _validate(weight, zone, service)
+
+    cost = 0.0
+    if zone == 1:
+        if service == "standard":
+            cost = 5.00 + weight * 1.00
+        elif service == "express":
+            cost = 10.00 + weight * 1.50
+        elif service == "overnight":
+            cost = 20.00 + weight * 2.00
+    elif zone == 2:
+        if service == "standard":
+            cost = 8.00 + weight * 1.20
+        elif service == "express":
+            cost = 14.00 + weight * 1.80
+        elif service == "overnight":
+            cost = 25.00 + weight * 2.50
+    elif zone == 3:
+        if service == "standard":
+            cost = 12.00 + weight * 1.50
+        elif service == "express":
+            cost = 18.00 + weight * 2.20
+        elif service == "overnight":
+            cost = 30.00 + weight * 3.00
+    elif zone == "international":
+        if service == "standard":
+            cost = 25.00 + weight * 3.00
+        elif service == "express":
+            cost = 40.00 + weight * 4.00
+
+    if is_member:
+        cost = cost * 0.90
+    if has_insurance:
+        cost = cost * 1.05
+    if is_holiday:
+        cost = cost * 1.20
+
+    return round(cost, 2)
+```
+
+Run the tests:
+
+```bash
+uv run pytest tests/ -v
+```
+
+Every test must still pass. If a test fails, the most likely cause is a missed validation case — re-read the original function and `_validate` side by side.
+
+Re-measure complexity:
+
+```bash
+uv run radon cc src/shipping.py -a -s
+```
+
+Expected: complexity has dropped from `D (17)` to about `C (12)` for `calculate_shipping`, plus a small `_validate` function rated `A` or `B`. The validation paths still exist; they are just no longer tangled with the calculation.
+
+Commit:
+
+```bash
+git add src/shipping.py
+git commit -m "refactor: extract validation as a guard clause"
+```
+
+---
+
+### Step 2: Stage 2 — Replace if/elif Chain with a Lookup Table
+
+The middle of the function is a 3 × 4 grid of (zone, service) → (base, per_kg) values, expressed as twelve nested branches. A dictionary expresses the same information as data.
+
+Replace `src/shipping.py` with:
+
+```python
+# src/shipping.py
+"""Calculates parcel shipping cost."""
+
+VALID_ZONES = (1, 2, 3, "international")
+VALID_SERVICES = ("standard", "express", "overnight")
+
+# (zone, service) -> (base_fee, per_kg)
+RATES = {
+    (1, "standard"): (5.00, 1.00),
+    (1, "express"): (10.00, 1.50),
+    (1, "overnight"): (20.00, 2.00),
+    (2, "standard"): (8.00, 1.20),
+    (2, "express"): (14.00, 1.80),
+    (2, "overnight"): (25.00, 2.50),
+    (3, "standard"): (12.00, 1.50),
+    (3, "express"): (18.00, 2.20),
+    (3, "overnight"): (30.00, 3.00),
+    ("international", "standard"): (25.00, 3.00),
+    ("international", "express"): (40.00, 4.00),
+}
+
+
+def _validate(weight, zone, service):
+    if weight is None or weight <= 0:
+        raise ValueError("weight must be positive")
+    if zone not in VALID_ZONES:
+        raise ValueError(f"invalid zone: {zone}")
+    if service not in VALID_SERVICES:
+        raise ValueError(f"invalid service: {service}")
+    if zone == "international" and service == "overnight":
+        raise ValueError("overnight is not available internationally")
+
+
+def calculate_shipping(
+    weight, zone, service,
+    is_member=False, has_insurance=False, is_holiday=False,
+):
+    _validate(weight, zone, service)
+
+    base, per_kg = RATES[(zone, service)]
+    cost = base + weight * per_kg
+
+    if is_member:
+        cost = cost * 0.90
+    if has_insurance:
+        cost = cost * 1.05
+    if is_holiday:
+        cost = cost * 1.20
+
+    return round(cost, 2)
+```
+
+Run the tests:
+
+```bash
+uv run pytest tests/ -v
+```
+
+All tests must still pass. The `RATES` table contains exactly the same numbers as the original branches — adding a new zone or service is now a one-line dictionary entry instead of a new `elif` block.
+
+Re-measure complexity:
+
+```bash
+uv run radon cc src/shipping.py -a -s
+```
+
+Expected: `calculate_shipping` is now around `A (5)` — well below McCabe's threshold. The complexity has gone into the data, where it belongs.
+
+Commit:
+
+```bash
+git add src/shipping.py
+git commit -m "refactor: replace if/elif rate chain with lookup table"
+```
+
+---
+
+### Step 3: Stage 3 — Extract a Helper for the Modifiers
+
+The three modifier flags at the end of the function are doing one job — applying multiplicative adjustments. Extract them so each function does one thing.
+
+Replace `src/shipping.py` with:
+
+```python
+# src/shipping.py
+"""Calculates parcel shipping cost."""
+
+VALID_ZONES = (1, 2, 3, "international")
+VALID_SERVICES = ("standard", "express", "overnight")
+
+RATES = {
+    (1, "standard"): (5.00, 1.00),
+    (1, "express"): (10.00, 1.50),
+    (1, "overnight"): (20.00, 2.00),
+    (2, "standard"): (8.00, 1.20),
+    (2, "express"): (14.00, 1.80),
+    (2, "overnight"): (25.00, 2.50),
+    (3, "standard"): (12.00, 1.50),
+    (3, "express"): (18.00, 2.20),
+    (3, "overnight"): (30.00, 3.00),
+    ("international", "standard"): (25.00, 3.00),
+    ("international", "express"): (40.00, 4.00),
+}
+
+
+def _validate(weight, zone, service):
+    if weight is None or weight <= 0:
+        raise ValueError("weight must be positive")
+    if zone not in VALID_ZONES:
+        raise ValueError(f"invalid zone: {zone}")
+    if service not in VALID_SERVICES:
+        raise ValueError(f"invalid service: {service}")
+    if zone == "international" and service == "overnight":
+        raise ValueError("overnight is not available internationally")
+
+
+def _apply_modifiers(cost, is_member, has_insurance, is_holiday):
+    if is_member:
+        cost *= 0.90
+    if has_insurance:
+        cost *= 1.05
+    if is_holiday:
+        cost *= 1.20
+    return cost
+
+
+def calculate_shipping(
+    weight, zone, service,
+    is_member=False, has_insurance=False, is_holiday=False,
+):
+    _validate(weight, zone, service)
+    base, per_kg = RATES[(zone, service)]
+    cost = base + weight * per_kg
+    cost = _apply_modifiers(cost, is_member, has_insurance, is_holiday)
+    return round(cost, 2)
+```
+
+Run the tests one more time:
+
+```bash
+uv run pytest tests/ -v
+```
+
+Re-measure:
+
+```bash
+uv run radon cc src/shipping.py -a -s
 ```
 
 Expected output:
 
 ```
-EMAIL_ADDRESS         score=1.00  'john.doe@example.com'
-PHONE_NUMBER          score=0.75  '+61 412 345 678'
-IP_ADDRESS            score=0.95  '192.168.1.1'
+src/shipping.py
+    F 22:0 _validate - A (5)
+    F 33:0 _apply_modifiers - A (4)
+    F 43:0 calculate_shipping - A (1)
+
+3 blocks (classes, functions, methods) analyzed.
+Average complexity: A (3.3)
 ```
 
-Each result carries an entity type, a confidence score, and character offsets into the original string. The `score` is a float between 0 and 1 — results below 0.7 are typically too uncertain to act on.
+The main function is now `A (1)` — every operation it performs is a single named step. Complexity has not vanished; it has been distributed across small, single-purpose functions, each with a complexity that fits in a reader's head.
 
-### Step 3: Build pii_guard.py
-
-Save the following as `pii_guard.py` in your project root:
-
-```python
-# pii_guard.py
-from presidio_analyzer import AnalyzerEngine
-
-_analyzer = AnalyzerEngine()
-
-
-def check_for_pii(text: str, threshold: float = 0.7) -> list[str]:
-    """Return detected PII entity types above the confidence threshold."""
-    results = _analyzer.analyze(text=text, language="en")
-    return [r.entity_type for r in results if r.score > threshold]
-
-
-def safe_prompt(text: str) -> str:
-    """Return the prompt unchanged, or raise ValueError if PII is detected."""
-    found = check_for_pii(text)
-    if found:
-        raise ValueError(
-            f"Prompt contains potential PII ({found}). "
-            "Remove personal data before sending to external AI services."
-        )
-    return text
-```
-
-`check_for_pii` is the detection primitive — it returns a list of entity type strings, empty if none are found. `safe_prompt` wraps it for use at call sites: pass any string through it before forwarding to an AI API.
-
-### Step 4: Test the guard
-
-Save as `test_pii_guard.py`:
-
-```python
-# test_pii_guard.py
-from pii_guard import safe_prompt
-
-# Should block — contains an email address
-try:
-    safe_prompt("Fix the bug reported by john.doe@example.com in the checkout flow")
-    print("FAIL: should have raised ValueError")
-except ValueError as e:
-    print(f"Blocked (expected): {e}")
-
-# Should pass — no PII
-result = safe_prompt("Fix the null pointer exception in the checkout flow")
-print(f"Passed (expected): returned {len(result)} chars")
-```
+Commit:
 
 ```bash
-uv run python test_pii_guard.py
+git add src/shipping.py
+git commit -m "refactor: extract modifier application into helper"
 ```
-
-Expected:
-
-```
-Blocked (expected): Prompt contains potential PII (['EMAIL_ADDRESS']). Remove personal data before sending to external AI services.
-Passed (expected): returned 51 chars
-```
-
-### Step 5: Activity — Extend with anonymisation
-
-Blocking forces engineers to redact manually before retrying. Anonymisation automates the redaction, replacing each detected entity with its entity-type label. Create `anonymize_prompt.py`:
-
-```python
-# anonymize_prompt.py
-from presidio_analyzer import AnalyzerEngine
-from presidio_anonymizer import AnonymizerEngine
-
-_analyzer = AnalyzerEngine()
-_anonymizer = AnonymizerEngine()
-
-
-def anonymize_prompt(text: str) -> str:
-    """Replace detected PII with <ENTITY_TYPE> placeholders."""
-    results = _analyzer.analyze(text=text, language="en")
-    if not results:
-        return text
-    return _anonymizer.anonymize(text=text, analyzer_results=results).text
-```
-
-Verify the output:
-
-```python
-from anonymize_prompt import anonymize_prompt
-
-original = "The user john.doe@example.com on 192.168.1.1 reported a crash in checkout"
-print(anonymize_prompt(original))
-# Expected: "The user <EMAIL_ADDRESS> on <IP_ADDRESS> reported a crash in checkout"
-```
-
-Then extend `pii_guard.py` with a third function:
-
-```python
-import logging
-
-_log = logging.getLogger(__name__)
-
-
-def sanitize_prompt(text: str) -> str:
-    """Anonymise PII in text and log a warning when redaction occurs."""
-    from anonymize_prompt import anonymize_prompt
-    found = check_for_pii(text)
-    if not found:
-        return text
-    sanitized = anonymize_prompt(text)
-    _log.warning("PII redacted from prompt: %s → anonymised before sending", found)
-    return sanitized
-```
-
-`sanitize_prompt` is the production-safe wrapper: it never blocks, always logs, and returns a redacted string the caller can forward to an AI API. Verify it against the same test strings used in Step 4.
 
 ---
 
-## Part D: Responsible AI Audit
+### Step 4: Record the Before-and-After
 
-*(~15 min)*
+Update `notes.md`:
 
-### Step 1: Generate an AI risk assessment
+```markdown
+# Shipping Refactor — Results
 
-Open any AI assistant. Set the system prompt and submit the user message below, replacing the example project description with your own course project:
-
-**System prompt:**
-```
-You are a responsible AI auditor with expertise in software engineering and AI ethics
-frameworks. You provide concise, actionable risk assessments grounded in established
-responsible AI principles (Fairness, Transparency, Accountability, Privacy, Safety,
-Beneficence). Be specific to the technology stack and deployment context described.
-```
-
-**User:**
-```
-Based on the project description below, provide a brief responsible AI risk assessment.
-For each of the six principles — Fairness, Transparency, Accountability, Privacy,
-Safety, and Beneficence — identify:
-
-1. The primary risk for this project
-2. A specific mitigation recommendation
-
-Project:
-[Paste your project description here: technology stack, what user data is stored,
-who uses the system, and whether AI coding assistants were used in development]
-```
-
-Save the output as `docs/responsible-ai-assessment.md`.
-
-### Step 2: Activity — Complete the checklist and write remediations
-
-Work through the responsible AI self-audit checklist from Section 10.7.2 for your own project. For every unchecked item, write one concrete remediation action — a specific code change, process change, or documentation addition that closes the gap.
-
-Record your findings in a table saved alongside the AI assessment:
-
-| Checklist Item | Status | Remediation Action |
+| Metric | Before | After |
 |---|---|---|
-| All AI-generated code has been reviewed by a human engineer | ✗ | Add mandatory AI-code reviewer label to PR template; configure CODEOWNERS |
-| No PII was included in AI prompts | ✗ | Wrap all AI calls through `sanitize_prompt()` from Part C |
-| Dependencies audited for licence compatibility | ✓ | — |
-| ... | ... | ... |
+| `calculate_shipping` cyclomatic complexity | 17 | 1 |
+| Number of functions | 1 | 3 |
+| Lines in `calculate_shipping` body | ~50 | ~6 |
+| Tests passing | 17 / 17 | 17 / 17 |
+| Behaviour changed | — | no |
 
-At minimum, one row should reference the PII guard from Part C and one should reference the GDPR specification work from Part B. If every checklist item is already satisfied, revisit Section 10.6.1 and verify whether your data deletion and export paths address all five GDPR requirements.
+## Adding a new zone now requires
+- Before: a new `elif zone == X` block with three nested service branches (~12 lines)
+- After: one entry per service in `RATES` (3 lines), plus updating `VALID_ZONES`
+```
+
+Commit:
+
+```bash
+git add notes.md
+git commit -m "docs: record before/after complexity measurements"
+```
 
 ---
 
-## Part E: Add Licence Auditing to CI/CD
+### Step 5: Activity — Refactor a Second Function on Your Own
 
-*(~20 min)*
+Add this second high-complexity function to `src/shipping.py` and a small test suite for it. Then refactor it using the three techniques from this tutorial. The complexity target is `A (≤ 5)` while keeping every test green.
 
-The licence scan is most useful when it runs on every pull request that changes dependencies. A package whose licence changes in a patch release slips past manual review; automated gating catches it before it merges.
+```python
+# src/shipping.py — append
 
-### Step 1: GitHub Actions configuration
+def estimate_delivery_days(zone, service, is_holiday=False, is_remote=False):
+    if zone is None or service is None:
+        raise ValueError("zone and service required")
+    if zone == 1:
+        if service == "standard":
+            days = 3
+        elif service == "express":
+            days = 2
+        elif service == "overnight":
+            days = 1
+        else:
+            raise ValueError(f"invalid service: {service}")
+    elif zone == 2:
+        if service == "standard":
+            days = 5
+        elif service == "express":
+            days = 3
+        elif service == "overnight":
+            days = 1
+        else:
+            raise ValueError(f"invalid service: {service}")
+    elif zone == 3:
+        if service == "standard":
+            days = 7
+        elif service == "express":
+            days = 4
+        elif service == "overnight":
+            days = 2
+        else:
+            raise ValueError(f"invalid service: {service}")
+    elif zone == "international":
+        if service == "standard":
+            days = 14
+        elif service == "express":
+            days = 7
+        elif service == "overnight":
+            raise ValueError("overnight is not available internationally")
+        else:
+            raise ValueError(f"invalid service: {service}")
+    else:
+        raise ValueError(f"invalid zone: {zone}")
 
-Create `.github/workflows/compliance.yml`:
-
-```yaml
-name: Compliance Checks
-
-on:
-  pull_request:
-    paths:
-      - 'pyproject.toml'
-      - 'uv.lock'
-
-jobs:
-  licence-audit:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Install pip-licenses
-        run: pip install pip-licenses
-
-      - name: Audit dependency licences
-        run: |
-          pip-licenses --format=json --output-file=licenses.json
-          pip-licenses --fail-on="GPL;AGPL" --format=table
-
-      - uses: actions/upload-artifact@v4
-        if: always()
-        with:
-          name: licence-report
-          path: licenses.json
+    if is_holiday:
+        days += 2
+    if is_remote:
+        days += 3
+    return days
 ```
 
-The job triggers only when `pyproject.toml` or `uv.lock` changes. The `if: always()` on the artifact upload preserves the licence report for review even when the job fails.
+```python
+# tests/test_shipping.py — append
+from src.shipping import estimate_delivery_days
 
-### Step 2: GitLab CI configuration
 
-Add to `.gitlab-ci.yml`:
+@pytest.mark.parametrize("zone,service,expected_days", [
+    (1, "standard", 3),
+    (1, "overnight", 1),
+    (2, "express", 3),
+    (3, "standard", 7),
+    ("international", "express", 7),
+])
+def test_delivery_days(zone, service, expected_days):
+    assert estimate_delivery_days(zone, service) == expected_days
 
-```yaml
-licence-audit:
-  stage: test
-  image: python:3.12-slim
-  before_script:
-    - pip install pip-licenses
-  script:
-    - pip-licenses --format=json --output-file=licenses.json
-    - pip-licenses --fail-on="GPL;AGPL" --format=table
-  artifacts:
-    when: always
-    paths:
-      - licenses.json
-    expire_in: 30 days
-  rules:
-    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
-      changes:
-        - pyproject.toml
-        - uv.lock
+
+def test_delivery_days_holiday_adds_two():
+    assert estimate_delivery_days(1, "standard", is_holiday=True) == 5
+
+
+def test_delivery_days_remote_adds_three():
+    assert estimate_delivery_days(1, "standard", is_remote=True) == 6
+
+
+def test_delivery_days_invalid_zone():
+    with pytest.raises(ValueError, match="invalid zone"):
+        estimate_delivery_days(99, "standard")
+
+
+def test_delivery_days_overnight_international_rejected():
+    with pytest.raises(ValueError):
+        estimate_delivery_days("international", "overnight")
 ```
 
-### Step 3: Activity — Trigger and fix the pipeline
+Verify the starting state — tests pass and complexity is high:
 
-1. Create a feature branch and add `mysql-connector-python` to `pyproject.toml`
-2. Push and open a pull/merge request
-3. Confirm: the `licence-audit` job fails and names the GPL licence in its output
-4. Remove the package, push again, confirm the job passes
-5. Download the `licenses.json` artifact from the passing run — verify it lists all project dependencies and contains no `UNKNOWN` licence entries
+```bash
+uv run pytest tests/ -v
+uv run radon cc src/shipping.py -a -s
+```
 
-If your project already has a passing CI configuration from Tutorial 9, add the `licence-audit` job alongside the existing `sast` job so both run in parallel on every pull request.
+Now refactor `estimate_delivery_days` using the same three stages:
+
+1. **Guard clauses** — extract validation (you can reuse or extend `_validate`).
+2. **Lookup table** — replace the nested `if`/`elif` with a `(zone, service) -> days` dictionary.
+3. **Extract function** — pull the holiday/remote modifier logic into a small helper.
+
+After each stage:
+
+```bash
+uv run pytest tests/ -v
+uv run radon cc src/shipping.py -a -s
+```
+
+When `estimate_delivery_days` is at `A (≤ 5)` and every test still passes, commit:
+
+```bash
+git add src/shipping.py tests/test_shipping.py
+git commit -m "refactor: simplify estimate_delivery_days using lookup table"
+```
+
+You have now applied the same three-stage workflow twice. This is the rhythm of safe refactoring: small steps, verified by tests, never more than one technique at a time.
 
 ---
 
 ## References
 
-- [pip-licenses](https://github.com/raimon49/pip-licenses)
-- [Microsoft Presidio](https://microsoft.github.io/presidio/)
-- [GDPR full text — EUR-Lex](https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX%3A32016R0679)
-- [FOSSA — automated licence compliance](https://fossa.com/)
-- [TLDR Legal — plain-English licence summaries](https://tldrlegal.com/)
-- [Australian Privacy Act 1988 — OAIC](https://www.oaic.gov.au/privacy/the-privacy-act)
+- [radon Documentation](https://radon.readthedocs.io/) — cyclomatic complexity, maintainability index, and Halstead metrics for Python
+- [pytest Documentation](https://docs.pytest.org/) — test runner, fixtures, and parametrize
+- [Refactoring Catalog (Martin Fowler)](https://refactoring.com/catalog/) — the canonical catalogue of refactoring moves, including Replace Conditional with Lookup, Extract Function, and Guard Clauses
+- [Cyclomatic Complexity (McCabe, 1976)](https://ieeexplore.ieee.org/document/1702388) — original paper introducing the metric
+- [Working Effectively with Legacy Code](https://www.oreilly.com/library/view/working-effectively-with/0131177052/) — Michael Feathers on safe behaviour-preserving refactoring

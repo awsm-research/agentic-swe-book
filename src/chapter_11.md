@@ -1,4 +1,4 @@
-# Chapter 11: From Build to Production — Packaging, Versioning, and Deployment
+# Chapter 11: Software Versioning, Packaging, and Deployment
 
 > *"You ship your org chart. You also ship your build pipeline."*
 > — paraphrased from Conway's Law and every release engineer who has ever rolled back a Friday deploy

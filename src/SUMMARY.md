@@ -20,10 +20,10 @@
 - [Chapter 9: Security Concerns of Agentic AI Coding Tools](./chapter_9.md)
 
 
-# Part III: Engineering Complex Software Systems
+# Part III: Shipping Your Software Responsibly & Ethically
 
 - [Chapter 10: Software Maintainance and Technical Debts](./chapter_10.md)
-- [Chapter 11: Software Packaging and Production](./chapter_11.md)
+- [Chapter 11: Software Versioning, Packaging, and Deployment](./chapter_11.md)
 - [Chapter 12: Licenses, Ethics, and Responsible AI](./chapter_12.md)
 
 <!-- # Part IV: Advanced Topics in Software Testing -->
@@ -52,4 +52,3 @@
 # For Monash University
 - [Using This Book at Monash University](./for_monash.md)
 - [Generative AI Policy and Responsible Use](./monash_genai_policy.md)
-- 

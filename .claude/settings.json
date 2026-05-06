@@ -19,7 +19,12 @@
       "Bash(python3 -c ' *)",
       "Bash(python3 -c \"import yaml; yaml.safe_load\\(open\\('tut11_compose/compose.yaml'\\)\\)\")",
       "Bash(git mv *)",
-      "Bash(git rm *)"
+      "Bash(git rm *)",
+      "Bash(curl -s \"https://handbook.monash.edu/2026/units/FIT5136?year=2026\")",
+      "Bash(curl -s \"https://handbook.monash.edu/api/es/search\" -H \"Content-Type: application/json\" -d '{\"query\":{\"bool\":{\"must\":[{\"term\":{\"contenttype\":\"monash2_pres_unit\"}},{\"term\":{\"code.value\":\"ITO5136\"}},{\"term\":{\"year.value\":\"2026\"}}]}},\"_source\":true}')",
+      "Bash(python3 -c \"import sys,json; data=json.load\\(sys.stdin\\); hits=data.get\\('hits',{}\\).get\\('hits',[]\\); print\\(json.dumps\\(hits[0]['_source'] if hits else {}, indent=2\\)\\)\")",
+      "Bash(curl -s \"https://handbook.monash.edu/api/es/search\" -H \"Content-Type: application/json\" -d '{\"query\":{\"bool\":{\"must\":[{\"term\":{\"contenttype\":\"monash2_pres_unit\"}},{\"term\":{\"code.value\":\"FIT5136\"}},{\"term\":{\"year.value\":\"2026\"}}]}},\"_source\":true}')",
+      "Bash(curl -sv \"https://handbook.monash.edu/api/es/search\" -H \"Content-Type: application/json\" -d '{\"query\":{\"bool\":{\"must\":[{\"term\":{\"code.value\":\"ITO5136\"}}]}},\"size\":5}')"
     ]
   }
 }

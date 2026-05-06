@@ -49,3 +49,7 @@
 - [Tutorial 11: Containerise and Ship a Three-Tier Application](./tutorial_11.md)
 - [Tutorial 12: Licences, Privacy, and Responsible AI in Practice](./tutorial_12.md)
 
+# For Monash University
+- [Using This Book at Monash University](./for_monash.md)
+- [Generative AI Policy and Responsible Use](./monash_genai_policy.md)
+- 

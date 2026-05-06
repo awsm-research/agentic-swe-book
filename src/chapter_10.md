@@ -4,11 +4,15 @@
 
 ---
 
+In March 2023, three Samsung engineers independently used ChatGPT to help with their work. One pasted proprietary source code from a semiconductor yield measurement tool and asked for debugging help. A second pasted meeting notes and asked for a summary. A third submitted internal test data to generate test scenarios. In each case, the data entered as a prompt was potentially retained for model training by OpenAI under the terms of service active at the time. When Samsung's security team discovered the incidents, the company banned external generative AI tools on company devices within weeks ([The Register, 2023](https://www.theregister.com/2023/05/02/samsung_bans_chatgpt/)). None of the engineers had acted maliciously. They used a tool the way it was designed to be used. The problem was the absence of any policy telling them not to — and the absence of any understanding of what IP obligations and privacy regulations that tool use triggered. That gap — between using AI tools and understanding the legal and ethical obligations they create — is what this chapter addresses.
+
+---
+
 ## Learning Objectives
 
 By the end of this chapter, you will be able to:
 
-1. Explain the major categories of software licenses and their obligations.
+1. Explain the major categories of software licences and their obligations.
 2. Navigate the copyright ambiguity around AI-generated code.
 3. Apply a responsible AI framework to evaluate an AI-enabled system.
 4. Identify sources of bias in AI coding assistants and their practical consequences.
@@ -19,7 +23,7 @@ By the end of this chapter, you will be able to:
 
 ## 10.1 Intellectual Property and Code Ownership
 
-Intellectual property (IP) law governs who owns creative works, including software. Understanding software IP is essential for every engineer — particularly in the context of open source software and AI-generated code.
+Intellectual property (IP) law governs who owns creative works, including software.
 
 ### 10.1.1 Copyright
 
@@ -92,11 +96,7 @@ For internal/proprietary projects: use a proprietary licence (explicitly state n
 
 **No licence = all rights reserved**: If you publish code without a licence, copyright law gives no-one the right to use it, even if it is publicly visible.
 
----
-
-## 10.2.5 Real-World Licensing Case Studies
-
-Understanding licensing obligations through concrete cases is more effective than reading licence texts in isolation.
+### 10.2.5 Real-World Licensing Case Studies
 
 **Case 1: The AGPL Trap — MongoDB and Elastic**
 
@@ -139,7 +139,7 @@ The copyright status of AI-generated code is one of the most actively litigated 
 
 ### 10.3.1 The Current Legal Landscape
 
-**Human authorship requirement**: In most jurisdictions, copyright requires human authorship. The United States Copyright Office has repeatedly held that works produced autonomously by AI without human creative input are not copyrightable ([USPTO, 2024](https://www.copyright.gov/ai/)). This means purely AI-generated code may have no copyright holder — it may be in the public domain.
+**Human authorship requirement**: In most jurisdictions, copyright requires human authorship. The United States Copyright Office has repeatedly held that works produced autonomously by AI without human creative input are not copyrightable ([US Copyright Office, 2024](https://www.copyright.gov/ai/)). This means purely AI-generated code may have no copyright holder — it may be in the public domain.
 
 **Human-AI collaboration**: Where a human makes meaningful creative choices in directing, selecting, and refining AI output, the resulting work may be copyrightable as a human-authored work. The threshold for "meaningful creative contribution" is not yet clearly defined.
 
@@ -161,7 +161,7 @@ In the absence of settled law, the pragmatic guidance is:
 
 ## 10.4 Responsible AI Principles
 
-Responsible AI is the discipline of designing, developing, and deploying AI systems in ways that are safe, fair, transparent, and accountable. It has moved from academic concern to regulatory requirement: the EU AI Act ([European Parliament, 2024](https://www.europarl.europa.eu/news/en/press-room/20240308IPR19015/artificial-intelligence-act-meps-adopt-landmark-law)), the US Executive Order on Safe, Secure, and Trustworthy AI ([White House, 2023](https://www.whitehouse.gov/briefing-room/presidential-actions/2023/10/30/executive-order-on-the-safe-secure-and-trustworthy-development-and-use-of-artificial-intelligence/)), and the Australian Government's AI Ethics Framework ([DISER, 2019](https://www.industry.gov.au/publications/australias-artificial-intelligence-ethics-framework)) all impose obligations on organisations developing or deploying AI.
+Responsible AI has moved from academic concern to regulatory requirement: the EU AI Act ([European Parliament, 2024](https://www.europarl.europa.eu/news/en/press-room/20240308IPR19015/artificial-intelligence-act-meps-adopt-landmark-law)), the US Executive Order on Safe, Secure, and Trustworthy AI ([White House, 2023](https://www.whitehouse.gov/briefing-room/presidential-actions/2023/10/30/executive-order-on-the-safe-secure-and-trustworthy-development-and-use-of-artificial-intelligence/)), and the Australian Government's AI Ethics Framework ([DISER, 2019](https://www.industry.gov.au/publications/australias-artificial-intelligence-ethics-framework)) all impose obligations on organisations developing or deploying AI.
 
 Key responsible AI principles ([Jobin et al., 2019](https://www.nature.com/articles/s42256-019-0088-2)):
 
@@ -206,8 +206,6 @@ This accountability principle reinforces the evaluation-driven approach of Chapt
 
 ## 10.5 Organisational AI Governance
 
-As AI tools proliferate in software teams, organisations need governance frameworks to manage the associated risks.
-
 ### 10.5.1 AI Use Policies
 
 An AI use policy defines:
@@ -248,7 +246,7 @@ Responsible AI deployment requires documentation:
 
 ## 10.6 Privacy Regulation and AI-Generated Code
 
-Privacy regulations impose obligations that interact directly with AI-generated code. Engineers who generate data-handling code with AI tools must understand whether the output is compliant.
+A governance policy controls what engineers do with AI tools. Privacy regulation controls what the code those tools produce does with user data. The two obligations are independent — an organisation can have a perfect AI use policy and still ship GDPR-non-compliant code.
 
 ### 10.6.1 Key Regulations
 
@@ -266,8 +264,6 @@ Key obligations relevant to AI-generated code:
 **Australian Privacy Act 1988** — applies to Australian Government agencies and organisations with annual turnover over $3 million ([OAIC](https://www.oaic.gov.au/privacy/the-privacy-act)).
 
 ### 10.6.2 Worked Scenario: AI-Generated User Deletion Endpoint
-
-A common GDPR compliance gap in AI-generated code is the missing right-to-erasure implementation.
 
 **Prompt to AI assistant:**
 ```
@@ -312,11 +308,11 @@ Assume: User, Task, Comment, AuditLog, DeletionRequest SQLAlchemy models;
         send_email(to, subject, body) utility function available
 ```
 
-This specification produces code that satisfies the right-to-erasure obligation. The gap between the two versions illustrates why privacy compliance cannot be delegated to AI without privacy-aware specifications.
+The difference between the two prompts is one sentence of context per GDPR requirement. That is the engineering cost of compliance — not implementing deletion differently, but specifying it precisely enough that the generated code actually does it.
 
 ### 10.6.3 PII in AI Prompts
 
-Sending personal data to external AI APIs creates its own compliance risk. GDPR Article 28 requires a Data Processing Agreement (DPA) with any third party that processes personal data on your behalf. Most major AI providers offer DPAs, but these must be executed before sending personal data.
+GDPR Article 28 requires a Data Processing Agreement (DPA) with any third party that processes personal data on your behalf. Most major AI providers offer DPAs, but these must be executed before sending personal data.
 
 **Do not send to external AI APIs (without a DPA and privacy review):**
 - Names, email addresses, phone numbers
@@ -325,6 +321,11 @@ Sending personal data to external AI APIs creates its own compliance risk. GDPR 
 - Authentication tokens or session identifiers
 
 **Automated PII detection before AI prompts:**
+
+```bash
+uv add --dev presidio-analyzer presidio-anonymizer
+```
+
 ```python
 # pii_guard.py
 import anthropic
@@ -365,21 +366,21 @@ except ValueError as e:
 
 ---
 
-## 10.7 Tutorial: License Compliance Audit and Responsible AI Checklist
+## 10.7 License Compliance Audit and Responsible AI Checklist
 
 ### 10.7.1 License Compliance Audit with pip-licenses
 
 ```bash
-pip install pip-licenses
+uv add --dev pip-licenses
 
 # List all dependencies and their licenses
-pip-licenses --format=table
+uv run pip-licenses --format=table
 
 # Export to CSV for review
-pip-licenses --format=csv --output-file=licenses.csv
+uv run pip-licenses --format=csv --output-file=licenses.csv
 
 # Check for copyleft licenses that may require disclosure
-pip-licenses --fail-on="GPL;AGPL" --format=table
+uv run pip-licenses --fail-on="GPL;AGPL" --format=table
 ```
 
 Sample output:
@@ -395,76 +396,107 @@ If any dependency has a GPL or AGPL licence, review whether your use triggers co
 
 ### 10.7.2 Responsible AI Checklist for the Course Project
 
-```python
-# responsible_ai_audit.py
-import anthropic
+**Step 1: Generate a risk assessment with an AI assistant**
 
-client = anthropic.Anthropic()
+Paste the following prompt into any AI assistant (Claude, ChatGPT, Gemini), replacing the project block with your own project description:
 
-RESPONSIBLE_AI_CHECKLIST = """
-Fairness:
-- [ ] Have we considered who may be disadvantaged by AI-generated code quality disparities?
-- [ ] Have we tested the system with diverse inputs, not just the "happy path"?
+**System prompt:**
 
-Transparency:
-- [ ] Is it documented which parts of the codebase are AI-generated?
-- [ ] Are AI tools used in this project disclosed in project documentation?
+<div class="admonish-prompt">
 
-Accountability:
-- [ ] Has all AI-generated code been reviewed by a human engineer?
-- [ ] Is there clear ownership of each component, including AI-generated ones?
+You are a responsible AI auditor with expertise in software engineering and AI ethics
+frameworks. You provide concise, actionable risk assessments grounded in established
+responsible AI principles (Fairness, Transparency, Accountability, Privacy, Safety,
+Beneficence). Be specific to the technology stack and deployment context described.
 
-Privacy:
-- [ ] Have we verified that no PII or credentials were included in AI prompts?
-- [ ] Does the system comply with applicable privacy regulations (GDPR, Privacy Act)?
+</div>
 
-Security:
-- [ ] Has AI-generated code undergone security review (Bandit, manual review)?
-- [ ] Have we run GitLeaks to ensure no credentials are in the repository?
+**User:**
 
-Licensing:
-- [ ] Have all dependencies been audited for licence compatibility?
-- [ ] Is it clear that AI-generated code does not reproduce copylefted code?
-"""
+<div class="admonish-prompt">
 
+Based on the project description below, provide a brief responsible AI risk assessment.
+For each of the six principles — Fairness, Transparency, Accountability, Privacy,
+Safety, and Beneficence — identify:
 
-def generate_responsible_ai_report(project_description: str) -> str:
-    """Generate a responsible AI assessment for a project."""
-    response = client.messages.create(
-        model="claude-opus-4-7",
-        max_tokens=1024,
-        messages=[
-            {
-                "role": "user",
-                "content": f"""You are a responsible AI auditor. Based on the project description
-below, provide a brief responsible AI risk assessment. For each of the six principles
-(Fairness, Transparency, Accountability, Privacy, Safety, Beneficence), identify:
 1. The primary risk for this project
 2. A specific mitigation recommendation
 
 Project:
-{project_description}""",
-            }
-        ],
-    )
-    return response.content[0].text
+Task Management API for software development teams.
+- Built with Python and FastAPI
+- Uses AI coding assistants for feature development
+- Stores user data including email addresses and work activity
+- Will be deployed as a SaaS product to paying customers
 
+</div>
 
-if __name__ == "__main__":
-    project = """
-    Task Management API for software development teams.
-    - Built with Python and FastAPI
-    - Uses AI coding assistants for feature development (chapters 5-8 of this course)
-    - Stores user data including email addresses and work activity
-    - Will be deployed as a SaaS product to paying customers
-    """
+**Step 2: Complete the self-audit checklist**
 
-    print("RESPONSIBLE AI ASSESSMENT")
-    print("=" * 60)
-    print(generate_responsible_ai_report(project))
-    print()
-    print("SELF-AUDIT CHECKLIST")
-    print("=" * 60)
-    print(RESPONSIBLE_AI_CHECKLIST)
-```
+Work through the checklist below for your own project. Each unchecked item is a gap to address before the project is considered responsible-AI-compliant.
+
+<div class="admonish-prompt">
+
+### Responsible AI Self-Audit
+
+### Fairness
+- [ ] Have we considered who may be disadvantaged by AI-generated code quality disparities?
+- [ ] Have we tested the system with diverse inputs, not just the "happy path"?
+
+### Transparency
+- [ ] Is it documented which parts of the codebase are AI-generated?
+- [ ] Are AI tools used in this project disclosed in project documentation?
+
+### Accountability
+- [ ] Has all AI-generated code been reviewed by a human engineer?
+- [ ] Is there clear ownership of each component, including AI-generated ones?
+
+### Privacy
+- [ ] Have we verified that no PII or credentials were included in AI prompts?
+- [ ] Does the system comply with applicable privacy regulations (GDPR, Privacy Act)?
+
+### Security
+- [ ] Has AI-generated code undergone security review (Bandit, manual review)?
+- [ ] Have we run GitLeaks to ensure no credentials are in the repository?
+
+### Licensing
+- [ ] Have all dependencies been audited for licence compatibility?
+- [ ] Is it clear that AI-generated code does not reproduce copylefted code?
+</div>
+
+---
+
+## 10.8 Key Takeaways
+
+The legal and ethical landscape for AI-generated code is unsettled and changing quickly. The key ideas from this chapter:
+
+1. **Copyright, patents, and trade secrets are the three main IP protection mechanisms for software.** For most software, copyright is the operative form — it attaches automatically on creation, without registration, and it governs whether anyone can copy, distribute, or build on your code.
+
+2. **Open source licences are not interchangeable.** Permissive licences (MIT, Apache 2.0) allow incorporation into proprietary software; copyleft licences (GPL, AGPL) require derivative works to remain open source. Mixing incompatible licences creates hidden legal obligations. Check compatibility before adopting a dependency.
+
+3. **AI-generated code exists in a copyright grey zone.** Purely AI-generated output may have no copyright holder — it may effectively be in the public domain. Where a human makes meaningful creative choices in directing and refining AI output, the work may be copyrightable as human-authored; the legal threshold for this is not yet settled.
+
+4. **You are accountable for AI-generated code you ship.** Responsibility does not transfer to the AI vendor. The engineer who reviews, accepts, and deploys the code is the responsible party — regardless of which tool produced the first draft.
+
+5. **Privacy regulations impose concrete obligations on the code you write.** GDPR's right to erasure, data minimisation, and lawful basis requirements are not satisfied by default by AI-generated code — they must be specified in the prompt. The same applies to CCPA and the Australian Privacy Act for their respective jurisdictions.
+
+6. **Do not send personal data to external AI APIs without a Data Processing Agreement.** Names, email addresses, and IP addresses are personal data under GDPR. Executing a DPA with the AI provider is a legal requirement before sending them, not an optional precaution.
+
+7. **Organisational AI governance starts with a use policy that is actually enforced.** The policy must specify which tools are approved, what data may be sent, and how AI-generated code is reviewed before production use. The Samsung incident illustrates what happens in the absence of one.
+
+8. **The EU AI Act classifies AI coding assistants as minimal risk.** If you are *building* a high-risk AI system — for medical diagnosis, hiring, or credit decisions — significantly stricter requirements apply, including conformity assessments, transparency obligations, and mandated human oversight.
+
+---
+
+## Review Questions
+
+1. Your team wants to add an AGPL-licensed library to your SaaS product's backend. The product charges a monthly subscription fee and does not distribute compiled binaries. A colleague argues: "AGPL only applies when you distribute software — since we're SaaS, we don't distribute anything, so we're fine." Evaluate this argument. What obligation, if any, does the AGPL create for a network-accessible service, and what would you recommend?
+
+2. A developer uses GitHub Copilot to generate approximately 40% of a new fintech product's codebase. The CTO wants to register the codebase as a company copyright and is confident this is straightforward. What are the obstacles to this, and what documentation practices — starting today — would strengthen the company's legal position?
+
+3. You are implementing a user data export feature in a FastAPI application. You submit the following prompt: *"Add a GET /users/{user_id}/export endpoint that returns all user data as JSON."* The AI returns a function that serialises the `User` SQLAlchemy model directly. Identify at least two GDPR compliance gaps in the generated code, then write the revised prompt that addresses them.
+
+4. A junior developer generates a user authentication module using an AI assistant and merges it without a security review. The module contains a timing vulnerability in the password comparison function that leaks whether a username exists. When the issue is reported, the developer says: "The AI wrote it — that's on the tool, not me." As tech lead, how do you respond, and what specific changes would you make to the team's AI code review process to prevent this class of issue?
+
+5. Your organisation has no AI use policy. You have been asked to draft three policy clauses before next week's sprint. Using the example clauses in Section 10.5.1 as a model, write three clauses specific to a team that builds healthcare data management software, uses external AI coding assistants daily, and is subject to GDPR. For each clause, explain the specific risk it mitigates.
 

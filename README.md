@@ -15,6 +15,12 @@
 
 <p align="center">
   <a href="https://doi.org/10.5281/zenodo.20053968"><img src="https://zenodo.org/badge/DOI/10.5281/zenodo.20053968.svg" alt="DOI"></a>
+  <img src="https://img.shields.io/badge/topic-agentic%20AI-purple" alt="AI Engineering">
+  <img src="https://img.shields.io/badge/version-2026-blue" alt="Version">
+  <img src="https://img.shields.io/badge/status-active%20development-brightgreen" alt="Status">
+  <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/"><img src="https://img.shields.io/badge/book-CC%20BY--NC--ND%204.0-lightgrey" alt="CC BY-NC-ND 4.0"></a>
+  <a href="https://opensource.org/licenses/MIT"><img src="https://img.shields.io/badge/code-MIT-yellow" alt="MIT License"></a>
+  <img src="https://visitor-badge.laobi.icu/badge?page_id=book.agentic-swe.dev" alt="Visitor Count">
 </p>
 
 ---
@@ -30,34 +36,44 @@ The book is built around a single running project (a Task Management API) that g
 ## Contents
 
 ### Part I: SE Fundamentals
-| Week | Chapter |
-|------|---------|
+| Chapter | Title |
+|---------|-------|
 | 1 | Software Engineering Fundamentals |
 | 2 | Requirements Engineering |
 | 3 | Software Design, Architecture, and Patterns |
-| 4 | Software Testing, Code Quality, Code Review, and CI/CD |
-| 5 | Software Security |
+| 4 | Software Quality & Testing |
+| 5 | Automated Code Review, Code Quality, and CI/CD |
 
 ### Part II: Agentic Software Engineering
-| Week | Chapter |
-|------|---------|
+| Chapter | Title |
+|---------|-------|
 | 6 | Agentic Software Engineering: A New Paradigm |
-| 7 | Agentic SWE in SDLC: Hands-on Activities |
-| 8 | Emerging Security Concerns in Agentic Software Engineering |
-| 9 | Configuring the Agent's World — Context, Skills, and Tools |
+| 7 | Configuring the Agent's World — Context, Skills, and Tools |
+| 8 | Security of AI-Generated Code |
+| 9 | Security Concerns of Agentic AI Coding Tools |
 
-### Part III: Engineering with Responsibility
-| Week | Chapter |
-|------|---------|
-| 10 | Licenses, Ethics, and Responsible AI |
-| 11 | Developer Productivity and Team Practices |
-| 12 | The Future of AI-Native Engineering |
+### Part III: Shipping Your Software Responsibly & Ethically
+| Chapter | Title |
+|---------|-------|
+| 10 | Software Maintenance and Technical Debts |
+| 11 | Software Versioning, Packaging, and Deployment |
+| 12 | Licenses, Ethics, and Responsible AI |
 
-### Appendices
-- A: Recommended Tools and Environments
-- B: Design Pattern Reference
-- C: Applying These Practices in Other Languages
-- D: Prompt Pattern Reference
+### Part IV: Tutorials
+| Tutorial | Title |
+|----------|-------|
+| 1 | Setting Up Your Python and GitLab for Code and Project Management |
+| 2 | Eliciting Requirements from AI As Your Client |
+| 3 | Designing a Learning Management System |
+| 4 | Unit Testing 101 |
+| 5 | Code Quality and CI/CD |
+| 6 | The AI-Assisted SDLC: From Spec to Code |
+| 7 | The AI-Assisted SDLC: From Code to Well-Tested App |
+| 8 | SAST, AI, and Human on Vulnerability Detection |
+| 9 | Security Review in CI/CD Pipeline |
+| 10 | Pay Down Debt on a Real Hotspot |
+| 11 | Containerise and Ship a Three-Tier Application |
+| 12 | Licences, Privacy, and Responsible AI in Practice |
 
 ## Key Concepts
 

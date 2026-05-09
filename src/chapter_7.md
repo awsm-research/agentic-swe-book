@@ -1,7 +1,11 @@
 # Chapter 7: Configuring the Agent's World — Context, Skills, and Tools
 
 > *"An agent is only as good as the world it can see. What you choose to put in front of it — and what you keep out — is an engineering decision, not a configuration detail."*
-> — [Source needed]
+> — Kla Tantithamthavorn
+
+---
+
+Within twelve months of Anthropic releasing the Model Context Protocol in November 2024, the open MCP registry listed thousands of community-built servers — integrations for issue trackers, databases, design tools, observability platforms, and internal APIs that teams had wired to their agents because the agents needed them to work. The Everything Claude Code project, a community-maintained library of reusable agent skills, catalogued hundreds of specialised workflows: security review, database migration, CI/CD orchestration, code review, deployment checklists — process knowledge that teams had encoded so their agents would stop guessing at conventions. The `AGENTS.md` format — a plain Markdown file describing a project's stack, commands, and constraints — had been adopted as a shared cross-tool standard by Claude Code, Cursor, OpenAI's Codex CLI, and Gemini CLI before any single organisation had formally standardised it. Engineers did not build all of this because agents worked correctly by default. They built it because an unconfigured agent, dropped into a production codebase, makes its best guesses — and in engineering organisations, best guesses accumulate into incidents.
 
 ---
 
@@ -22,7 +26,7 @@ By the end of this chapter, you will be able to:
 
 When you first run a coding agent on a large codebase, it faces a fundamental problem: it can read any file, run any command, and potentially take any action — but it has no idea what it *should* do, what conventions to follow, what tools are sanctioned, or what parts of the system are off-limits.
 
-Left unconfigured, an agent will make its best guesses. It may use a testing framework you abandoned two years ago, commit without signing, push to a branch that triggers a production deployment, or generate code in a style that conflicts with your team's standards. These are not AI failures — they are *configuration failures*.
+Left unconfigured, an agent will make its best guesses. It may use a testing framework you abandoned two years ago, commit without signing, push to a branch that triggers a production deployment, or generate code in a style that conflicts with your team's standards. Agent failures that feel like AI limitations are usually configuration failures.
 
 The central insight of this chapter is that configuring the agent's world is itself an engineering task. It requires the same rigour as writing code: deliberate decisions about what information the agent should have, what it is allowed to do, and what external systems it can reach.
 
@@ -538,15 +542,25 @@ Each layer serves a distinct purpose:
 
 ## 7.8 Key Takeaways
 
-How an agent is configured is as consequential as the code it generates — the decisions you make about context, permissions, and tool access determine what the agent can produce and what it cannot accidentally break.
+How an agent is configured is as consequential as the code it generates. The decisions you make about context, permissions, and tool access determine both what the agent can produce and what it cannot accidentally break:
 
-The key ideas from this chapter:
+1. **`AGENTS.md`** is the cross-tool standard for giving agents project context. It works across Claude Code, Cursor, Codex CLI, Gemini CLI, and others. Treat it as living documentation.
+2. **Subagents** are specialised agents with explicit model selection, tool allowlists, permission modes, and turn limits. Apply the principle of least privilege: give each subagent only what it needs.
+3. **Skills** are deterministic, curated knowledge injections — not retrieval. They encode process knowledge (how your team does a specific type of task) and are invoked by slash commands.
+4. **MCP servers** connect agents to external tools. They enable genuinely autonomous workflows across the full engineering lifecycle.
+5. **Token cost is real.** Each MCP tool description consumes context. Enable only what is needed for the current project; audit usage regularly.
 
-- **`AGENTS.md`** is the cross-tool standard for giving agents project context. It works across Claude Code, Cursor, Codex CLI, Gemini CLI, and others. Treat it as living documentation.
-- **Subagents** are specialised agents with explicit model selection, tool allowlists, permission modes, and turn limits. Apply the principle of least privilege: give each subagent only what it needs.
-- **Skills** are deterministic, curated knowledge injections — not retrieval. They encode process knowledge (how your team does a specific type of task) and are invoked by slash commands.
-- **MCP servers** connect agents to external tools. They enable genuinely autonomous workflows across the full engineering lifecycle.
-- **Token cost is real.** Each MCP tool description consumes context. Enable only what is needed for the current project; audit usage regularly.
+---
+
+## Review Questions
+
+1. A junior engineer joins your team and asks why the agent keeps using the wrong testing framework. Using the concept of context files, diagnose what is likely missing and describe what you would write to fix it.
+
+2. You are designing a subagent that must read the database schema and generate migration scripts, but must not execute any SQL directly. Which `permission_mode` would you choose, and which tools would you include in the allowlist? Justify each decision.
+
+3. Your team enables 15 MCP servers "so the agent can do everything." A month later, engineers complain that the agent is slower and produces lower-quality output on complex tasks. Using what you know about token cost and context windows, explain what is happening and propose a remedy.
+
+4. A colleague argues that putting a convention in `AGENTS.md` and creating a Skill for it accomplish the same thing. Where do they overlap, and where do they fundamentally differ? Give an example where only one of the two approaches is appropriate.
 
 ---
 
@@ -594,13 +608,6 @@ List the MCP servers you would realistically use for your course project. For ea
 
 Justify your final list of enabled MCP servers.
 
-### Reflection Questions
-
-1. What information in your `AGENTS.md` would you not have known to write before taking this course?
-2. What is the difference between putting a convention in `AGENTS.md` and creating a Skill for it?
-3. A teammate proposes enabling 12 MCP servers "so the agent can do everything." How would you respond?
-4. Which subagent permission mode would you use for a subagent that needs to run tests but should not be able to push code to GitHub? Why?
-
 ---
 
 ## Further Reading
@@ -608,5 +615,3 @@ Justify your final list of enabled MCP servers.
 - Anthropic. (2024). *Model Context Protocol specification*. [https://modelcontextprotocol.io](https://modelcontextprotocol.io)
 - Anthropic. (2024). *Claude Code documentation: Sub-agents*. [https://docs.anthropic.com/en/docs/claude-code/sub-agents](https://docs.anthropic.com/en/docs/claude-code/sub-agents)
 - Anthropic. (2024). *Claude Code documentation: Slash commands (Skills)*. [https://docs.anthropic.com/en/docs/claude-code/slash-commands](https://docs.anthropic.com/en/docs/claude-code/slash-commands)
-- Weng, L. (2023). LLM-powered autonomous agents. *Lil'Log*. [https://lilianweng.github.io/posts/2023-06-23-agent/](https://lilianweng.github.io/posts/2023-06-23-agent/)
-- Shinn, N., Cassano, F., Labash, A., Gopalan, A., Narasimhan, K., & Yao, S. (2023). Reflexion: Language agents with verbal reinforcement learning. *Advances in Neural Information Processing Systems, 36*.

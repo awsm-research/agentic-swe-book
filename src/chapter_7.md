@@ -536,7 +536,7 @@ Each layer serves a distinct purpose:
 
 ---
 
-## 7.8 Summary
+## 7.8 Key Takeaways
 
 How an agent is configured is as consequential as the code it generates — the decisions you make about context, permissions, and tool access determine what the agent can produce and what it cannot accidentally break.
 

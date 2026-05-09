@@ -5,6 +5,10 @@
 
 ---
 
+Veracode's 2025 GenAI Code Security Report tested more than 100 large language models across security-sensitive coding tasks and found that 45% of AI-generated code samples introduce at least one OWASP Top 10 vulnerability — and that AI-generated code contains 2.74 times more security flaws than human-written equivalents ([Veracode, 2025](https://www.veracode.com/resources/analyst-reports/2025-genai-code-security-report/)). The models improved at producing syntactically correct, functional code; they did not improve at producing secure code. Georgia Tech's Vibe Security Radar, launched in May 2025 to formally track CVEs attributable to AI coding tools, documented 78 confirmed AI-linked vulnerabilities through March 2026 — 43 of them rated Critical or High severity — with the pace accelerating sharply: March 2026 alone recorded 35 CVEs, more than the entirety of the second half of 2025 combined ([Georgia Tech, 2026](https://research.gatech.edu/bad-vibes-ai-generated-code-vulnerable-researchers-warn)). The pattern is structural, not incidental. An AI assistant that generates hundreds of lines per session, at a pace no manual reviewer can match, turns every untriaged output into a potential entry point. Functional correctness is not security. Throughput without verification is a liability.
+
+---
+
 ## Learning Objectives
 
 By the end of this chapter, you will be able to:
@@ -55,7 +59,7 @@ The Open Web Application Security Project publishes a regularly updated list of 
 
 ## 8.2 Common Python Security Vulnerabilities
 
-Python's dynamic features and expressive syntax make certain vulnerability classes particularly easy to introduce accidentally.
+Five vulnerability classes recur consistently in Python codebases — and appear with measurable frequency in the code that AI assistants generate for them.
 
 ### 8.2.1 SQL Injection (CWE-89)
 
@@ -272,11 +276,11 @@ print(anonymise_pii(text))
 
 ## 8.4 The Security Risk of AI-Generated Code
 
-The vulnerability patterns in Section 8.2 are not merely historical concerns — they are among the most consistently documented outputs of AI coding assistants. Two independent studies provide the empirical grounding.
+The vulnerability patterns in Section 8.2 appear in AI-generated code at measurable, reproducible rates — documented by independent studies as observed output, not theoretical risk. Two studies establish the evidence.
 
 Perry et al. (2022) conducted a controlled experiment in which developers using GitHub Copilot for security-relevant programming tasks produced code with significantly more vulnerabilities than those who completed the same tasks unaided — and rated their AI-assisted code as *more* secure ([Perry et al., 2022](https://arxiv.org/abs/2211.03622)). The confidence inversion is the finding that matters: AI assistance raised perceived security while lowering actual security. Liu et al. (2023) found that 32.2% of ChatGPT-generated code samples produced incorrect outputs, and nearly half had maintainability issues detectable by standard static analysis ([Liu et al., 2023](https://arxiv.org/abs/2307.12596)). An engineer accepting the output without review ships these failures without knowing.
 
-The mechanism is not that AI models are adversarial. They are trained on the full corpus of publicly available code — which includes, at scale, code that is vulnerable. Patterns such as SQL string concatenation, `shell=True`, hardcoded credentials, and `debug=True` are prevalent in public repositories; a model trained to complete code *plausibly* reproduces them *plausibly*.
+AI models are trained on the full corpus of publicly available code — which includes, at scale, code that is vulnerable. SQL string concatenation, `shell=True`, hardcoded credentials, and `debug=True` are all prevalent in public repositories; a model trained to complete code *plausibly* reproduces them *plausibly*. The confidence inversion Perry et al. documented is the sharpest illustration: the tool made developers feel more secure while making their code less so.
 
 ### 8.4.1 From Benign Prompt to Vulnerable Output
 
@@ -330,8 +334,8 @@ if __name__ == "__main__":
 
 ### 8.4.2 Why Static Analysis Is Not Sufficient Alone
 
-The tools covered in Section 8.3 — GitLeaks, Semgrep, Bandit — catch many of these patterns automatically. The SAST triage activity shows their limits: three vulnerability classes eluded both tools in that exercise, including a hardcoded API key, a logged password, and an unauthenticated admin route. These are design-level and intent-level failures. No static analyser can detect that an endpoint lacks an access-control check without knowing what the access-control requirements were.
+Static analysis tools — GitLeaks, Semgrep, Bandit — catch many of these patterns automatically. The SAST triage activity in the accompanying tutorial shows their limits: three vulnerability classes eluded automated detection in that exercise, including a hardcoded API key, a logged password, and an unauthenticated admin route. These are design-level and intent-level failures. No static analyser can detect that an endpoint lacks an access-control check without knowing what the access-control requirements were.
 
-The practical implication: AI-generated code requires review rigour at least equal to code produced by an engineer unfamiliar with your security requirements. SAST tools establish a floor — they catch the patterns they were trained to recognise. Human review is the second line, responsible for the design-level issues that pattern matching cannot reach. The Perry et al. finding makes the stakes explicit: developers trusted AI-generated code *more* than warranted. Trusting it less — specifically, applying systematic verification to every AI-generated security-relevant function — is the correct calibration.
+AI-generated code requires review rigour at least equal to code produced by an engineer unfamiliar with your security requirements. SAST tools establish a floor — they catch the patterns they were trained to recognise. Human review is the second line, responsible for the design-level issues that pattern matching cannot reach. The Perry et al. finding makes the stakes explicit: developers trusted AI-generated code *more* than warranted. The right response is systematic verification of every AI-generated security-relevant function — not trust, but structured scepticism.
 
 ---

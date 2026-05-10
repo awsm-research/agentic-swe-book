@@ -1,0 +1,19 @@
+## 15.2 Metrics for Classification: What Accuracy Hides
+
+---
+
+**Accuracy** — the proportion of predictions that are correct — is the intuitive default metric for classification problems. It is also the wrong metric for most clinical applications, and understanding precisely why reveals what better metrics capture.
+
+Consider ChestScan. The dataset contains 5,216 training images: 3,875 pneumonia and 1,341 normal. An application deployed into a clinical environment where patients are referred to X-ray because they are symptomatic will see a similarly imbalanced distribution: far more positive cases than a random population sample would contain, because low-risk patients are rarely referred for imaging. In this setting, a model that predicts pneumonia for every input achieves approximately 73% accuracy. It produces no false negatives — it flags every pneumonia case — but it also produces no true negatives. Every normal patient is incorrectly diagnosed as having pneumonia, which carries its own clinical and cost consequences.
+
+Accuracy cannot detect this failure because it treats all correct predictions as equivalent. One correctly identified normal patient and one correctly identified pneumonia patient contribute equally to the numerator. The metric provides no information about how errors are distributed.
+
+**AUC** — the *Area Under the Receiver Operating Characteristic Curve* — addresses part of this problem by measuring the model's ability to discriminate between classes across all possible classification thresholds. AUC answers the question: if you randomly select one positive example and one negative example, what is the probability that the model ranks the positive example higher? An AUC of 0.5 indicates chance performance; 1.0 indicates perfect discrimination. AUC is threshold-independent, which makes it useful for comparing models before a deployment threshold has been chosen. The limitation is that AUC still summarises performance across the full threshold range, and the performance at the specific threshold used in deployment may differ substantially from what the AUC curve suggests.
+
+**Precision** and **recall** — and their harmonic mean, the **F1 score** — provide class-level perspective. Precision measures the proportion of positive predictions that are correct: of all the patients the model flags as having pneumonia, how many actually do? Recall measures the proportion of actual positives the model identifies: of all patients with pneumonia, how many does the model flag? In clinical settings, these two quantities encode different clinical costs. A model with low recall misses pneumonia cases — patients who need treatment are sent home. A model with low precision over-diagnoses — healthy patients are subjected to unnecessary treatment and investigation. The appropriate balance between these depends on the clinical context, treatment cost, and relative harm of each error type.
+
+The **F1 score** is the harmonic mean of precision and recall. It penalises extreme imbalance between the two: a model with perfect recall and zero precision, or vice versa, scores zero. F1 is appropriate when neither false positives nor false negatives are acceptable, and when class imbalance makes accuracy misleading.
+
+The choice between these metrics is not arbitrary. For ChestScan, the evaluation framework uses AUC as the primary metric for model comparison across training runs — because it is threshold-independent and captures the full discrimination capability of the model — combined with per-class recall as a constraint. A model that achieves high AUC through strong pneumonia recall at the expense of catastrophically low normal recall fails the evaluation gate, regardless of its AUC value. The metric and the constraint together encode the clinical requirements that accuracy alone cannot represent.
+
+---

@@ -12,6 +12,10 @@ site-url = "/"
 additional-js = ["theme/mermaid.min.js", "theme/mermaid-init.js"]
 additional-css = ["theme/css/custom.css"]
 
+[output.html.fold]
+enable = true
+level = 0
+
 [output.html.search]
 enable = true
 limit-results = 20

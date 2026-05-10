@@ -1,0 +1,23 @@
+model_name: chestscan-pneumonia-detector
+version: "1.0"
+architecture: "Hybrid CNN+ViT (ResNet-34 backbone + 6-layer Vision Transformer)"
+training_data:
+  dataset: "Kaggle Chest X-Ray Images (Pneumonia)"
+  source: "Guangzhou Women and Children's Medical Centre"
+  size: 5856
+  classes: [Normal, Bacterial Pneumonia, Viral Pneumonia]
+  split: "Patient-level 80/10/10 train/val/test"
+evaluation_results:
+  auc: 0.96
+  sensitivity: 0.94
+  specificity: 0.91
+  f1_macro: 0.93
+known_limitations:
+  - "Trained on paediatric chest X-rays; not validated on adult populations"
+  - "Single institution dataset; may not generalise to different X-ray equipment"
+  - "Three-class classifier; does not detect other pulmonary conditions"
+intended_use: "Clinical decision support for radiologists — not for autonomous diagnosis"
+prohibited_use:
+  - "Autonomous clinical diagnosis without radiologist review"
+  - "Screening in populations substantially different from the training population"
+contact: "clinical-ai@hospital.org"

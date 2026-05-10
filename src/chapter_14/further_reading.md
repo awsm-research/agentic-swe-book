@@ -1,0 +1,8 @@
+## Further Reading
+
+- Recht, B., Roelofs, R., Schmidt, L., & Shankar, V. (2019). Do ImageNet classifiers generalize to ImageNet? *Proceedings of the 36th International Conference on Machine Learning (ICML)*. [https://arxiv.org/abs/1902.10811](https://arxiv.org/abs/1902.10811)
+- Gebru, T., Morgenstern, J., Vecchione, B., Vaughan, J. W., Wallach, H., Daumé III, H., & Crawford, K. (2021). Datasheets for datasets. *Communications of the ACM*, 64(12), 86–92. [https://doi.org/10.1145/3458723](https://doi.org/10.1145/3458723)
+- Breck, E., Cai, S., Nielsen, E., Salib, M., & Sculley, D. (2017). The ML test score: A rubric for ML production readiness and technical debt reduction. *Proceedings of the IEEE International Conference on Big Data*, 1123–1132. [https://doi.org/10.1109/BigData.2017.8258038](https://doi.org/10.1109/BigData.2017.8258038)
+- Sculley, D., et al. (2015). Hidden technical debt in machine learning systems. *Advances in Neural Information Processing Systems*, 28. [https://papers.nips.cc/paper/2015/hash/86df7dcfd896fcaf2674f757a2463eba-Abstract.html](https://papers.nips.cc/paper/2015/hash/86df7dcfd896fcaf2674f757a2463eba-Abstract.html)
+- Polyzotis, N., Roy, S., Whang, S. E., & Zinkevich, M. (2017). Data management challenges in production machine learning. *Proceedings of the 2017 ACM SIGMOD International Conference on Management of Data*, 1723–1726. [https://doi.org/10.1145/3035918.3054782](https://doi.org/10.1145/3035918.3054782)
+- MLflow Documentation. (2024). MLflow Tracking. [https://mlflow.org/docs/latest/tracking.html](https://mlflow.org/docs/latest/tracking.html)

@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "mcp__plugin_everything-claude-code_exa__web_search_exa",
+      "Bash(ls /Users/klainfo/Research/ai-native-engineer/src/tutorial_*.md)",
+      "Bash(python3:*)"
+    ]
+  }
+}

@@ -1,0 +1,108 @@
+# docker-compose.yml
+# Three-service Docker Compose stack for the ChestScan pneumonia detection system.
+#
+# Services:
+#   mlflow   — MLflow tracking server + model registry (port 5000)
+#   backend  — FastAPI inference server (port 8000)
+#   frontend — Streamlit radiologist interface (port 8501)
+#
+# Service startup order:
+#   mlflow must be healthy before backend starts (model registry must be available)
+#   backend must be healthy before frontend starts (API must be available)
+#
+# Usage:
+#   docker compose up --build        # build and start all services
+#   docker compose up --build -d     # start in background
+#   docker compose logs -f backend   # tail backend logs
+#   docker compose ps                # check health of all services
+#   docker compose down              # stop and remove containers
+#   docker compose down -v           # also remove the mlflow_data volume
+#
+# After startup:
+#   MLflow UI:      http://localhost:5000
+#   Backend API docs: http://localhost:8000/docs
+#   Streamlit app:  http://localhost:8501
+
+services:
+
+  # ── MLflow Tracking Server ──────────────────────────────────────────────
+  mlflow:
+    image: python:3.11-slim
+    container_name: mlflow
+    command: >
+      sh -c "pip install mlflow>=2.12.0 --quiet &&
+             mlflow server
+               --host 0.0.0.0
+               --port 5000
+               --backend-store-uri sqlite:////mlflow/mlflow.db
+               --default-artifact-root /mlflow/artifacts"
+    volumes:
+      - mlflow_data:/mlflow
+    ports:
+      - "5000:5000"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5000/api/2.0/mlflow/experiments/list"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 30s
+    networks:
+      - chestscan_net
+    restart: unless-stopped
+
+  # ── FastAPI Backend ──────────────────────────────────────────────────────
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: backend
+    environment:
+      MLFLOW_TRACKING_URI: http://mlflow:5000
+      MODEL_NAME: chestscan-pneumonia-detector
+      MODEL_ALIAS: champion
+      LOG_LEVEL: INFO
+    ports:
+      - "8000:8000"
+    depends_on:
+      mlflow:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 90s
+    networks:
+      - chestscan_net
+    restart: unless-stopped
+
+  # ── Streamlit Frontend ──────────────────────────────────────────────────
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: frontend
+    environment:
+      BACKEND_URL: http://backend:8000
+    ports:
+      - "8501:8501"
+    depends_on:
+      backend:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8501/healthz"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
+    networks:
+      - chestscan_net
+    restart: unless-stopped
+
+volumes:
+  mlflow_data:
+    driver: local
+
+networks:
+  chestscan_net:
+    driver: bridge
